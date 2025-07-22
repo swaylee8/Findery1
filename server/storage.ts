@@ -29,6 +29,8 @@ import {
   type ListingWithUser,
   type BoardWithListings,
 } from "@shared/schema";
+import { db } from "./db";
+import { eq, and, desc, inArray, sql, like, lte, count, or } from "drizzle-orm";
 
 export interface IStorage {
   // User operations
@@ -83,7 +85,7 @@ export interface IStorage {
   getMessageTemplates(): Promise<string[]>;
 }
 
-export class MemStorage implements IStorage {
+export class DatabaseStorage implements IStorage {
   private users: Map<number, User>;
   private listings: Map<number, Listing>;
   private likes: Map<number, Like>;
@@ -656,86 +658,6 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+import { DatabaseStorage } from "./database-storage";
 
-// Initialize with sample data including P1 features
-storage.users.set(1, {
-  id: 1,
-  email: "john@example.com",
-  name: "John Smith",
-  password: "password123",
-  isVerified: true,
-});
-
-storage.users.set(2, {
-  id: 2,
-  email: "sarah@example.com",
-  name: "Sarah Johnson",
-  password: "password123",
-  isVerified: false,
-});
-
-storage.users.set(3, {
-  id: 3,
-  email: "mike@example.com",
-  name: "Mike Wilson",
-  password: "password123",
-  isVerified: true,
-});
-
-storage.listings.set(1, {
-  id: 1,
-  userId: 1,
-  title: "Modern Beach House",
-  description: "Stunning oceanfront property with panoramic views. This contemporary home features an open floor plan, high-end finishes, and floor-to-ceiling windows.",
-  price: 850000,
-  category: "homes",
-  location: "Malibu, CA",
-  images: ["https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800"],
-  specs: JSON.stringify({
-    bedrooms: 4,
-    bathrooms: 3,
-    sqft: 2800,
-    yearBuilt: 2019,
-    propertyType: "House"
-  }),
-  createdAt: new Date("2024-01-22T10:00:00Z"),
-});
-
-storage.listings.set(2, {
-  id: 2,
-  userId: 2,
-  title: "Tesla Model S",
-  description: "Excellent condition Tesla Model S with autopilot. Low mileage, well maintained, and includes all original accessories.",
-  price: 65000,
-  category: "cars",
-  location: "San Francisco, CA",
-  images: ["https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800"],
-  specs: JSON.stringify({
-    year: 2022,
-    mileage: 15000,
-    transmission: "automatic",
-    fuelType: "electric",
-    engine: "Dual Motor"
-  }),
-  createdAt: new Date("2024-01-22T08:30:00Z"),
-});
-
-storage.listings.set(3, {
-  id: 3,
-  userId: 3,
-  title: "Luxury Yacht",
-  description: "Beautiful 45-foot yacht perfect for entertaining. Fully equipped with modern amenities and navigation systems.",
-  price: 320000,
-  category: "boats",
-  location: "Newport Beach, CA",
-  images: ["https://images.unsplash.com/photo-1540946485063-a40da27545f8?w=800"],
-  specs: JSON.stringify({
-    year: 2020,
-    length: 45,
-    boatType: "Motor Yacht",
-    engine: "Twin Diesel",
-    fuel: "Diesel"
-  }),
-  createdAt: new Date("2024-01-22T12:15:00Z"),
-});
+export const storage = new DatabaseStorage();
