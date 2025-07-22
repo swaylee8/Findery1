@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { useParams, useLocation } from "wouter";
-import { ArrowLeft, Phone, Send } from "lucide-react";
+import { ArrowLeft, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useListing } from "@/hooks/use-listings";
 import { useAuth } from "@/hooks/use-auth";
+import MessageTemplates from "@/components/message-templates";
+import VerifiedBadge from "@/components/verified-badge";
 
 export default function Messages() {
   const { listingId } = useParams<{ listingId: string }>();
   const [, setLocation] = useLocation();
   const { user } = useAuth();
-  const [message, setMessage] = useState("");
 
   const id = parseInt(listingId || "0");
   const { data: listing } = useListing(id, user?.id);
@@ -37,13 +37,9 @@ export default function Messages() {
     },
   ];
 
-  const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!message.trim()) return;
-    
+  const handleSendMessage = (messageText: string) => {
     // In a real app, this would send the message to the backend
-    console.log("Sending message:", message);
-    setMessage("");
+    console.log("Sending message:", messageText);
   };
 
   if (!listing) {
@@ -75,7 +71,10 @@ export default function Messages() {
           </span>
         </div>
         <div className="flex-1">
-          <h3 className="font-semibold text-instagram-gray">{listing.user.name}</h3>
+          <div className="flex items-center space-x-2">
+            <h3 className="font-semibold text-instagram-gray">{listing.user.name}</h3>
+            {listing.user.isVerified && <VerifiedBadge size="sm" />}
+          </div>
           <p className="text-xs text-instagram-light-gray">Active now</p>
         </div>
         <Button variant="ghost" size="icon" className="text-instagram-gray">
@@ -100,25 +99,9 @@ export default function Messages() {
         ))}
       </div>
 
-      {/* Message Input */}
+      {/* Message Templates */}
       <div className="p-4 border-t border-gray-200">
-        <form onSubmit={handleSendMessage} className="flex items-center space-x-3">
-          <Input
-            type="text"
-            placeholder="Message..."
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:border-instagram-blue"
-          />
-          <Button
-            type="submit"
-            variant="ghost"
-            size="icon"
-            className="text-instagram-blue"
-          >
-            <Send size={20} />
-          </Button>
-        </form>
+        <MessageTemplates onSendMessage={handleSendMessage} />
       </div>
     </div>
   );

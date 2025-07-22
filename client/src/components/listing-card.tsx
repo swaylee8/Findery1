@@ -1,9 +1,15 @@
-import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal } from "lucide-react";
+import { useState } from "react";
+import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal, Flag, BookmarkPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { useToggleLike } from "@/hooks/use-listings";
 import { useAuth } from "@/hooks/use-auth";
 import { ListingWithUser } from "@shared/schema";
+import VerifiedBadge from "./verified-badge";
+import ListingSpecs from "./listing-specs";
+import BoardsModal from "./boards-modal";
+import FollowButton from "./follow-button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface ListingCardProps {
   listing: ListingWithUser;
@@ -13,6 +19,7 @@ export default function ListingCard({ listing }: ListingCardProps) {
   const [, setLocation] = useLocation();
   const { user } = useAuth();
   const toggleLikeMutation = useToggleLike();
+  const [showBoardsModal, setShowBoardsModal] = useState(false);
 
   const handleToggleLike = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -51,16 +58,51 @@ export default function ListingCard({ listing }: ListingCardProps) {
                 .join("")}
             </span>
           </div>
-          <div>
-            <p className="font-semibold text-instagram-gray text-sm">
-              {listing.user.name}
-            </p>
+          <div className="flex-1">
+            <div className="flex items-center space-x-2">
+              <p className="font-semibold text-instagram-gray text-sm">
+                {listing.user.name}
+              </p>
+              {listing.user.isVerified && <VerifiedBadge size="sm" />}
+            </div>
             <p className="text-instagram-light-gray text-xs">{listing.location}</p>
           </div>
+          <div className="flex items-center space-x-2">
+            {user?.id !== listing.user.id && (
+              <FollowButton
+                type="user"
+                targetId={listing.user.id}
+                targetName={listing.user.name}
+                size="sm"
+              />
+            )}
+          </div>
         </div>
-        <Button variant="ghost" size="icon" className="text-instagram-light-gray">
-          <MoreHorizontal size={16} />
-        </Button>
+        
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="text-instagram-light-gray">
+              <MoreHorizontal size={16} />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {user?.id !== listing.user.id && (
+              <>
+                <DropdownMenuItem 
+                  onClick={() => setShowBoardsModal(true)}
+                  className="flex items-center space-x-2"
+                >
+                  <BookmarkPlus size={16} />
+                  <span>Save to Board</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="flex items-center space-x-2 text-red-600">
+                  <Flag size={16} />
+                  <span>Report</span>
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {/* Image */}
@@ -116,6 +158,18 @@ export default function ListingCard({ listing }: ListingCardProps) {
           </span>
         </div>
 
+        {/* Specs */}
+        {listing.specs && (
+          <div className="mb-2">
+            <ListingSpecs 
+              specs={listing.specs} 
+              category={listing.category} 
+              size="sm" 
+              maxDisplay={4}
+            />
+          </div>
+        )}
+
         <p className="text-instagram-gray text-sm">
           {listing.description.length > 100
             ? `${listing.description.slice(0, 100)}...`
@@ -134,6 +188,13 @@ export default function ListingCard({ listing }: ListingCardProps) {
           {formatTimeAgo(new Date(listing.createdAt!))}
         </p>
       </div>
+
+      {/* Boards Modal */}
+      <BoardsModal
+        isOpen={showBoardsModal}
+        onClose={() => setShowBoardsModal(false)}
+        listing={listing}
+      />
     </div>
   );
 }
