@@ -31,7 +31,7 @@ import {
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, inArray, sql, like, lte, count, or } from "drizzle-orm";
-import { IStorage } from "./storage";
+import { IStorage } from "./storage-interface";
 
 export class DatabaseStorage implements IStorage {
   // User operations
