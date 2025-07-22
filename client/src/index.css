@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(0, 0%, 15.3%);
+  --muted: hsl(0, 0%, 96.1%);
+  --muted-foreground: hsl(0, 0%, 45.1%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(0, 0%, 15.3%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(0, 0%, 15.3%);
+  --border: hsl(0, 0%, 89.8%);
+  --input: hsl(0, 0%, 89.8%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(0, 0%, 98%);
+  --secondary: hsl(0, 0%, 96.1%);
+  --secondary-foreground: hsl(0, 0%, 9%);
+  --accent: hsl(0, 0%, 96.1%);
+  --accent-foreground: hsl(0, 0%, 9%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(0, 0%, 15.3%);
+  --radius: 0.5rem;
+  --instagram-blue: hsl(207, 90%, 54%);
+  --instagram-gray: hsl(0, 0%, 15.3%);
+  --instagram-light-gray: hsl(214, 2%, 56%);
+  --instagram-red: hsl(355, 78%, 64%);
+  --success-green: hsl(154, 100%, 36%);
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(0, 0%, 98%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  --instagram-blue: hsl(207, 90%, 54%);
+  --instagram-gray: hsl(0, 0%, 85%);
+  --instagram-light-gray: hsl(214, 2%, 65%);
+  --instagram-red: hsl(355, 78%, 64%);
+  --success-green: hsl(154, 100%, 36%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+}
+
+@layer components {
+  .instagram-blue {
+    color: var(--instagram-blue);
+  }
+  
+  .instagram-gray {
+    color: var(--instagram-gray);
+  }
+  
+  .instagram-light-gray {
+    color: var(--instagram-light-gray);
+  }
+  
+  .instagram-red {
+    color: var(--instagram-red);
+  }
+  
+  .success-green {
+    color: var(--success-green);
+  }
+  
+  .bg-instagram-blue {
+    background-color: var(--instagram-blue);
+  }
+  
+  .bg-instagram-gray {
+    background-color: var(--instagram-gray);
+  }
+  
+  .bg-instagram-light-gray {
+    background-color: var(--instagram-light-gray);
+  }
+  
+  .bg-instagram-red {
+    background-color: var(--instagram-red);
+  }
+  
+  .bg-success-green {
+    background-color: var(--success-green);
+  }
+  
+  .border-instagram-blue {
+    border-color: var(--instagram-blue);
+  }
+  
+  .heart-animation {
+    transition: all 0.2s ease;
+  }
+  
+  .heart-animation:active {
+    transform: scale(1.2);
+  }
+  
+  .card-shadow {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top, 44px);
+  }
+  
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 34px);
+  }
+  
+  .mobile-container {
+    max-width: 480px;
+    min-height: 100vh;
+    margin: 0 auto;
+    position: relative;
+  }
+}
+
+@layer utilities {
+  .text-instagram-blue {
+    color: var(--instagram-blue);
+  }
+  
+  .text-instagram-gray {
+    color: var(--instagram-gray);
+  }
+  
+  .text-instagram-light-gray {
+    color: var(--instagram-light-gray);
+  }
+  
+  .text-instagram-red {
+    color: var(--instagram-red);
+  }
+  
+  .text-success-green {
+    color: var(--success-green);
+  }
+}
