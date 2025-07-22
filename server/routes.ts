@@ -382,6 +382,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Alert routes
+  app.get("/api/alerts/:userId", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      
+      if (!req.session.userId || req.session.userId !== userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const alerts = await storage.getUserAlerts(userId);
+      res.json(alerts);
+    } catch (error) {
+      console.error("Error fetching alerts:", error);
+      res.status(500).json({ message: "Failed to fetch alerts" });
+    }
+  });
+
+  app.post("/api/alerts", async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const alertData = insertAlertSchema.parse(req.body);
+      const alert = await storage.createAlert(alertData);
+      res.json(alert);
+    } catch (error) {
+      console.error("Error creating alert:", error);
+      res.status(500).json({ message: "Failed to create alert" });
+    }
+  });
+
+  app.patch("/api/alerts/:id", async (req, res) => {
+    try {
+      const alertId = parseInt(req.params.id);
+      
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const alert = await storage.updateAlert(alertId, req.body);
+      res.json(alert);
+    } catch (error) {
+      console.error("Error updating alert:", error);
+      res.status(500).json({ message: "Failed to update alert" });
+    }
+  });
+
+  app.delete("/api/alerts/:id", async (req, res) => {
+    try {
+      const alertId = parseInt(req.params.id);
+      
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      await storage.deleteAlert(alertId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting alert:", error);
+      res.status(500).json({ message: "Failed to delete alert" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

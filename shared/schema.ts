@@ -9,6 +9,7 @@ export const users = pgTable("users", {
   name: text("name").notNull(),
   profileImage: text("profile_image"),
   isVerified: boolean("is_verified").default(false),
+  verificationStatus: text("verification_status").default("unverified"), // "unverified", "pending", "verified", "rejected"
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -22,8 +23,9 @@ export const listings = pgTable("listings", {
   location: text("location").notNull(),
   zipCode: text("zip_code").notNull(),
   images: text("images").array().notNull(),
-  videoUrl: text("video_url"),
+  videoUrl: text("video_url"), // 15s vertical video
   specs: text("specs"), // JSON string for category-specific specs
+  aiGenerated: boolean("ai_generated").default(false), // AI-generated description flag
   isReported: boolean("is_reported").default(false),
   createdAt: timestamp("created_at").defaultNow(),
 });
@@ -34,6 +36,8 @@ export const boards = pgTable("boards", {
   name: text("name").notNull(),
   description: text("description"),
   isPublic: boolean("is_public").default(false),
+  shareId: text("share_id").unique(), // UUID for shareable URLs
+  displayOrder: integer("display_order").default(0),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -41,6 +45,7 @@ export const boardListings = pgTable("board_listings", {
   id: serial("id").primaryKey(),
   boardId: integer("board_id").notNull().references(() => boards.id),
   listingId: integer("listing_id").notNull().references(() => listings.id),
+  displayOrder: integer("display_order").default(0),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -56,12 +61,25 @@ export const follows = pgTable("follows", {
 export const alerts = pgTable("alerts", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").notNull().references(() => users.id),
-  alertType: text("alert_type").notNull(), // "new_listing", "price_drop", "similar_item"
+  alertType: text("alert_type").notNull(), // "new_listing", "price_drop", "similar_item", "liked_item_price_drop"
   category: text("category"),
   zipCode: text("zip_code"),
   minPrice: integer("min_price"),
   maxPrice: integer("max_price"),
+  keywords: text("keywords").array(), // Array of keywords
+  targetListingId: integer("target_listing_id").references(() => listings.id), // For liked item price drops
   isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const comments = pgTable("comments", {
+  id: serial("id").primaryKey(),
+  listingId: integer("listing_id").notNull().references(() => listings.id),
+  userId: integer("user_id").notNull().references(() => users.id),
+  parentId: integer("parent_id").references(() => comments.id), // For threaded comments
+  content: text("content").notNull(),
+  isReported: boolean("is_reported").default(false),
+  isDeleted: boolean("is_deleted").default(false),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -69,6 +87,7 @@ export const reports = pgTable("reports", {
   id: serial("id").primaryKey(),
   reporterId: integer("reporter_id").notNull().references(() => users.id),
   listingId: integer("listing_id").references(() => listings.id),
+  commentId: integer("comment_id").references(() => comments.id),
   userId: integer("user_id").references(() => users.id), // reported user
   reason: text("reason").notNull(),
   description: text("description"),
@@ -138,6 +157,11 @@ export const insertMessageSchema = createInsertSchema(messages).omit({
   createdAt: true,
 });
 
+export const insertCommentSchema = createInsertSchema(comments).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertListing = z.infer<typeof insertListingSchema>;
@@ -156,6 +180,8 @@ export type InsertLike = z.infer<typeof insertLikeSchema>;
 export type Like = typeof likes.$inferSelect;
 export type InsertMessage = z.infer<typeof insertMessageSchema>;
 export type Message = typeof messages.$inferSelect;
+export type InsertComment = z.infer<typeof insertCommentSchema>;
+export type Comment = typeof comments.$inferSelect;
 
 export type ListingWithUser = Listing & {
   user: User & { isVerified?: boolean };

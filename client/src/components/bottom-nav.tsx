@@ -1,13 +1,9 @@
-import { Home, Plus, User } from "lucide-react";
+import { Home, Plus, User, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 
-interface BottomNavProps {
-  activeTab: "feed" | "add" | "profile";
-}
-
-export default function BottomNav({ activeTab }: BottomNavProps) {
-  const [, setLocation] = useLocation();
+export default function BottomNav() {
+  const [location, setLocation] = useLocation();
 
   return (
     <div className="safe-area-bottom bg-white border-t border-gray-200 px-4">
@@ -15,8 +11,8 @@ export default function BottomNav({ activeTab }: BottomNavProps) {
         <Button
           variant="ghost"
           onClick={() => setLocation("/")}
-          className={`flex flex-col items-center py-2 px-4 ${
-            activeTab === "feed" ? "text-instagram-blue" : "text-instagram-light-gray"
+          className={`flex flex-col items-center py-2 px-3 ${
+            location === "/" ? "text-instagram-blue" : "text-instagram-light-gray"
           }`}
         >
           <Home className="mb-1" size={20} />
@@ -26,19 +22,30 @@ export default function BottomNav({ activeTab }: BottomNavProps) {
         <Button
           variant="ghost"
           onClick={() => setLocation("/add-listing")}
-          className={`flex flex-col items-center py-2 px-4 ${
-            activeTab === "add" ? "text-instagram-blue" : "text-instagram-light-gray"
+          className={`flex flex-col items-center py-2 px-3 ${
+            location === "/add-listing" ? "text-instagram-blue" : "text-instagram-light-gray"
           }`}
         >
           <Plus className="mb-1" size={20} />
-          <span className="text-xs font-medium">New Post</span>
+          <span className="text-xs font-medium">Post</span>
+        </Button>
+
+        <Button
+          variant="ghost"
+          onClick={() => setLocation("/alerts")}
+          className={`flex flex-col items-center py-2 px-3 ${
+            location === "/alerts" ? "text-instagram-blue" : "text-instagram-light-gray"
+          }`}
+        >
+          <Bell className="mb-1" size={20} />
+          <span className="text-xs font-medium">Alerts</span>
         </Button>
 
         <Button
           variant="ghost"
           onClick={() => setLocation("/profile")}
-          className={`flex flex-col items-center py-2 px-4 ${
-            activeTab === "profile" ? "text-instagram-blue" : "text-instagram-light-gray"
+          className={`flex flex-col items-center py-2 px-3 ${
+            location === "/profile" ? "text-instagram-blue" : "text-instagram-light-gray"
           }`}
         >
           <User className="mb-1" size={20} />

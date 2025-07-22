@@ -10,6 +10,7 @@ import ListingDetail from "@/pages/listing-detail";
 import AddListing from "@/pages/add-listing";
 import Profile from "@/pages/profile";
 import Messages from "@/pages/messages";
+import Alerts from "@/pages/alerts";
 import { useAuth } from "@/hooks/use-auth";
 
 function Router() {
@@ -37,6 +38,7 @@ function Router() {
           <Route path="/add-listing" component={AddListing} />
           <Route path="/profile" component={Profile} />
           <Route path="/messages/:listingId" component={Messages} />
+          <Route path="/alerts" component={Alerts} />
         </>
       )}
       <Route component={NotFound} />

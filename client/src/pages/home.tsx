@@ -112,7 +112,7 @@ export default function Home() {
         )}
       </div>
 
-      <BottomNav activeTab="feed" />
+      <BottomNav />
       
       {/* Alert Modal */}
       <AlertModal

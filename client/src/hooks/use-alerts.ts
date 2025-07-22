@@ -1,15 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { Alert, InsertAlert } from "@shared/schema";
 
 export function useUserAlerts(userId: number) {
-  return useQuery<Alert[]>({
-    queryKey: ["/api/users", userId.toString(), "alerts"],
-    queryFn: async () => {
-      const response = await fetch(`/api/users/${userId}/alerts`);
-      if (!response.ok) throw new Error("Failed to fetch alerts");
-      return response.json();
-    },
+  return useQuery({
+    queryKey: ["/api/alerts", userId],
+    enabled: !!userId,
   });
 }
 
@@ -17,14 +12,15 @@ export function useCreateAlert() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (alertData: InsertAlert) => {
-      const response = await apiRequest("POST", "/api/alerts", alertData);
-      return response.json();
+    mutationFn: async (alertData: any) => {
+      return apiRequest(`/api/alerts`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(alertData),
+      });
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ 
-        queryKey: ["/api/users", variables.userId.toString(), "alerts"] 
-      });
+      queryClient.invalidateQueries({ queryKey: ["/api/alerts", variables.userId] });
     },
   });
 }
@@ -33,12 +29,15 @@ export function useUpdateAlert() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, updates }: { id: number; updates: Partial<Alert> }) => {
-      const response = await apiRequest("PATCH", `/api/alerts/${id}`, updates);
-      return response.json();
+    mutationFn: async ({ id, ...updateData }: any) => {
+      return apiRequest(`/api/alerts/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updateData),
+      });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/users"] });
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/alerts"] });
     },
   });
 }
@@ -48,11 +47,12 @@ export function useDeleteAlert() {
 
   return useMutation({
     mutationFn: async (alertId: number) => {
-      const response = await apiRequest("DELETE", `/api/alerts/${alertId}`);
-      return response.json();
+      return apiRequest(`/api/alerts/${alertId}`, {
+        method: "DELETE",
+      });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/users"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/alerts"] });
     },
   });
 }

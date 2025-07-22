@@ -6,7 +6,8 @@ import { useToggleLike } from "@/hooks/use-listings";
 import { useAuth } from "@/hooks/use-auth";
 import { ListingWithUser } from "@shared/schema";
 import VerifiedBadge from "./verified-badge";
-import ListingSpecs from "./listing-specs";
+import ImprovedListingSpecs from "./improved-listing-specs";
+import PriceSuggestion from "./price-suggestion";
 import BoardsModal from "./boards-modal";
 import FollowButton from "./follow-button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -158,8 +159,25 @@ export default function ListingCard({ listing }: ListingCardProps) {
           </span>
         </div>
 
-        {/* Specs */}
-        {listing.specs && (
+        {/* Specs and Price Info */}
+        <div className="mb-2 space-y-2">
+          {listing.specs && (
+            <ImprovedListingSpecs 
+              category={listing.category} 
+              specs={listing.specs}
+              isOwner={user?.id === listing.userId}
+            />
+          )}
+          <PriceSuggestion
+            category={listing.category}
+            zipCode={listing.zipCode}
+            specs={listing.specs}
+            currentPrice={listing.price}
+          />
+        </div>
+
+        {/* Original specs for fallback */}
+        {false && listing.specs && (
           <div className="mb-2">
             <ListingSpecs 
               specs={listing.specs} 

@@ -1,12 +1,15 @@
 import { useState } from "react";
-import { Heart, Grid, LogOut } from "lucide-react";
+import { Heart, Grid, LogOut, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/use-auth";
 import { useUserListings, useLikedListings } from "@/hooks/use-listings";
 import BottomNav from "@/components/bottom-nav";
+import VerificationModal from "@/components/verification-modal";
 
 export default function Profile() {
   const [activeTab, setActiveTab] = useState<"liked" | "posted">("liked");
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
   const { user, logout } = useAuth();
 
   const { data: likedListings } = useLikedListings(user?.id || 0);
@@ -42,7 +45,24 @@ export default function Profile() {
               </span>
             </div>
             <div className="flex-1">
-              <h3 className="font-bold text-instagram-gray text-lg">{user.name}</h3>
+              <div className="flex items-center space-x-2 mb-1">
+                <h3 className="font-bold text-instagram-gray text-lg">{user.name}</h3>
+                {user.isVerified ? (
+                  <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200">
+                    <Shield size={12} className="mr-1" />
+                    Verified
+                  </Badge>
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowVerificationModal(true)}
+                    className="text-xs px-2 py-1 h-6"
+                  >
+                    Get Verified
+                  </Button>
+                )}
+              </div>
               <p className="text-instagram-light-gray">{user.email}</p>
               <div className="flex space-x-4 mt-2">
                 <span className="text-sm">
@@ -122,7 +142,13 @@ export default function Profile() {
         </div>
       </div>
 
-      <BottomNav activeTab="profile" />
+      <BottomNav />
+      
+      {/* Verification Modal */}
+      <VerificationModal
+        open={showVerificationModal}
+        onOpenChange={setShowVerificationModal}
+      />
     </div>
   );
 }

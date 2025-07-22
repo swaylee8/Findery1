@@ -8,6 +8,7 @@ import {
   follows,
   alerts,
   reports,
+  comments,
   type User,
   type InsertUser,
   type Listing,
@@ -26,6 +27,8 @@ import {
   type InsertAlert,
   type Report,
   type InsertReport,
+  type Comment,
+  type InsertComment,
   type ListingWithUser,
   type BoardWithListings,
 } from "@shared/schema";

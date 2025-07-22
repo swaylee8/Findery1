@@ -229,7 +229,7 @@ export default function AddListing() {
         </div>
       </div>
 
-      <BottomNav activeTab="add" />
+      <BottomNav />
     </div>
   );
 }
