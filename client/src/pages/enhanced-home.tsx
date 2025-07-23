@@ -191,8 +191,8 @@ export default function Home() {
   const renderGridMode = () => {
     if (isLoading) {
       return (
-        <div className="grid grid-cols-2 gap-4 p-4">
-          {Array.from({ length: 6 }).map((_, i) => (
+        <div className="space-y-4">
+          {Array.from({ length: 4 }).map((_, i) => (
             <ListingCardSkeleton key={i} />
           ))}
         </div>
@@ -211,7 +211,7 @@ export default function Home() {
     }
 
     return (
-      <div className="grid grid-cols-2 gap-4 p-4">
+      <div className="space-y-4">
         {displayedListings.map((listing) => (
           <ListingCard key={listing.id} listing={listing} />
         ))}
