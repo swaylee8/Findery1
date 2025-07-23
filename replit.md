@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a modern marketplace application called "Scroll & Sold" built with React, Express, and PostgreSQL. The app allows users to browse, like, and message about listings for homes, cars, and boats in an Instagram-like social media interface.
+This is a modern marketplace application called "Scroll & Sold" built with React, Express, and PostgreSQL. The app allows users to browse, like, and message about listings for homes, cars, and boats in an Instagram-like social media interface with advanced UX features including Tinder-style swiping, smart filtering, and offline capabilities.
 
 ## User Preferences
 
@@ -54,6 +54,10 @@ Preferred communication style: Simple, everyday language.
 - Bottom navigation pattern
 - Touch-friendly interactions
 - Safe area handling for mobile browsers
+- Swipe mode toggle (Tinder Cards vs Grid view)
+- Bottom-sheet quick filters with smart category-specific options
+- Skeleton/shimmer loaders for all image loading states
+- Offline cache for last feed with automatic sync
 
 ## Data Flow
 
@@ -114,3 +118,19 @@ Preferred communication style: Simple, everyday language.
 - Fallback to in-memory storage for development without database
 
 The application follows a monorepo structure with shared TypeScript types, enabling full-stack type safety and efficient development workflows.
+
+## Recent UX Improvements (January 2025)
+
+### Advanced User Experience Features
+- **Tinder-style Card Swiping**: Users can toggle between grid view and swipe mode for browsing listings with smooth drag animations
+- **Smart Bottom-sheet Filters**: Category-specific filtering with price ranges, bedrooms (homes), mileage/year (cars), and ZIP code targeting
+- **Skeleton Loading States**: Comprehensive shimmer loaders for all images and content to improve perceived performance
+- **Offline Capabilities**: Automatic caching of the last feed with 5-minute TTL and offline mode indicators
+- **Enhanced Mobile UX**: Improved touch interactions, gesture controls, and seamless view mode transitions
+
+### Implementation Details
+- Framer Motion for smooth swipe animations and gestures
+- Local storage-based offline caching with automatic data freshness checks
+- Category-aware filtering system with dynamic UI components
+- Progressive image loading with skeleton placeholders
+- Real-time online/offline status indicators

@@ -5,6 +5,7 @@ import { useLocation } from "wouter";
 import { useToggleLike } from "@/hooks/use-listings";
 import { useAuth } from "@/hooks/use-auth";
 import { ListingWithUser } from "@shared/schema";
+import { ImageWithSkeleton } from "./image-with-skeleton";
 import VerifiedBadge from "./verified-badge";
 import ImprovedListingSpecs from "./improved-listing-specs";
 import PriceSuggestion from "./price-suggestion";
