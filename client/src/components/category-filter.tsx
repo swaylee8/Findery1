@@ -1,34 +1,51 @@
 import { Button } from "@/components/ui/button";
 
 interface CategoryFilterProps {
-  activeCategory: string;
+  selectedCategory: string;
   onCategoryChange: (category: string) => void;
+  variant?: "horizontal" | "vertical";
 }
 
-const categories = [
-  { id: "all", label: "All" },
-  { id: "homes", label: "🏠 Homes" },
-  { id: "cars", label: "🚗 Cars" },
-  { id: "boats", label: "🚤 Boats" },
-];
-
-export default function CategoryFilter({
-  activeCategory,
-  onCategoryChange,
+export default function CategoryFilter({ 
+  selectedCategory, 
+  onCategoryChange, 
+  variant = "horizontal" 
 }: CategoryFilterProps) {
+  const categories = [
+    { id: "all", label: "All", icon: "🏠" },
+    { id: "homes", label: "Homes", icon: "🏡" },
+    { id: "cars", label: "Cars", icon: "🚗" },
+    { id: "boats", label: "Boats", icon: "⛵" },
+  ];
+
+  const containerClass = variant === "vertical" 
+    ? "flex flex-col space-y-2" 
+    : "flex space-x-2 overflow-x-auto";
+
+  const buttonClass = variant === "vertical"
+    ? "w-full justify-start text-left"
+    : "whitespace-nowrap";
+
   return (
-    <div className="flex space-x-4">
+    <div className={containerClass}>
       {categories.map((category) => (
         <Button
           key={category.id}
-          variant={activeCategory === category.id ? "default" : "outline"}
+          variant={selectedCategory === category.id ? "default" : "ghost"}
+          size="sm"
+          className={`${buttonClass} ${
+            variant === "vertical" 
+              ? selectedCategory === category.id 
+                ? "bg-purple-600 hover:bg-purple-700 text-white" 
+                : "text-gray-300 hover:text-white hover:bg-gray-800"
+              : selectedCategory === category.id 
+                ? "bg-white text-black" 
+                : "bg-white/20 text-white hover:bg-white/30"
+          }`}
           onClick={() => onCategoryChange(category.id)}
-          className={
-            activeCategory === category.id
-              ? "px-4 py-2 rounded-full bg-instagram-blue text-white text-sm font-medium hover:bg-instagram-blue/90"
-              : "px-4 py-2 rounded-full bg-gray-100 text-instagram-gray text-sm font-medium hover:bg-gray-200"
-          }
+          data-testid={`filter-${category.id}`}
         >
+          <span className="mr-2">{category.icon}</span>
           {category.label}
         </Button>
       ))}

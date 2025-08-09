@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Landing from "@/pages/landing";
 import Home from "@/pages/enhanced-home";
+import TikTokHome from "@/pages/tiktok-home";
 import ListingDetail from "@/pages/listing-detail";
 import AddListing from "@/pages/add-listing";
 import Profile from "@/pages/profile";
@@ -33,7 +34,7 @@ function Router() {
         <Route path="/" component={Landing} />
       ) : (
         <>
-          <Route path="/" component={Home} />
+          <Route path="/" component={TikTokHome} />
           <Route path="/listing/:id" component={ListingDetail} />
           <Route path="/add-listing" component={AddListing} />
           <Route path="/profile" component={Profile} />

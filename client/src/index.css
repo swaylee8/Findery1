@@ -171,3 +171,26 @@
     color: var(--success-green);
   }
 }
+
+/* TikTok-style scroll snap */
+.snap-y {
+  scroll-snap-type: y mandatory;
+}
+
+.snap-start {
+  scroll-snap-align: start;
+}
+
+.snap-always {
+  scroll-snap-stop: always;
+}
+
+/* Hide scrollbar for TikTok-style interface */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

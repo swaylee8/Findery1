@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a modern marketplace application called "Scroll & Sold" built with React, Express, and PostgreSQL. The app allows users to browse, like, and message about listings for homes, cars, and boats in an Instagram-like social media interface with advanced UX features including Tinder-style swiping, smart filtering, and offline capabilities.
+This is a modern marketplace application called "Scroll & Sold" built with React, Express, and PostgreSQL. The app now features a full-screen vertical scrolling TikTok-style interface for browsing homes, cars, and boats with immersive media content, glassmorphism overlays, and modern minimalistic design.
 
 ## User Preferences
 
@@ -134,3 +134,32 @@ The application follows a monorepo structure with shared TypeScript types, enabl
 - Category-aware filtering system with dynamic UI components
 - Progressive image loading with skeleton placeholders
 - Real-time online/offline status indicators
+
+## TikTok-Style Interface Transformation (January 2025)
+
+### Major UI/UX Overhaul
+- **Full-Screen Vertical Scrolling**: Each listing now takes up the entire viewport with smooth snap-to-section behavior
+- **Dark Theme with Glassmorphism**: Modern black interface with semi-transparent overlays and blur effects
+- **Video-First Experience**: Auto-playing videos (muted start) with tap controls and volume management
+- **Minimalistic Overlays**: Essential information displayed over media content with large typography
+- **Floating Navigation**: Top hamburger menu, floating action button, and bottom tab bar
+
+### Enhanced Video Integration
+- Priority given to video listings in feed algorithm
+- Automatic video playback when listings come into view
+- Video controls (play/pause on tap, mute toggle)
+- Full-screen video viewing capability
+- Video duration indicators
+
+### Modern Mobile UX
+- Infinite scroll with lazy loading
+- Pull-to-refresh functionality
+- Swipe gestures for interactions
+- Scroll progress indicators
+- Keyboard navigation support (arrow keys)
+
+### Technical Implementation
+- CSS scroll-snap for precise viewport alignment
+- Backdrop-filter for glassmorphism effects
+- Video element optimization for mobile performance
+- Custom scrollbar hiding for immersive experience
