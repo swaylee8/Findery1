@@ -194,3 +194,32 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Enhanced price animations */
+@keyframes priceGlow {
+  0%, 100% { 
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 215, 0, 0.2);
+  }
+  50% { 
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.5), 0 0 60px rgba(255, 215, 0, 0.4);
+  }
+}
+
+.price-glow {
+  animation: priceGlow 3s ease-in-out infinite;
+}
+
+/* Gradient text effects */
+.price-gradient-gold {
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.price-gradient-green {
+  background: linear-gradient(135deg, #10b981 0%, #34d399 50%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

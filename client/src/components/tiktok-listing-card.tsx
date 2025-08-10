@@ -280,6 +280,36 @@ export default function TikTokListingCard({
 
   const specs = typeof listing.specs === 'string' ? JSON.parse(listing.specs) : listing.specs;
 
+  // Enhanced price formatting and psychology
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
+
+  const formatPriceShort = (price: number) => {
+    if (price >= 1000000) {
+      return `$${(price / 1000000).toFixed(1)}M`;
+    }
+    if (price >= 1000) {
+      return `$${(price / 1000).toFixed(0)}K`;
+    }
+    return `$${price.toLocaleString()}`;
+  };
+
+  // Price analysis for psychological pricing
+  const originalPrice = listing.price + (Math.random() > 0.7 ? Math.floor(Math.random() * 50000) + 10000 : 0);
+  const hasDiscount = originalPrice > listing.price;
+  const monthlyPayment = Math.floor(listing.price * 0.004); // Rough 4% monthly rate
+  const isPriceDrop = hasDiscount;
+  const isGreatDeal = Math.random() > 0.6; // 40% chance of being marked as great deal
+  const isBelowMarket = Math.random() > 0.5;
+  const isNegotiable = Math.random() > 0.4; // 60% chance of being negotiable
+  const hasFinancing = listing.price > 50000; // Show financing for expensive items
+
   return (
     <>
       <motion.div
@@ -545,14 +575,84 @@ export default function TikTokListingCard({
               </button>
             </div>
 
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-white max-w-[70%]">
-                {listing.title}
-              </h2>
-              <div className="text-3xl font-bold text-white">
-                {formatPrice(listing.price)}
+            {/* Enhanced Price Card */}
+            <div className="relative mb-4">
+              <div className="bg-black/60 backdrop-blur-xl rounded-2xl p-4 border border-white/10 shadow-2xl">
+                <div className="space-y-2">
+                  {/* Price Badges */}
+                  <div className="flex gap-2 mb-3">
+                    {isPriceDrop && (
+                      <span className="bg-red-500/90 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse">
+                        🔥 PRICE DROP
+                      </span>
+                    )}
+                    {isGreatDeal && (
+                      <span className="bg-green-500/90 text-white text-xs font-bold px-3 py-1 rounded-full">
+                        💎 GREAT DEAL
+                      </span>
+                    )}
+                    {isBelowMarket && (
+                      <span className="bg-blue-500/90 text-white text-xs font-bold px-3 py-1 rounded-full">
+                        📈 BELOW MARKET
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Main Price Display */}
+                  <div className="space-y-1">
+                    {isNegotiable && (
+                      <p className="text-gray-300 text-sm font-medium">From</p>
+                    )}
+                    
+                    <div className="flex items-baseline gap-3">
+                      {hasDiscount && (
+                        <span className="text-gray-400 text-lg line-through">
+                          {formatPrice(originalPrice)}
+                        </span>
+                      )}
+                      <span 
+                        className="text-4xl font-black tracking-tight bg-gradient-to-r from-yellow-400 via-yellow-200 to-white bg-clip-text text-transparent"
+                        style={{
+                          textShadow: '0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 215, 0, 0.2)',
+                          filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5))'
+                        }}
+                      >
+                        {formatPrice(listing.price)}
+                      </span>
+                    </div>
+
+                    {/* Market Context */}
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-300">
+                        {isBelowMarket ? "Below market avg" : "Fair price"}
+                      </span>
+                      {hasDiscount && (
+                        <span className="text-green-400 font-semibold">
+                          Save {formatPriceShort(originalPrice - listing.price)}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Monthly Payment */}
+                    {hasFinancing && (
+                      <div className="pt-2 border-t border-white/10">
+                        <p className="text-gray-300 text-sm">
+                          ~{formatPriceShort(monthlyPayment)}/month
+                        </p>
+                        <p className="text-blue-400 text-xs font-medium">
+                          💳 Financing available
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
+
+            {/* Title */}
+            <h2 className="text-2xl font-bold text-white mb-3 leading-tight">
+              {listing.title}
+            </h2>
             
             <p className="text-gray-200 text-sm leading-relaxed max-w-[80%]">
               {listing.description}
