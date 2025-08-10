@@ -28,6 +28,14 @@ const formatPrice = (price: number) => {
   return `$${price.toLocaleString()}`;
 };
 
+const formatPriceDisplay = (price: number) => {
+  const formatted = formatPrice(price);
+  const dollarSign = formatted.charAt(0);
+  const amount = formatted.slice(1);
+  
+  return { dollarSign, amount };
+};
+
 export default function TikTokListingCard({ 
   listing, 
   isActive, 
@@ -546,11 +554,29 @@ export default function TikTokListingCard({
             </div>
 
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-white max-w-[70%]">
+              <h2 className="text-2xl font-bold text-white max-w-[60%] leading-tight">
                 {listing.title}
               </h2>
-              <div className="text-3xl font-bold text-white">
-                {formatPrice(listing.price)}
+              <div className="relative group">
+                {/* Glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-green-400/30 to-emerald-500/30 rounded-xl blur-lg animate-pulse group-hover:from-green-400/50 group-hover:to-emerald-500/50 transition-all duration-300" />
+                
+                {/* Main price container */}
+                <div className="relative flex items-baseline gap-1 px-4 py-2 rounded-xl bg-black/60 backdrop-blur-md border border-green-400/40 shadow-2xl shadow-green-500/20">
+                  {/* Dollar sign */}
+                  <span className="text-2xl font-black tracking-tight bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent drop-shadow-lg animate-pulse">
+                    {formatPriceDisplay(listing.price).dollarSign}
+                  </span>
+                  
+                  {/* Amount */}
+                  <span className="text-4xl font-black tracking-tighter bg-gradient-to-r from-green-400 via-emerald-400 to-green-500 bg-clip-text text-transparent drop-shadow-lg">
+                    {formatPriceDisplay(listing.price).amount}
+                  </span>
+                  
+                  {/* Sparkle effect */}
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full animate-ping opacity-75" />
+                  <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full animate-ping opacity-60 animation-delay-300" />
+                </div>
               </div>
             </div>
             
@@ -876,7 +902,12 @@ export default function TikTokListingCard({
                     <TrendingUp className="w-5 h-5" />
                     Price History
                   </h3>
-                  <span className="text-green-400 text-sm">↓ ${(mockPriceHistory[0].price - listing.price).toLocaleString()} saved</span>
+                  <div className="flex items-center gap-1 bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+                    <span className="text-sm font-bold">↓</span>
+                    <span className="font-black text-xs">{formatPriceDisplay(mockPriceHistory[0].price - listing.price).dollarSign}</span>
+                    <span className="font-black text-sm">{formatPriceDisplay(mockPriceHistory[0].price - listing.price).amount}</span>
+                    <span className="text-sm font-semibold">saved</span>
+                  </div>
                 </div>
                 
                 {/* Simple price chart */}
@@ -887,9 +918,12 @@ export default function TikTokListingCard({
                                     (Math.max(...mockPriceHistory.map(p => p.price)) - Math.min(...mockPriceHistory.map(p => p.price)))) * 100;
                       return (
                         <div key={index} className="flex-1 flex flex-col items-center gap-2">
-                          <div className="text-xs text-gray-300">{formatPrice(point.price)}</div>
+                          <div className="text-xs font-black flex items-baseline gap-0.5 bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+                            <span className="text-[10px]">{formatPriceDisplay(point.price).dollarSign}</span>
+                            <span>{formatPriceDisplay(point.price).amount}</span>
+                          </div>
                           <div 
-                            className="w-full bg-blue-500 rounded-t-sm transition-all"
+                            className="w-full bg-gradient-to-t from-green-500 to-emerald-400 rounded-t-sm transition-all"
                             style={{ height: `${Math.max(height, 10)}%` }}
                           />
                           <div className="text-xs text-gray-400">{point.date}</div>
@@ -943,7 +977,14 @@ export default function TikTokListingCard({
                       />
                       <div className="flex-1">
                         <h4 className="text-white font-medium text-sm mb-1">{similar.title}</h4>
-                        <p className="text-gray-300 text-sm">{formatPrice(similar.price)}</p>
+                        <div className="flex items-baseline gap-0.5 bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+                          <span className="font-black text-xs">
+                            {formatPriceDisplay(similar.price).dollarSign}
+                          </span>
+                          <span className="font-black text-sm">
+                            {formatPriceDisplay(similar.price).amount}
+                          </span>
+                        </div>
                         <div className="flex items-center gap-2 mt-2">
                           <span className="text-xs text-gray-400">📍 Similar location</span>
                           <span className="text-xs text-green-400">• Available</span>
