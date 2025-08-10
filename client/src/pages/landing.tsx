@@ -42,6 +42,31 @@ export default function Landing() {
     }
   };
 
+  const handleDemoLogin = async () => {
+    setIsLoading(true);
+    try {
+      const response = await apiRequest("POST", "/api/auth/login", {
+        email: "john@example.com",
+        password: "password123"
+      });
+      const result = await response.json();
+      
+      login(result.user);
+      toast({
+        title: "Demo Login Successful!",
+        description: "You're now logged in as John Doe",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Demo Login Failed",
+        description: error.message || "Please try manual login",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="mobile-container bg-white min-h-screen flex flex-col justify-center px-8">
       <div className="text-center mb-12">
@@ -85,16 +110,34 @@ export default function Landing() {
               type="submit"
               disabled={isLoading}
               className="w-full bg-instagram-blue text-white py-3 rounded-lg font-semibold mb-4 hover:bg-instagram-blue/90"
+              data-testid="button-submit"
             >
               {isLoading ? "Loading..." : (isLogin ? "Sign In" : "Sign Up")}
             </Button>
           </form>
+
+          {/* Demo Login Option */}
+          <div className="mb-4">
+            <Button
+              type="button"
+              onClick={handleDemoLogin}
+              disabled={isLoading}
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold transition-colors"
+              data-testid="button-demo-login"
+            >
+              🚀 Try Demo Account
+            </Button>
+            <p className="text-center text-xs text-gray-500 mt-2">
+              Quick access • No signup needed
+            </p>
+          </div>
 
           <p className="text-center text-instagram-light-gray">
             {isLogin ? "Don't have an account? " : "Already have an account? "}
             <button
               onClick={() => setIsLogin(!isLogin)}
               className="text-instagram-blue cursor-pointer hover:underline"
+              data-testid="button-toggle-mode"
             >
               {isLogin ? "Sign up" : "Sign in"}
             </button>
