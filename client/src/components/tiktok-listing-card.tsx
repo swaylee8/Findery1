@@ -647,7 +647,14 @@ export default function TikTokListingCard({
             </div>
 
             {/* Title */}
-            <h2 className="text-2xl font-bold text-white mb-3 leading-tight">
+            <h2 
+              className="text-2xl font-light text-white mb-3 leading-tight tracking-wide"
+              style={{
+                fontFamily: 'ui-serif, Georgia, Cambria, serif',
+                textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)',
+                letterSpacing: '-0.01em'
+              }}
+            >
               {listing.title}
             </h2>
             
