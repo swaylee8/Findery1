@@ -171,7 +171,7 @@ export default function TikTokListingCard({
     
     const shareData = {
       title: listing.title,
-      text: `Check out this ${listing.category.slice(0, -1)}: ${listing.title} - ${formatPrice(listing.price)}`,
+      text: `Check out this ${listing.category.slice(0, -1)}: ${listing.title} - ${formatPrice(listing.price).symbol}${formatPrice(listing.price).amount}`,
       url: window.location.href,
     };
 
@@ -282,22 +282,21 @@ export default function TikTokListingCard({
 
   // Enhanced price formatting and psychology
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    const formatted = new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(price);
+    return { symbol: '$', amount: formatted };
   };
 
   const formatPriceShort = (price: number) => {
     if (price >= 1000000) {
-      return `$${(price / 1000000).toFixed(1)}M`;
+      return { symbol: '$', amount: `${(price / 1000000).toFixed(1)}M` };
     }
     if (price >= 1000) {
-      return `$${(price / 1000).toFixed(0)}K`;
+      return { symbol: '$', amount: `${(price / 1000).toFixed(0)}K` };
     }
-    return `$${price.toLocaleString()}`;
+    return { symbol: '$', amount: price.toLocaleString() };
   };
 
   // Price analysis for psychological pricing
@@ -603,32 +602,44 @@ export default function TikTokListingCard({
                 
                 <div className="flex items-baseline justify-end gap-2">
                   {hasDiscount && (
-                    <span className="text-white/40 text-sm line-through font-light">
-                      {formatPrice(originalPrice)}
-                    </span>
+                    <div className="flex items-baseline text-white/40 text-sm line-through font-light">
+                      <span className="text-xs mr-1">$</span>
+                      <span>{new Intl.NumberFormat('en-US').format(originalPrice)}</span>
+                    </div>
                   )}
-                  <span 
-                    className="text-3xl font-light tracking-wide text-white"
-                    style={{
-                      fontFamily: 'ui-serif, Georgia, Cambria, serif',
-                      textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)',
-                      letterSpacing: '-0.02em'
-                    }}
-                  >
-                    {formatPrice(listing.price)}
-                  </span>
+                  <div className="flex items-baseline">
+                    <span 
+                      className="text-lg font-light text-white/80 mr-1"
+                      style={{
+                        fontFamily: 'ui-serif, Georgia, Cambria, serif',
+                        textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)'
+                      }}
+                    >
+                      $
+                    </span>
+                    <span 
+                      className="text-3xl font-light tracking-wide text-white"
+                      style={{
+                        fontFamily: 'ui-serif, Georgia, Cambria, serif',
+                        textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)',
+                        letterSpacing: '-0.02em'
+                      }}
+                    >
+                      {new Intl.NumberFormat('en-US').format(listing.price)}
+                    </span>
+                  </div>
                 </div>
 
                 {/* Subtle context */}
                 <div className="flex items-center justify-end gap-3 mt-1">
                   {hasFinancing && (
                     <span className="text-white/50 text-xs font-light">
-                      {formatPriceShort(monthlyPayment)}/mo
+                      {formatPriceShort(monthlyPayment).symbol}{formatPriceShort(monthlyPayment).amount}/mo
                     </span>
                   )}
                   {hasDiscount && (
                     <span className="text-green-300/80 text-xs font-medium">
-                      Save {formatPriceShort(originalPrice - listing.price)}
+                      Save {formatPriceShort(originalPrice - listing.price).symbol}{formatPriceShort(originalPrice - listing.price).amount}
                     </span>
                   )}
                 </div>
