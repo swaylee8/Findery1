@@ -135,6 +135,14 @@ The application follows a monorepo structure with shared TypeScript types, enabl
 - Progressive image loading with skeleton placeholders
 - Real-time online/offline status indicators
 
+## Latest Updates (January 2025)
+
+### Enhanced Double-Tap Like Functionality
+- **Toggle Behavior**: Double-tap now properly toggles between like and unlike states, matching the heart button behavior
+- **Visual Feedback**: Different animations for liking (red heart) vs unliking (broken heart effect with shake animation)
+- **Audio Feedback**: Different sounds for like vs unlike actions to provide clear user feedback
+- **Consistent UX**: Double-tap and heart button now have identical toggle behavior for seamless interaction
+
 ## TikTok-Style Interface Transformation (January 2025)
 
 ### Major UI/UX Overhaul

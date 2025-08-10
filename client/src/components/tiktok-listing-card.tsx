@@ -74,18 +74,26 @@ export default function TikTokListingCard({
     const timeSinceLastTap = now - lastTap;
     
     if (timeSinceLastTap < 300 && timeSinceLastTap > 0) {
-      // Double tap detected
-      setLiked(true);
+      // Double tap detected - toggle like state
+      const newLikedState = !liked;
+      setLiked(newLikedState);
       setShowHeartAnimation(true);
       triggerHaptic('medium');
-      playSound('like');
+      
+      if (newLikedState) {
+        playSound('like');
+      } else {
+        playSound('pop'); // Different sound for unlike
+      }
+      
+      onInteraction?.('like');
       likeMutation.mutate();
       
       setTimeout(() => setShowHeartAnimation(false), 1000);
     }
     
     setLastTap(now);
-  }, [lastTap, triggerHaptic, playSound, likeMutation]);
+  }, [lastTap, liked, triggerHaptic, playSound, onInteraction, likeMutation]);
 
   const handleLongPressStart = useCallback(() => {
     setIsLongPress(false);
@@ -207,13 +215,37 @@ export default function TikTokListingCard({
           {showHeartAnimation && (
             <motion.div
               initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: [0, 1.5, 1.2], opacity: [0, 1, 0] }}
+              animate={{ 
+                scale: [0, 1.5, 1.2], 
+                opacity: [0, 1, 0],
+                rotate: liked ? 0 : [0, 15, -15, 0] // Shake animation when unliking
+              }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 1 }}
+              transition={{ 
+                duration: 1,
+                rotate: { duration: 0.5 }
+              }}
               className="absolute inset-0 flex items-center justify-center pointer-events-none z-30"
               data-testid="heart-animation"
             >
-              <Heart className="w-24 h-24 text-red-500 fill-red-500 drop-shadow-2xl" />
+              {liked ? (
+                // Liked state - full red heart
+                <Heart className="w-24 h-24 text-red-500 fill-red-500 drop-shadow-2xl" />
+              ) : (
+                // Unliked state - broken heart effect
+                <div className="relative">
+                  <Heart className="w-24 h-24 text-gray-400 fill-gray-400 drop-shadow-2xl opacity-60" />
+                  <motion.div
+                    initial={{ scale: 1, opacity: 1 }}
+                    animate={{ scale: [1, 1.1, 0.8], opacity: [1, 0.8, 0.3] }}
+                    transition={{ duration: 0.6 }}
+                    className="absolute inset-0 flex items-center justify-center"
+                  >
+                    <div className="w-1 h-12 bg-gray-600 rotate-45 absolute"></div>
+                    <div className="w-1 h-12 bg-gray-600 -rotate-45 absolute"></div>
+                  </motion.div>
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
