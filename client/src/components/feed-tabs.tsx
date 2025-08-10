@@ -118,10 +118,10 @@ export default function FeedTabs({
               <button
                 key={tab.id}
                 onClick={() => onCategoryChange(tab.id)}
-                className={`relative px-4 py-1.5 rounded-full text-xs font-medium transition-all ${
+                className={`relative px-4 py-1.5 rounded-full text-sm font-bold transition-all shadow-lg ${
                   isActive 
-                    ? 'text-white bg-white/20 scale-110' 
-                    : 'text-gray-400 hover:text-gray-200'
+                    ? 'text-white bg-white/30 backdrop-blur-md border border-white/20 scale-110 shadow-white/10' 
+                    : 'text-gray-200 hover:text-white hover:bg-white/10 backdrop-blur-sm'
                 }`}
                 data-testid={`category-tab-${tab.id}`}
               >
@@ -132,7 +132,7 @@ export default function FeedTabs({
                 
                 {isActive && (
                   <motion.div
-                    className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full"
+                    className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-white rounded-full shadow-lg shadow-white/30"
                     layoutId="categoryIndicator"
                     transition={{ type: "spring", duration: 0.3 }}
                   />
@@ -160,8 +160,10 @@ export default function FeedTabs({
       </div>
 
       {/* Touch instruction hint - only show first few times */}
-      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-gray-500 text-xs animate-pulse">
-        Swipe to switch categories
+      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+        <span className="text-gray-200 text-sm font-medium animate-pulse">
+          Swipe to switch categories
+        </span>
       </div>
     </div>
   );
