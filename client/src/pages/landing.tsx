@@ -29,8 +29,13 @@ export default function Landing() {
       login(result.user);
       toast({
         title: isLogin ? "Welcome back!" : "Account created!",
-        description: isLogin ? "You've been logged in successfully." : "Your account has been created and you're logged in.",
+        description: isLogin ? "Redirecting to TikTok-style feed..." : "Your account has been created and you're logged in.",
       });
+      
+      // Force page reload to ensure redirect works
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error: any) {
       toast({
         title: "Error",
@@ -54,15 +59,19 @@ export default function Landing() {
       login(result.user);
       toast({
         title: "Demo Login Successful!",
-        description: "You're now logged in as John Doe",
+        description: "Redirecting to TikTok-style feed...",
       });
+      
+      // Force page reload to ensure state updates properly
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error: any) {
       toast({
         title: "Demo Login Failed",
         description: error.message || "Please try manual login",
         variant: "destructive",
       });
-    } finally {
       setIsLoading(false);
     }
   };
