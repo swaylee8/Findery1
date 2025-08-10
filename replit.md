@@ -225,3 +225,17 @@ The application follows a monorepo structure with shared TypeScript types, enabl
 - Mock data integration for price history and similar listings
 - Touch-optimized navigation with gesture recognition
 - Glassmorphism design language throughout all interfaces
+
+## Premium Price Display Design (January 2025)
+
+### Minimalist Price Redesign
+- **Sleek Typography**: Elegant serif font with refined letter spacing for premium feel
+- **Subtle Positioning**: Right-aligned price display that doesn't dominate the interface
+- **Minimal Visual Weight**: Removed heavy background blocks for clean, unobtrusive design
+- **Premium Aesthetic**: Light font weights and sophisticated spacing for luxury appeal
+
+### Refined Visual Elements
+- **Understated Badges**: Transparent badges with subtle borders instead of bold blocks
+- **Elegant Hierarchy**: Clear price prominence without overwhelming visual presence
+- **Sophisticated Colors**: Muted tones and transparency for premium look
+- **Clean Layout**: Streamlined design that maintains focus on content

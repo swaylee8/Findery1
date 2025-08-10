@@ -575,76 +575,62 @@ export default function TikTokListingCard({
               </button>
             </div>
 
-            {/* Enhanced Price Card */}
-            <div className="relative mb-4">
-              <div className="bg-black/60 backdrop-blur-xl rounded-2xl p-4 border border-white/10 shadow-2xl">
-                <div className="space-y-2">
-                  {/* Price Badges */}
-                  <div className="flex gap-2 mb-3">
+            {/* Sleek Price Display */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="space-y-1">
+                {/* Subtle badges - only show one at a time */}
+                {(isPriceDrop || isGreatDeal) && (
+                  <div className="inline-block">
                     {isPriceDrop && (
-                      <span className="bg-red-500/90 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse">
-                        🔥 PRICE DROP
+                      <span className="bg-red-500/20 text-red-300 text-xs font-medium px-2 py-1 rounded-md backdrop-blur-sm border border-red-500/30">
+                        Price Drop
                       </span>
                     )}
-                    {isGreatDeal && (
-                      <span className="bg-green-500/90 text-white text-xs font-bold px-3 py-1 rounded-full">
-                        💎 GREAT DEAL
-                      </span>
-                    )}
-                    {isBelowMarket && (
-                      <span className="bg-blue-500/90 text-white text-xs font-bold px-3 py-1 rounded-full">
-                        📈 BELOW MARKET
+                    {isGreatDeal && !isPriceDrop && (
+                      <span className="bg-green-500/20 text-green-300 text-xs font-medium px-2 py-1 rounded-md backdrop-blur-sm border border-green-500/30">
+                        Great Deal
                       </span>
                     )}
                   </div>
+                )}
+              </div>
+              
+              {/* Premium Price Display */}
+              <div className="text-right">
+                {isNegotiable && (
+                  <p className="text-white/60 text-xs font-light mb-1">From</p>
+                )}
+                
+                <div className="flex items-baseline justify-end gap-2">
+                  {hasDiscount && (
+                    <span className="text-white/40 text-sm line-through font-light">
+                      {formatPrice(originalPrice)}
+                    </span>
+                  )}
+                  <span 
+                    className="text-3xl font-light tracking-wide text-white"
+                    style={{
+                      fontFamily: 'ui-serif, Georgia, Cambria, serif',
+                      textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)',
+                      letterSpacing: '-0.02em'
+                    }}
+                  >
+                    {formatPrice(listing.price)}
+                  </span>
+                </div>
 
-                  {/* Main Price Display */}
-                  <div className="space-y-1">
-                    {isNegotiable && (
-                      <p className="text-gray-300 text-sm font-medium">From</p>
-                    )}
-                    
-                    <div className="flex items-baseline gap-3">
-                      {hasDiscount && (
-                        <span className="text-gray-400 text-lg line-through">
-                          {formatPrice(originalPrice)}
-                        </span>
-                      )}
-                      <span 
-                        className="text-4xl font-black tracking-tight bg-gradient-to-r from-yellow-400 via-yellow-200 to-white bg-clip-text text-transparent"
-                        style={{
-                          textShadow: '0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 215, 0, 0.2)',
-                          filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5))'
-                        }}
-                      >
-                        {formatPrice(listing.price)}
-                      </span>
-                    </div>
-
-                    {/* Market Context */}
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-300">
-                        {isBelowMarket ? "Below market avg" : "Fair price"}
-                      </span>
-                      {hasDiscount && (
-                        <span className="text-green-400 font-semibold">
-                          Save {formatPriceShort(originalPrice - listing.price)}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Monthly Payment */}
-                    {hasFinancing && (
-                      <div className="pt-2 border-t border-white/10">
-                        <p className="text-gray-300 text-sm">
-                          ~{formatPriceShort(monthlyPayment)}/month
-                        </p>
-                        <p className="text-blue-400 text-xs font-medium">
-                          💳 Financing available
-                        </p>
-                      </div>
-                    )}
-                  </div>
+                {/* Subtle context */}
+                <div className="flex items-center justify-end gap-3 mt-1">
+                  {hasFinancing && (
+                    <span className="text-white/50 text-xs font-light">
+                      {formatPriceShort(monthlyPayment)}/mo
+                    </span>
+                  )}
+                  {hasDiscount && (
+                    <span className="text-green-300/80 text-xs font-medium">
+                      Save {formatPriceShort(originalPrice - listing.price)}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
