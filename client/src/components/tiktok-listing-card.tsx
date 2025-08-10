@@ -12,6 +12,10 @@ import type { Listing } from "@shared/schema";
 interface TikTokListingCardProps {
   listing: Listing;
   isActive: boolean;
+  onInteraction?: (type: 'like' | 'save' | 'share' | 'skip') => void;
+  loadingPriority?: 'immediate' | 'high' | 'medium' | 'low';
+  shouldLoadEagerly?: boolean;
+  isImagePreloaded?: boolean;
 }
 
 const formatPrice = (price: number) => {
@@ -24,7 +28,14 @@ const formatPrice = (price: number) => {
   return `$${price.toLocaleString()}`;
 };
 
-export default function TikTokListingCard({ listing, isActive }: TikTokListingCardProps) {
+export default function TikTokListingCard({ 
+  listing, 
+  isActive, 
+  onInteraction,
+  loadingPriority = 'medium',
+  shouldLoadEagerly = false,
+  isImagePreloaded = false 
+}: TikTokListingCardProps) {
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
   const [showHeartAnimation, setShowHeartAnimation] = useState(false);
@@ -110,6 +121,7 @@ export default function TikTokListingCard({ listing, isActive }: TikTokListingCa
       // Swipe left - not interested
       triggerHaptic('light');
       playSound('swipe');
+      onInteraction?.('skip');
       toast({
         title: "Not interested",
         description: "We'll show you less like this",
@@ -125,19 +137,22 @@ export default function TikTokListingCard({ listing, isActive }: TikTokListingCa
     setLiked(!liked);
     triggerHaptic('light');
     playSound('like');
+    onInteraction?.('like');
     likeMutation.mutate();
-  }, [liked, triggerHaptic, playSound, likeMutation]);
+  }, [liked, triggerHaptic, playSound, onInteraction, likeMutation]);
 
   const handleSave = useCallback(() => {
     setSaved(!saved);
     triggerHaptic('light');
     playSound('pop');
+    onInteraction?.('save');
     saveMutation.mutate();
-  }, [saved, triggerHaptic, playSound, saveMutation]);
+  }, [saved, triggerHaptic, playSound, onInteraction, saveMutation]);
 
   const handleShare = useCallback(() => {
     triggerHaptic('light');
     playSound('notification');
+    onInteraction?.('share');
     if (navigator.share) {
       navigator.share({
         title: listing.title,
@@ -151,7 +166,7 @@ export default function TikTokListingCard({ listing, isActive }: TikTokListingCa
         description: "Share this listing with others",
       });
     }
-  }, [listing, triggerHaptic, playSound, toast]);
+  }, [listing, triggerHaptic, playSound, onInteraction, toast]);
 
   const specs = typeof listing.specs === 'string' ? JSON.parse(listing.specs) : listing.specs;
 
@@ -177,7 +192,11 @@ export default function TikTokListingCard({ listing, isActive }: TikTokListingCa
             src={listing.images[0]}
             alt={listing.title}
             className="h-full w-full object-cover"
-            loading={isActive ? "eager" : "lazy"}
+            loading={shouldLoadEagerly ? "eager" : "lazy"}
+            style={{
+              filter: isImagePreloaded ? 'none' : 'blur(5px)',
+              transition: 'filter 0.3s ease'
+            }}
             data-testid={`listing-image-${listing.id}`}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />

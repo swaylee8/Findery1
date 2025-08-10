@@ -69,7 +69,12 @@ export function useSound() {
     }
 
     oscillator.type = 'sine';
-    oscillator.start(context.currentTime);
+    try {
+      oscillator.start(context.currentTime);
+    } catch (error) {
+      // Oscillator already started or context issues
+      console.warn('Audio oscillator error:', error);
+    }
   }, [initAudioContext]);
 
   const toggleSound = useCallback(() => {
