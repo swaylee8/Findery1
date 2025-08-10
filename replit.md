@@ -171,3 +171,26 @@ The application follows a monorepo structure with shared TypeScript types, enabl
 - Backdrop-filter for glassmorphism effects
 - Video element optimization for mobile performance
 - Custom scrollbar hiding for immersive experience
+
+## Social Features Integration (January 2025)
+
+### Advanced Social Elements
+- **Floating Comment System**: Tap comment bubble to see overlay with threaded discussions without leaving listing view
+- **Seller Profile Quick Preview**: Tap seller avatar for instant popup with bio, listings count, and action buttons
+- **Enhanced Share Integration**: Native social sharing with rich media previews and formatted text
+- **Live Status Indicators**: Real-time online/offline status for sellers with "Active now" and "Last seen" timestamps
+- **Direct Messaging**: Instant message buttons for immediate seller contact
+
+### Social UX Features
+- **Online Status Dots**: Green indicator dots on seller avatars when active
+- **Comment Engagement**: View and add comments with user avatars and timestamps
+- **Profile Bio Display**: Rich seller information with specialization and experience details
+- **Interactive Seller Cards**: Expandable seller profiles with all listings and contact options
+- **Social Proof Elements**: Listing counts, activity status, and engagement metrics
+
+### Technical Implementation
+- Real-time status simulation with randomized online states
+- Glassmorphism overlays for social panels
+- Smooth slide-up animations for all social interactions
+- Mock seller and comment data with realistic profiles and content
+- Touch-optimized social interaction patterns
