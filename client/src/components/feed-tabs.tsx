@@ -121,7 +121,7 @@ export default function FeedTabs({
                 className={`relative px-4 py-1.5 rounded-full text-xs font-medium transition-all ${
                   isActive 
                     ? 'text-white bg-white/20 scale-110' 
-                    : 'text-gray-400 hover:text-gray-200'
+                    : 'text-gray-300 hover:text-gray-100'
                 }`}
                 data-testid={`category-tab-${tab.id}`}
               >
@@ -160,7 +160,7 @@ export default function FeedTabs({
       </div>
 
       {/* Touch instruction hint - only show first few times */}
-      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-gray-500 text-xs animate-pulse">
+      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-gray-300 text-xs animate-pulse">
         Swipe to switch categories
       </div>
     </div>
