@@ -584,23 +584,10 @@ export default function TikTokListingCard({
                 
                 <div className="flex items-baseline gap-2">
                   <div className="flex items-baseline">
-                    <span 
-                      className="text-lg font-light text-white/80 mr-1"
-                      style={{
-                        fontFamily: 'ui-serif, Georgia, Cambria, serif',
-                        textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)'
-                      }}
-                    >
+                    <span className="text-lg font-light text-white/80 mr-1">
                       $
                     </span>
-                    <span 
-                      className="text-3xl font-light tracking-wide text-white"
-                      style={{
-                        fontFamily: 'ui-serif, Georgia, Cambria, serif',
-                        textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)',
-                        letterSpacing: '-0.02em'
-                      }}
-                    >
+                    <span className="text-3xl font-light tracking-wide text-white">
                       {new Intl.NumberFormat('en-US').format(listing.price)}
                     </span>
                   </div>
@@ -647,14 +634,7 @@ export default function TikTokListingCard({
             </div>
 
             {/* Title */}
-            <h2 
-              className="text-2xl font-light text-white mb-3 leading-tight tracking-wide"
-              style={{
-                fontFamily: 'ui-serif, Georgia, Cambria, serif',
-                textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)',
-                letterSpacing: '-0.01em'
-              }}
-            >
+            <h2 className="text-2xl font-bold text-white mb-3 leading-tight">
               {listing.title}
             </h2>
             
