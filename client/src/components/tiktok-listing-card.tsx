@@ -171,7 +171,7 @@ export default function TikTokListingCard({
     
     const shareData = {
       title: listing.title,
-      text: `Check out this ${listing.category.slice(0, -1)}: ${listing.title} - ${formatPrice(listing.price).symbol}${formatPrice(listing.price).amount}`,
+      text: `Check out this ${listing.category.slice(0, -1)}: ${listing.title} - $${listing.price.toLocaleString()}`,
       url: window.location.href,
     };
 
@@ -574,39 +574,15 @@ export default function TikTokListingCard({
               </button>
             </div>
 
-            {/* Sleek Price Display */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="space-y-1">
-                {/* Subtle badges - only show one at a time */}
-                {(isPriceDrop || isGreatDeal) && (
-                  <div className="inline-block">
-                    {isPriceDrop && (
-                      <span className="bg-red-500/20 text-red-300 text-xs font-medium px-2 py-1 rounded-md backdrop-blur-sm border border-red-500/30">
-                        Price Drop
-                      </span>
-                    )}
-                    {isGreatDeal && !isPriceDrop && (
-                      <span className="bg-green-500/20 text-green-300 text-xs font-medium px-2 py-1 rounded-md backdrop-blur-sm border border-green-500/30">
-                        Great Deal
-                      </span>
-                    )}
-                  </div>
-                )}
-              </div>
-              
-              {/* Premium Price Display */}
-              <div className="text-right">
+            {/* Sleek Price Display - Left Aligned */}
+            <div className="flex items-start justify-between mb-4">
+              {/* Premium Price Display - Left Side */}
+              <div className="text-left">
                 {isNegotiable && (
                   <p className="text-white/60 text-xs font-light mb-1">From</p>
                 )}
                 
-                <div className="flex items-baseline justify-end gap-2">
-                  {hasDiscount && (
-                    <div className="flex items-baseline text-white/40 text-sm line-through font-light">
-                      <span className="text-xs mr-1">$</span>
-                      <span>{new Intl.NumberFormat('en-US').format(originalPrice)}</span>
-                    </div>
-                  )}
+                <div className="flex items-baseline gap-2">
                   <div className="flex items-baseline">
                     <span 
                       className="text-lg font-light text-white/80 mr-1"
@@ -628,21 +604,45 @@ export default function TikTokListingCard({
                       {new Intl.NumberFormat('en-US').format(listing.price)}
                     </span>
                   </div>
+                  {hasDiscount && (
+                    <div className="flex items-baseline text-white/40 text-sm line-through font-light">
+                      <span className="text-xs mr-1">$</span>
+                      <span>{new Intl.NumberFormat('en-US').format(originalPrice)}</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Subtle context */}
-                <div className="flex items-center justify-end gap-3 mt-1">
+                <div className="flex items-center gap-3 mt-1">
                   {hasFinancing && (
                     <span className="text-white/50 text-xs font-light">
-                      {formatPriceShort(monthlyPayment).symbol}{formatPriceShort(monthlyPayment).amount}/mo
+                      ${Math.floor(listing.price * 0.004).toLocaleString()}/mo
                     </span>
                   )}
                   {hasDiscount && (
                     <span className="text-green-300/80 text-xs font-medium">
-                      Save {formatPriceShort(originalPrice - listing.price).symbol}{formatPriceShort(originalPrice - listing.price).amount}
+                      Save ${(originalPrice - listing.price).toLocaleString()}
                     </span>
                   )}
                 </div>
+              </div>
+              
+              {/* Subtle badges - Right Side */}
+              <div className="space-y-1">
+                {(isPriceDrop || isGreatDeal) && (
+                  <div className="inline-block">
+                    {isPriceDrop && (
+                      <span className="bg-red-500/20 text-red-300 text-xs font-medium px-2 py-1 rounded-md backdrop-blur-sm border border-red-500/30">
+                        Price Drop
+                      </span>
+                    )}
+                    {isGreatDeal && !isPriceDrop && (
+                      <span className="bg-green-500/20 text-green-300 text-xs font-medium px-2 py-1 rounded-md backdrop-blur-sm border border-green-500/30">
+                        Great Deal
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
