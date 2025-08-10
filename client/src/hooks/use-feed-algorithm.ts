@@ -50,26 +50,6 @@ export function useFeedAlgorithm() {
     }
   }, [user]);
 
-  // Track user interaction
-  const trackInteraction = useCallback((interaction: Omit<UserInteraction, 'timestamp'>) => {
-    const newInteraction = {
-      ...interaction,
-      timestamp: Date.now()
-    };
-    
-    if (user) {
-      // Get current interactions from localStorage to avoid state dependency
-      const currentInteractions = JSON.parse(localStorage.getItem(`interactions_${user.id}`) || '[]');
-      const updatedInteractions = [...currentInteractions, newInteraction].slice(-1000); // Keep only last 1000
-      
-      localStorage.setItem(`interactions_${user.id}`, JSON.stringify(updatedInteractions));
-      setInteractions(updatedInteractions);
-      
-      // Update preferences based on interactions
-      updatePreferencesFromInteractions(updatedInteractions);
-    }
-  }, [user, updatePreferencesFromInteractions]);
-
   // Update preferences based on user behavior
   const updatePreferencesFromInteractions = useCallback((userInteractions: UserInteraction[]) => {
     const recentInteractions = userInteractions.filter(
@@ -190,6 +170,26 @@ export function useFeedAlgorithm() {
       })
       .map(item => item.listing);
   }, [user, preferences]);
+
+  // Track user interaction
+  const trackInteraction = useCallback((interaction: Omit<UserInteraction, 'timestamp'>) => {
+    const newInteraction = {
+      ...interaction,
+      timestamp: Date.now()
+    };
+    
+    if (user) {
+      // Get current interactions from localStorage to avoid state dependency
+      const currentInteractions = JSON.parse(localStorage.getItem(`interactions_${user.id}`) || '[]');
+      const updatedInteractions = [...currentInteractions, newInteraction].slice(-1000); // Keep only last 1000
+      
+      localStorage.setItem(`interactions_${user.id}`, JSON.stringify(updatedInteractions));
+      setInteractions(updatedInteractions);
+      
+      // Update preferences based on interactions
+      updatePreferencesFromInteractions(updatedInteractions);
+    }
+  }, [user, updatePreferencesFromInteractions]);
 
   return {
     personalizeListings,
