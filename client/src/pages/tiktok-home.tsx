@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import { Heart, MessageCircle, Share, MoreHorizontal, Plus, Menu, Search } from "lucide-react";
+import { Heart, MessageCircle, Share, MoreHorizontal, Plus, Menu, Search, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { useListings } from "@/hooks/use-listings";
 import { useToggleLike } from "@/hooks/use-listings";
+import { useHaptics } from "@/hooks/use-haptics";
+import { useSound } from "@/hooks/use-sound";
 import type { ListingWithUser } from "@shared/schema";
 import TikTokListingCard from "../components/tiktok-listing-card";
 import CategoryFilter from "../components/category-filter";
@@ -15,6 +17,8 @@ export default function TikTokHome() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const { triggerHaptic } = useHaptics();
+  const { playSound, soundEnabled, toggleSound } = useSound();
   
   const containerRef = useRef<HTMLDivElement>(null);
   const listingRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -44,6 +48,10 @@ export default function TikTokHome() {
         if (newIndex !== currentIndex && newIndex >= 0 && newIndex < filteredListings.length) {
           setCurrentIndex(newIndex);
           
+          // Haptic feedback for scroll snapping
+          triggerHaptic('light');
+          playSound('snap', 0.1);
+          
           // Smooth scroll to exact position
           isScrolling = true;
           container.scrollTo({
@@ -63,7 +71,7 @@ export default function TikTokHome() {
       container.removeEventListener('scroll', handleScroll);
       clearTimeout(scrollTimeout);
     };
-  }, [currentIndex, filteredListings.length]);
+  }, [currentIndex, filteredListings.length, triggerHaptic, playSound]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -79,11 +87,15 @@ export default function TikTokHome() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentIndex, filteredListings.length]);
+  }, [currentIndex, filteredListings.length, triggerHaptic, playSound]);
 
   const scrollToIndex = (index: number) => {
     const container = containerRef.current;
     if (!container) return;
+    
+    // Haptic feedback for keyboard navigation
+    triggerHaptic('light');
+    playSound('snap', 0.1);
     
     setCurrentIndex(index);
     container.scrollTo({
@@ -146,14 +158,26 @@ export default function TikTokHome() {
           Scroll & Sold
         </div>
 
-        <Button 
-          variant="ghost" 
-          size="icon"
-          className="text-white hover:bg-white/20 backdrop-blur-sm"
-          data-testid="button-search"
-        >
-          <Search size={24} />
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            className="text-white hover:bg-white/20 backdrop-blur-sm"
+            onClick={toggleSound}
+            data-testid="button-sound-toggle"
+          >
+            {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
+          </Button>
+          
+          <Button 
+            variant="ghost" 
+            size="icon"
+            className="text-white hover:bg-white/20 backdrop-blur-sm"
+            data-testid="button-search"
+          >
+            <Search size={24} />
+          </Button>
+        </div>
       </div>
 
       {/* Main Content */}
@@ -173,7 +197,6 @@ export default function TikTokHome() {
             <TikTokListingCard 
               listing={listing}
               isActive={index === currentIndex}
-              onRefresh={handlePullToRefresh}
             />
           </div>
         ))}
