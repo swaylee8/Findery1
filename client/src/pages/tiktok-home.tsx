@@ -228,33 +228,33 @@ export default function TikTokHome() {
         onCategoryChange={handleCategoryChange}
       />
 
-      {/* Side Menu */}
+      {/* Compact Header Navigation */}
       <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
         <SheetTrigger asChild>
           <Button 
             variant="ghost" 
-            size="icon"
-            className="fixed top-4 left-4 z-50 text-white hover:bg-white/20 backdrop-blur-sm"
+            size="sm"
+            className="fixed top-2 left-2 z-50 text-white hover:bg-white/20 backdrop-blur-sm p-2 rounded-full"
             data-testid="button-menu"
           >
-            <Menu size={24} />
+            <Menu size={18} />
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="bg-black/90 backdrop-blur-md border-gray-800">
           <div className="text-white">
-            <h2 className="text-xl font-bold mb-6">Scroll & Sold</h2>
-            <div className="space-y-4">
+            <h2 className="text-lg font-light mb-4">Scroll & Sold</h2>
+            <div className="space-y-3">
               <div>
-                <h3 className="text-sm font-medium text-gray-400 mb-2">Feed Algorithm</h3>
-                <div className="text-xs text-gray-300 space-y-1">
+                <h3 className="text-sm font-light text-gray-400 mb-2">Feed Algorithm</h3>
+                <div className="text-xs text-gray-300 space-y-1 font-light">
                   <div>Homes: {Math.round(preferences.categoryWeights.homes * 100)}%</div>
                   <div>Cars: {Math.round(preferences.categoryWeights.cars * 100)}%</div>
                   <div>Boats: {Math.round(preferences.categoryWeights.boats * 100)}%</div>
                 </div>
               </div>
               <div>
-                <h3 className="text-sm font-medium text-gray-400 mb-2">Smart Loading</h3>
-                <div className="text-xs text-gray-300">
+                <h3 className="text-sm font-light text-gray-400 mb-2">Smart Loading</h3>
+                <div className="text-xs text-gray-300 font-light">
                   <div>Preloaded: {preloadedCount} images</div>
                   <div>Loaded: {loadedCount} listings</div>
                 </div>
@@ -264,15 +264,15 @@ export default function TikTokHome() {
         </SheetContent>
       </Sheet>
 
-      {/* Sound Toggle */}
+      {/* Compact Sound Toggle */}
       <Button 
         variant="ghost" 
-        size="icon"
-        className="fixed top-4 right-4 z-50 text-white hover:bg-white/20 backdrop-blur-sm"
+        size="sm"
+        className="fixed top-2 right-2 z-50 text-white hover:bg-white/20 backdrop-blur-sm p-2 rounded-full"
         onClick={toggleSound}
         data-testid="button-sound-toggle"
       >
-        {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
+        {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
       </Button>
 
       {/* Main Content */}

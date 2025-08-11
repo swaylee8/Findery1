@@ -61,9 +61,9 @@ export default function FeedTabs({
 
   return (
     <div className="fixed top-0 left-0 right-0 z-40 bg-gradient-to-b from-black/80 via-black/60 to-transparent backdrop-blur-sm">
-      {/* Feed Type Tabs */}
-      <div className="flex items-center justify-center pt-12 pb-2">
-        <div className="relative bg-black/40 backdrop-blur-md rounded-full p-1 flex">
+      {/* Feed Type Tabs - Compact */}
+      <div className="flex items-center justify-center pt-10 pb-1">
+        <div className="relative bg-black/40 backdrop-blur-md rounded-full p-0.5 flex">
           {feedTabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeFeed === tab.id;
@@ -72,7 +72,7 @@ export default function FeedTabs({
               <button
                 key={tab.id}
                 onClick={() => onFeedChange(tab.id)}
-                className={`relative px-6 py-2 rounded-full text-sm font-medium transition-colors ${
+                className={`relative px-4 py-1.5 rounded-full text-sm font-light transition-colors ${
                   isActive ? 'text-white' : 'text-gray-400'
                 }`}
                 data-testid={`feed-tab-${tab.id}`}
@@ -94,9 +94,9 @@ export default function FeedTabs({
         </div>
       </div>
 
-      {/* Category Tabs - Swipeable */}
+      {/* Category Tabs - Compact Swipeable */}
       <div 
-        className="flex items-center justify-center pb-4 px-4 overflow-hidden"
+        className="flex items-center justify-center pb-2 px-4 overflow-hidden"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         data-testid="category-tabs-container"
@@ -105,8 +105,8 @@ export default function FeedTabs({
           className="flex items-center gap-1"
           animate={{
             x: activeCategory === 'all' ? 0 : 
-               activeCategory === 'homes' ? -60 :
-               activeCategory === 'cars' ? -120 : -180
+               activeCategory === 'homes' ? -50 :
+               activeCategory === 'cars' ? -100 : -150
           }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
@@ -118,21 +118,21 @@ export default function FeedTabs({
               <button
                 key={tab.id}
                 onClick={() => onCategoryChange(tab.id)}
-                className={`relative px-4 py-1.5 rounded-full text-xs font-medium transition-all ${
+                className={`relative px-3 py-1 rounded-full text-xs font-light transition-all ${
                   isActive 
-                    ? 'text-white bg-white/20 scale-110' 
+                    ? 'text-white bg-white/20 scale-105' 
                     : 'text-gray-300 hover:text-gray-100'
                 }`}
                 data-testid={`category-tab-${tab.id}`}
               >
-                <div className="flex items-center gap-1.5">
-                  {Icon && <Icon size={12} />}
+                <div className="flex items-center gap-1">
+                  {Icon && <Icon size={10} />}
                   <span>{tab.label}</span>
                 </div>
                 
                 {isActive && (
                   <motion.div
-                    className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full"
+                    className="absolute -bottom-0.5 left-1/2 transform -translate-x-1/2 w-0.5 h-0.5 bg-white rounded-full"
                     layoutId="categoryIndicator"
                     transition={{ type: "spring", duration: 0.3 }}
                   />
@@ -143,9 +143,9 @@ export default function FeedTabs({
         </motion.div>
       </div>
 
-      {/* Swipe Indicator */}
-      <div className="flex justify-center pb-2">
-        <div className="flex gap-1">
+      {/* Compact Swipe Indicator */}
+      <div className="flex justify-center pb-1">
+        <div className="flex gap-0.5">
           {categoryTabs.map((_, index) => (
             <div
               key={index}

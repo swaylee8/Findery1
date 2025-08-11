@@ -339,46 +339,46 @@ export default function TikTokListingCard({
         onPointerLeave={handleLongPressEnd}
         onClick={handleDoubleTap}
       >
-        {/* Background Image/Video */}
+        {/* Background Image/Video - Optimized for Mobile Density */}
         <div className="absolute inset-0">
           <img
             src={listing.images[currentImageIndex]}
             alt={listing.title}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover scale-105"
             loading={shouldLoadEagerly ? "eager" : "lazy"}
             style={{
-              filter: isImagePreloaded ? 'none' : 'blur(5px)',
-              transition: 'filter 0.3s ease'
+              filter: isImagePreloaded ? 'none' : 'blur(3px)',
+              transition: 'filter 0.2s ease'
             }}
             data-testid={`listing-image-${listing.id}`}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/15" />
           
-          {/* Image Navigation Controls - Only show if multiple images */}
+          {/* Compact Image Navigation Controls */}
           {listing.images.length > 1 && (
             <>
               <button
                 onClick={prevImage}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 backdrop-blur-sm rounded-full p-2 text-white hover:bg-black/60 transition-colors z-20"
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 backdrop-blur-sm rounded-full p-1.5 text-white hover:bg-black/60 transition-colors z-20 border border-white/10"
                 data-testid="prev-image"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="w-3 h-3" />
               </button>
               <button
                 onClick={nextImage}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 backdrop-blur-sm rounded-full p-2 text-white hover:bg-black/60 transition-colors z-20"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 backdrop-blur-sm rounded-full p-1.5 text-white hover:bg-black/60 transition-colors z-20 border border-white/10"
                 data-testid="next-image"
               >
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight className="w-3 h-3" />
               </button>
               
-              {/* Image Dots Indicator */}
-              <div className="absolute top-4 left-1/2 -translate-x-1/2 flex gap-1 z-20">
+              {/* Minimal Image Dots Indicator */}
+              <div className="absolute top-3 left-1/2 -translate-x-1/2 flex gap-0.5 z-20">
                 {listing.images.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
-                    className={`w-2 h-2 rounded-full transition-colors ${
+                    className={`w-1.5 h-1.5 rounded-full transition-colors ${
                       index === currentImageIndex ? 'bg-white' : 'bg-white/40'
                     }`}
                     data-testid={`image-dot-${index}`}
@@ -389,15 +389,15 @@ export default function TikTokListingCard({
           )}
         </div>
 
-        {/* Enhanced Action Buttons */}
-        <div className="absolute top-4 right-4 flex flex-col gap-2 z-20">
+        {/* Enhanced Action Buttons - Compact */}
+        <div className="absolute top-3 right-3 flex flex-col gap-1 z-20">
           {/* 360° View Button */}
           <button
             onClick={handle360Viewer}
-            className="bg-black/40 backdrop-blur-sm rounded-full p-2 text-white hover:bg-black/60 transition-colors"
+            className="bg-black/40 backdrop-blur-sm rounded-full p-1.5 text-white hover:bg-black/60 transition-colors shadow-sm border border-white/10"
             data-testid="360-view-button"
           >
-            <Camera className="w-5 h-5" />
+            <Camera className="w-4 h-4" />
           </button>
           
           {/* AR Preview Button */}
@@ -411,19 +411,19 @@ export default function TikTokListingCard({
                 duration: 3000,
               });
             }}
-            className="bg-black/40 backdrop-blur-sm rounded-full p-2 text-white hover:bg-black/60 transition-colors"
+            className="bg-black/40 backdrop-blur-sm rounded-full p-1.5 text-white hover:bg-black/60 transition-colors shadow-sm border border-white/10"
             data-testid="ar-preview-button"
           >
-            <Maximize2 className="w-5 h-5" />
+            <Maximize2 className="w-4 h-4" />
           </button>
           
           {/* Price History Button */}
           <button
             onClick={handlePriceHistory}
-            className="bg-black/40 backdrop-blur-sm rounded-full p-2 text-white hover:bg-black/60 transition-colors"
+            className="bg-black/40 backdrop-blur-sm rounded-full p-1.5 text-white hover:bg-black/60 transition-colors shadow-sm border border-white/10"
             data-testid="price-history-button"
           >
-            <TrendingUp className="w-5 h-5" />
+            <TrendingUp className="w-4 h-4" />
           </button>
         </div>
 
@@ -492,61 +492,61 @@ export default function TikTokListingCard({
           <span className="text-gray-400 font-semibold text-sm">Pass</span>
         </motion.div>
 
-        {/* Right Action Bar */}
-        <div className="absolute right-4 bottom-32 flex flex-col gap-6 z-20">
+        {/* Right Action Bar - Compact */}
+        <div className="absolute right-3 bottom-24 flex flex-col gap-3 z-20">
           <button
             onClick={handleLike}
-            className="flex flex-col items-center gap-1 group"
+            className="flex flex-col items-center gap-0.5 group"
             data-testid={`button-like-${listing.id}`}
           >
-            <div className="bg-black/40 backdrop-blur-sm rounded-full p-3 group-active:scale-95 transition-transform">
+            <div className="bg-black/40 backdrop-blur-sm rounded-full p-2.5 group-active:scale-95 transition-transform shadow-sm border border-white/10">
               <Heart 
-                className={`w-7 h-7 ${liked ? 'text-red-500 fill-red-500' : 'text-white'}`} 
+                className={`w-6 h-6 ${liked ? 'text-red-500 fill-red-500' : 'text-white'}`} 
               />
             </div>
-            <span className="text-white text-xs font-medium">12.3K</span>
+            <span className="text-white text-xs font-light">12.3K</span>
           </button>
 
           <button
             onClick={handleCommentsOpen}
-            className="flex flex-col items-center gap-1 group"
+            className="flex flex-col items-center gap-0.5 group"
             data-testid={`button-comments-${listing.id}`}
           >
-            <div className="bg-black/40 backdrop-blur-sm rounded-full p-3 group-active:scale-95 transition-transform">
-              <MessageCircle className="w-7 h-7 text-white" />
+            <div className="bg-black/40 backdrop-blur-sm rounded-full p-2.5 group-active:scale-95 transition-transform shadow-sm border border-white/10">
+              <MessageCircle className="w-6 h-6 text-white" />
             </div>
-            <span className="text-white text-xs font-medium">234</span>
+            <span className="text-white text-xs font-light">234</span>
           </button>
 
           <button
             onClick={handleBoardSelector}
-            className="flex flex-col items-center gap-1 group"
+            className="flex flex-col items-center gap-0.5 group"
             data-testid={`button-save-${listing.id}`}
           >
-            <div className="bg-black/40 backdrop-blur-sm rounded-full p-3 group-active:scale-95 transition-transform">
+            <div className="bg-black/40 backdrop-blur-sm rounded-full p-2.5 group-active:scale-95 transition-transform shadow-sm border border-white/10">
               <Layers 
-                className={`w-7 h-7 ${saved ? 'text-yellow-500 fill-yellow-500' : 'text-white'}`} 
+                className={`w-6 h-6 ${saved ? 'text-yellow-500 fill-yellow-500' : 'text-white'}`} 
               />
             </div>
-            <span className="text-white text-xs font-medium">Save</span>
+            <span className="text-white text-xs font-light">Save</span>
           </button>
 
           <button
             onClick={handleShare}
-            className="flex flex-col items-center gap-1 group"
+            className="flex flex-col items-center gap-0.5 group"
             data-testid={`button-share-${listing.id}`}
           >
-            <div className="bg-black/40 backdrop-blur-sm rounded-full p-3 group-active:scale-95 transition-transform">
-              <Share className="w-7 h-7 text-white" />
+            <div className="bg-black/40 backdrop-blur-sm rounded-full p-2.5 group-active:scale-95 transition-transform shadow-sm border border-white/10">
+              <Share className="w-6 h-6 text-white" />
             </div>
           </button>
         </div>
 
-        {/* Bottom Info Panel */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
-          <div className="space-y-3">
+        {/* Bottom Info Panel - Compact */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+          <div className="space-y-2">
             {/* Seller Profile Section */}
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-3 mb-2">
               <div className="relative">
                 <button
                   onClick={handleProfilePreview}
@@ -556,12 +556,11 @@ export default function TikTokListingCard({
                   <img
                     src={mockSeller.avatar}
                     alt="Seller"
-                    className="w-12 h-12 rounded-full border-2 border-white/20 hover:border-white/40 transition-colors"
+                    className="w-10 h-10 rounded-full border border-white/20 hover:border-white/40 transition-colors"
                   />
-                  {/* Online Status Indicator */}
+                  {/* Online Status Indicator - Smaller */}
                   {mockSeller.isOnline && (
-                    <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-green-500 rounded-full border-2 border-black flex items-center justify-center">
-                      <Circle className="w-2 h-2 fill-green-500 text-green-500" />
+                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border border-black">
                     </div>
                   )}
                 </button>
@@ -571,74 +570,74 @@ export default function TikTokListingCard({
                   onClick={handleProfilePreview}
                   className="text-left hover:opacity-80 transition-opacity"
                 >
-                  <p className="text-white font-semibold text-sm flex items-center gap-2">
+                  <p className="text-white font-medium text-sm flex items-center gap-2">
                     {mockSeller.name}
                     {mockSeller.isOnline && (
-                      <span className="text-green-400 text-xs">• Online</span>
+                      <span className="text-green-400 text-xs font-light">• Online</span>
                     )}
                   </p>
-                  <p className="text-gray-300 text-xs">
+                  <p className="text-gray-300 text-xs font-light">
                     {mockSeller.listingsCount} listings • {mockSeller.isOnline ? "Active now" : `Last seen ${mockSeller.lastSeen}`}
                   </p>
                 </button>
               </div>
-              {/* Message Button */}
-              <button className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-full text-white text-sm font-medium transition-colors">
+              {/* Message Button - Compact */}
+              <button className="bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full text-white text-sm font-light transition-colors">
                 Message
               </button>
             </div>
 
-            {/* Sleek Price Display - Left Aligned */}
-            <div className="flex items-start justify-between mb-4">
+            {/* Sleek Price Display - Left Aligned - Compact */}
+            <div className="flex items-start justify-between mb-3">
               {/* Premium Price Display - Left Side */}
               <div className="text-left">
                 {isNegotiable && (
-                  <p className="text-white/60 text-xs font-light mb-1">From</p>
+                  <p className="text-white/60 text-xs font-light mb-0.5">From</p>
                 )}
                 
                 <div className="flex items-baseline gap-2">
                   <div className="flex items-baseline">
-                    <span className="text-lg font-light text-white/80 mr-1">
+                    <span className="text-base font-light text-white/80 mr-0.5">
                       $
                     </span>
-                    <span className="text-3xl font-light tracking-wide text-white">
+                    <span className="text-2xl font-light tracking-wide text-white">
                       {new Intl.NumberFormat('en-US').format(listing.price)}
                     </span>
                   </div>
                   {hasDiscount && (
                     <div className="flex items-baseline text-white/40 text-sm line-through font-light">
-                      <span className="text-xs mr-1">$</span>
+                      <span className="text-xs mr-0.5">$</span>
                       <span>{new Intl.NumberFormat('en-US').format(originalPrice)}</span>
                     </div>
                   )}
                 </div>
 
                 {/* Subtle context */}
-                <div className="flex items-center gap-3 mt-1">
+                <div className="flex items-center gap-2 mt-0.5">
                   {hasFinancing && (
                     <span className="text-white/50 text-xs font-light">
                       ${Math.floor(listing.price * 0.004).toLocaleString()}/mo
                     </span>
                   )}
                   {hasDiscount && (
-                    <span className="text-green-300/80 text-xs font-medium">
+                    <span className="text-green-300/80 text-xs font-light">
                       Save ${(originalPrice - listing.price).toLocaleString()}
                     </span>
                   )}
                 </div>
               </div>
               
-              {/* Subtle badges - Right Side */}
-              <div className="space-y-1">
+              {/* Subtle badges - Right Side - Compact */}
+              <div className="space-y-0.5">
                 {(isPriceDrop || isGreatDeal) && (
                   <div className="inline-block">
                     {isPriceDrop && (
-                      <span className="bg-red-500/20 text-red-300 text-xs font-medium px-2 py-1 rounded-md backdrop-blur-sm border border-red-500/30">
+                      <span className="bg-red-500/20 text-red-300 text-xs font-light px-1.5 py-0.5 rounded-md backdrop-blur-sm border border-red-500/20">
                         Price Drop
                       </span>
                     )}
                     {isGreatDeal && !isPriceDrop && (
-                      <span className="bg-green-500/20 text-green-300 text-xs font-medium px-2 py-1 rounded-md backdrop-blur-sm border border-green-500/30">
+                      <span className="bg-green-500/20 text-green-300 text-xs font-light px-1.5 py-0.5 rounded-md backdrop-blur-sm border border-green-500/20">
                         Great Deal
                       </span>
                     )}
@@ -647,8 +646,8 @@ export default function TikTokListingCard({
               </div>
             </div>
 
-            {/* Title */}
-            <h2 className="text-2xl font-bold text-white mb-3 leading-tight">
+            {/* Title - Compact */}
+            <h2 className="text-xl font-medium text-white mb-2 leading-tight">
               {listing.title}
             </h2>
             
@@ -689,7 +688,7 @@ export default function TikTokListingCard({
               </div>
             </div>
             
-            <div className="flex items-center gap-4 text-gray-300 text-sm">
+            <div className="flex items-center gap-3 text-gray-300 text-sm font-light">
               <span>📍 {listing.location}</span>
               {listing.category === 'homes' && specs && (
                 <>
@@ -711,14 +710,14 @@ export default function TikTokListingCard({
               )}
             </div>
             
-            {/* Similar Listings Preview */}
+            {/* Similar Listings Preview - Compact */}
             <button
               onClick={handleSimilarListings}
-              className="w-full bg-gray-800/30 backdrop-blur-sm rounded-xl p-3 mt-4 border border-gray-600/30 hover:bg-gray-700/40 transition-colors"
+              className="w-full bg-gray-800/30 backdrop-blur-sm rounded-lg p-2.5 mt-3 border border-gray-600/20 hover:bg-gray-700/40 transition-colors"
               data-testid="similar-listings-button"
             >
               <div className="flex items-center justify-between">
-                <span className="text-white text-sm font-medium">View Similar Listings</span>
+                <span className="text-white text-sm font-light">View Similar Listings</span>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
               </div>
             </button>
