@@ -9,7 +9,7 @@ import { Card } from "@/components/ui/card";
 import { useAuth } from "@/hooks/use-auth";
 import { useUserAlerts, useCreateAlert, useUpdateAlert, useDeleteAlert } from "@/hooks/use-alerts";
 import { useLocation } from "wouter";
-import BottomNav from "@/components/bottom-nav";
+
 
 export default function Alerts() {
   const [, setLocation] = useLocation();
@@ -298,7 +298,6 @@ export default function Alerts() {
         )}
       </div>
 
-      <BottomNav />
     </div>
   );
 }

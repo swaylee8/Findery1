@@ -6,7 +6,7 @@ import { useListings } from "@/hooks/use-listings";
 import { useFollowingFeed } from "@/hooks/use-follows";
 import ListingCard from "@/components/listing-card";
 import CategoryFilter from "@/components/category-filter";
-import BottomNav from "@/components/bottom-nav";
+
 import AlertModal from "@/components/alert-modal";
 
 export default function Home() {
@@ -85,7 +85,7 @@ export default function Home() {
       </div>
 
       {/* Feed */}
-      <div className="flex-1 overflow-y-auto pb-20">
+      <div className="flex-1 overflow-y-auto">
         {isLoading ? (
           <div className="p-4 space-y-4">
             {[...Array(3)].map((_, i) => (
@@ -112,8 +112,6 @@ export default function Home() {
         )}
       </div>
 
-      <BottomNav />
-      
       {/* Alert Modal */}
       <AlertModal
         isOpen={showAlertModal}

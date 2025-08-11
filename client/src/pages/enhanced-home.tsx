@@ -11,7 +11,7 @@ import { useOfflineCache } from "@/hooks/use-offline-cache";
 import ListingCard from "@/components/listing-card";
 import { TinderCard } from "@/components/tinder-card";
 import CategoryFilter from "@/components/category-filter";
-import BottomNav from "@/components/bottom-nav";
+
 import AlertModal from "@/components/alert-modal";
 import { BottomSheetFilters } from "@/components/bottom-sheet-filters";
 import { ListingCardSkeleton, TinderCardSkeleton } from "@/components/skeleton-loader";
@@ -334,8 +334,6 @@ export default function Home() {
         {viewMode === "swipe" ? renderSwipeMode() : renderGridMode()}
       </div>
 
-      <BottomNav />
-      
       <AlertModal
         open={showAlertModal}
         onOpenChange={setShowAlertModal}

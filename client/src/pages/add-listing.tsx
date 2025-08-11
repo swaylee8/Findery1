@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useCreateListing } from "@/hooks/use-listings";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
-import BottomNav from "@/components/bottom-nav";
+
 
 const categories = [
   { id: "homes", label: "🏠 Home" },
@@ -229,7 +229,6 @@ export default function AddListing() {
         </div>
       </div>
 
-      <BottomNav />
     </div>
   );
 }

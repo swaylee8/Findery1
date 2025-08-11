@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Heart, MessageCircle, Share, MoreHorizontal, Plus, Menu, Search } from "lucide-react";
+import { Heart, MessageCircle, Share, MoreHorizontal, Plus, Menu, Search, Home, User, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
+import { useLocation } from "wouter";
 import { useListings } from "@/hooks/use-listings";
 import { useToggleLike } from "@/hooks/use-listings";
 import { useHaptics } from "@/hooks/use-haptics";
@@ -18,6 +19,7 @@ type CategoryType = 'all' | 'homes' | 'cars' | 'boats';
 
 export default function TikTokHome() {
   const { user } = useAuth();
+  const [, setLocation] = useLocation();
   const { data: rawListings = [], isLoading } = useListings();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -238,7 +240,71 @@ export default function TikTokHome() {
         </SheetTrigger>
         <SheetContent side="left" className="bg-black/90 backdrop-blur-md border-gray-800">
           <div className="text-white">
-            <h2 className="text-lg font-light mb-4">Scroll & Sold</h2>
+            <h2 className="text-lg font-light mb-6">Scroll & Sold</h2>
+            
+            {/* Navigation Section */}
+            <div className="space-y-1 mb-6">
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setLocation("/");
+                  setIsMenuOpen(false);
+                  triggerHaptic('light');
+                }}
+                className="w-full justify-start text-white hover:bg-white/10 px-3 py-3 h-auto"
+                data-testid="menu-home"
+              >
+                <Home className="mr-3" size={20} />
+                <span className="text-sm font-light">Home</span>
+              </Button>
+              
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setLocation("/messages");
+                  setIsMenuOpen(false);
+                  triggerHaptic('light');
+                }}
+                className="w-full justify-start text-white hover:bg-white/10 px-3 py-3 h-auto"
+                data-testid="menu-messages"
+              >
+                <MessageCircle className="mr-3" size={20} />
+                <span className="text-sm font-light">Messages</span>
+              </Button>
+              
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setLocation("/profile");
+                  setIsMenuOpen(false);
+                  triggerHaptic('light');
+                }}
+                className="w-full justify-start text-white hover:bg-white/10 px-3 py-3 h-auto"
+                data-testid="menu-profile"
+              >
+                <User className="mr-3" size={20} />
+                <span className="text-sm font-light">Profile</span>
+              </Button>
+              
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setLocation("/alerts");
+                  setIsMenuOpen(false);
+                  triggerHaptic('light');
+                }}
+                className="w-full justify-start text-white hover:bg-white/10 px-3 py-3 h-auto"
+                data-testid="menu-alerts"
+              >
+                <Bell className="mr-3" size={20} />
+                <span className="text-sm font-light">Alerts</span>
+              </Button>
+            </div>
+
+            {/* Divider */}
+            <div className="border-t border-gray-700 mb-4"></div>
+            
+            {/* Debug Information */}
             <div className="space-y-3">
               <div>
                 <h3 className="text-sm font-light text-gray-400 mb-2">Feed Algorithm</h3>
@@ -297,40 +363,7 @@ export default function TikTokHome() {
       </div>
 
       {/* Removed floating action button - moved to Profile section */}
-
-      {/* Floating Tab Bar */}
-      <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="bg-black/80 backdrop-blur-md rounded-full px-6 py-3 flex items-center space-x-6 border border-gray-700">
-          <Button 
-            variant="ghost" 
-            size="sm"
-            className="text-white hover:text-purple-400 transition-colors"
-            data-testid="button-home"
-          >
-            Home
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="sm"
-            className="text-gray-400 hover:text-white transition-colors"
-            onClick={() => window.location.href = '/messages'}
-            data-testid="button-messages"
-          >
-            Messages
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="sm"
-            className="text-gray-400 hover:text-white transition-colors"
-            onClick={() => window.location.href = '/profile'}
-            data-testid="button-profile"
-          >
-            Profile
-          </Button>
-        </div>
-      </div>
-
-
+      {/* Removed floating tab bar - navigation moved to hamburger menu */}
     </div>
   );
 }
