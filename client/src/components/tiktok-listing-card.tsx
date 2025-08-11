@@ -344,6 +344,39 @@ export default function TikTokListingCard({
           )}
         </div>
 
+        {/* Price Drop & Great Deal Badges - Left Side with Mobile Optimization */}
+        <div className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 z-20 max-w-[90px] sm:max-w-none">
+          {isPriceDrop && (
+            <motion.div
+              initial={{ opacity: 0, x: -15 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="bg-red-500/30 backdrop-blur-xl text-red-100 text-xs font-medium px-2 py-0.5 rounded-md border border-red-400/30 shadow-sm"
+              style={{ 
+                textShadow: '0 1px 2px rgba(0,0,0,0.8)',
+                backdropFilter: 'blur(12px) saturate(150%)'
+              }}
+              data-testid="price-drop-badge"
+            >
+              Price Drop
+            </motion.div>
+          )}
+          {isGreatDeal && (
+            <motion.div
+              initial={{ opacity: 0, x: -15 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+              className="bg-green-500/30 backdrop-blur-xl text-green-100 text-xs font-medium px-2 py-0.5 rounded-md border border-green-400/30 shadow-sm"
+              style={{ 
+                textShadow: '0 1px 2px rgba(0,0,0,0.8)',
+                backdropFilter: 'blur(12px) saturate(150%)'
+              }}
+              data-testid="great-deal-badge"
+            >
+              Great Deal
+            </motion.div>
+          )}
+        </div>
+
         {/* Enhanced Action Buttons - Compact */}
         <div className="absolute top-3 right-3 flex flex-col gap-1 z-20">
           {/* 360° View Button */}
@@ -552,23 +585,7 @@ export default function TikTokListingCard({
                 </div>
               </div>
               
-              {/* Subtle badges - Right Side - Compact */}
-              <div className="space-y-0.5">
-                {(isPriceDrop || isGreatDeal) && (
-                  <div className="inline-block">
-                    {isPriceDrop && (
-                      <span className="bg-red-500/20 text-red-300 text-xs font-light px-1.5 py-0.5 rounded-md backdrop-blur-sm border border-red-500/20">
-                        Price Drop
-                      </span>
-                    )}
-                    {isGreatDeal && !isPriceDrop && (
-                      <span className="bg-green-500/20 text-green-300 text-xs font-light px-1.5 py-0.5 rounded-md backdrop-blur-sm border border-green-500/20">
-                        Great Deal
-                      </span>
-                    )}
-                  </div>
-                )}
-              </div>
+              {/* Removed badges from right side - moved to left */}
             </div>
 
             {/* Title - Compact */}
