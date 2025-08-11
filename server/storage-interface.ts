@@ -69,6 +69,7 @@ export interface IStorage {
   getLikesCount(listingId: number): Promise<number>;
   
   // Message operations
+  getConversations(): Promise<any[]>;
   getMessagesByListing(listingId: number): Promise<Message[]>;
   createMessage(message: InsertMessage): Promise<Message>;
   getMessageTemplates(): Promise<string[]>;

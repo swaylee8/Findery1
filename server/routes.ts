@@ -155,12 +155,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Message routes
+  app.get("/api/conversations", async (req, res) => {
+    try {
+      const conversations = await storage.getConversations();
+      res.json(conversations);
+    } catch (error) {
+      console.error("Error fetching conversations:", error);
+      res.status(500).json({ message: "Failed to fetch conversations" });
+    }
+  });
+
   app.get("/api/listings/:id/messages", async (req, res) => {
     try {
       const listingId = parseInt(req.params.id);
       const messages = await storage.getMessagesByListing(listingId);
       res.json(messages);
     } catch (error) {
+      console.error("Error fetching messages:", error);
       res.status(500).json({ message: "Failed to fetch messages" });
     }
   });

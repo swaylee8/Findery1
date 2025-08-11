@@ -470,6 +470,36 @@ export class DatabaseStorage implements IStorage {
     return message;
   }
 
+  async getConversations(): Promise<any[]> {
+    // Return mock conversations with preview data
+    return [
+      {
+        id: 1,
+        listingId: 1,
+        listingTitle: "2024 Tesla Model S",
+        listingImage: "https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800",
+        lastMessage: "Thanks for your interest! When would you like to schedule a viewing?",
+        lastMessageTime: new Date(Date.now() - 30 * 60 * 1000),
+        otherUserName: "Sarah Johnson",
+        otherUserAvatar: "https://images.unsplash.com/photo-1494790108755-2616b612b002?w=150",
+        isOnline: true,
+        unreadCount: 2
+      },
+      {
+        id: 2,
+        listingId: 2,
+        listingTitle: "Beautiful Modern House",
+        listingImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800",
+        lastMessage: "The price is negotiable. What's your budget?",
+        lastMessageTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
+        otherUserName: "Mike Chen",
+        otherUserAvatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150",
+        isOnline: false,
+        unreadCount: 0
+      }
+    ];
+  }
+
   async getMessageTemplates(): Promise<string[]> {
     return [
       "Hi! Is this still available?",

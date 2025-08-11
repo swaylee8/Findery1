@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { useParams, useLocation } from "wouter";
-import { ArrowLeft, Phone, Send, MoreHorizontal, Smile } from "lucide-react";
+import { ArrowLeft, Phone, Send, MoreHorizontal, Smile, MessageCircle, ChevronRight, Circle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { useListing } from "@/hooks/use-listings";
 import { useAuth } from "@/hooks/use-auth";
 import { useHaptics } from "@/hooks/use-haptics";
-import { useSound } from "@/hooks/use-sound";
+import { useQuery } from "@tanstack/react-query";
 
 interface Message {
   id: number;
@@ -17,12 +17,31 @@ interface Message {
   status?: 'sent' | 'delivered' | 'read';
 }
 
+interface Conversation {
+  id: number;
+  listingId: number;
+  listingTitle: string;
+  listingImage: string;
+  lastMessage: string;
+  lastMessageTime: Date;
+  otherUserName: string;
+  otherUserAvatar: string;
+  isOnline: boolean;
+  unreadCount: number;
+}
+
 export default function Messages() {
   const { listingId } = useParams<{ listingId: string }>();
   const [, setLocation] = useLocation();
   const { user } = useAuth();
   const { triggerHaptic } = useHaptics();
-  const { playSound } = useSound();
+
+  // Fetch conversations list
+  const { data: conversations, isLoading, error } = useQuery<Conversation[]>({
+    queryKey: ['/api/conversations'],
+    retry: 3,
+    retryDelay: 1000,
+  });
 
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -51,9 +70,6 @@ export default function Messages() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const id = parseInt(listingId || "0");
-  const { data: listing } = useListing(id, user?.id);
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -76,7 +92,6 @@ export default function Messages() {
     setMessages(prev => [...prev, message]);
     setNewMessage("");
     triggerHaptic('light');
-    playSound('pop');
     
     // Simulate typing indicator and response
     setTimeout(() => setIsTyping(true), 1000);
@@ -89,7 +104,6 @@ export default function Messages() {
         timestamp: new Date(),
       }]);
       triggerHaptic('light');
-      playSound('notification');
     }, 3000);
   };
 
@@ -100,6 +114,111 @@ export default function Messages() {
       hour12: true 
     });
   };
+
+  // Show conversation list if no specific conversation is selected
+  if (!listingId) {
+    if (isLoading) {
+      return (
+        <div className="fixed inset-0 bg-black flex items-center justify-center">
+          <div className="text-white font-light">Loading conversations...</div>
+        </div>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="fixed inset-0 bg-black flex items-center justify-center">
+          <div className="text-center space-y-4">
+            <div className="text-red-400 font-light">Failed to load conversations</div>
+            <Button 
+              onClick={() => window.location.reload()} 
+              className="bg-blue-500/20 text-blue-300 hover:bg-blue-500/30"
+            >
+              Try Again
+            </Button>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="fixed inset-0 bg-black overflow-hidden flex flex-col">
+        {/* Header */}
+        <div className="bg-black/80 backdrop-blur-xl border-b border-gray-800/50 px-6 py-4">
+          <h1 className="text-white text-xl font-light">Messages</h1>
+        </div>
+
+        {/* Conversations List */}
+        <div className="flex-1 overflow-y-auto">
+          {conversations && conversations.length > 0 ? (
+            <div className="space-y-1 p-4">
+              {conversations.map((conversation) => (
+                <motion.button
+                  key={conversation.id}
+                  onClick={() => {
+                    triggerHaptic('light');
+                    setLocation(`/messages/${conversation.listingId}`);
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full p-4 bg-gray-800/40 backdrop-blur-sm border border-gray-700/50 rounded-2xl flex items-center space-x-4 text-left hover:bg-gray-700/50 transition-colors"
+                  data-testid={`conversation-${conversation.id}`}
+                >
+                  {/* Listing Image */}
+                  <img
+                    src={conversation.listingImage}
+                    alt={conversation.listingTitle}
+                    className="w-14 h-14 rounded-xl object-cover"
+                  />
+
+                  {/* Content */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <h3 className="text-white font-medium text-sm truncate">{conversation.otherUserName}</h3>
+                      <div className="flex items-center space-x-2">
+                        {conversation.isOnline && (
+                          <Circle className="w-2 h-2 text-green-400 fill-green-400" />
+                        )}
+                        <span className="text-xs text-gray-400">
+                          {new Date(conversation.lastMessageTime).toLocaleTimeString('en-US', { 
+                            hour: 'numeric', 
+                            minute: '2-digit' 
+                          })}
+                        </span>
+                      </div>
+                    </div>
+                    <p className="text-gray-300 text-xs truncate mb-1">{conversation.listingTitle}</p>
+                    <p className="text-gray-400 text-sm truncate">{conversation.lastMessage}</p>
+                  </div>
+
+                  {/* Unread Badge & Arrow */}
+                  <div className="flex items-center space-x-2">
+                    {conversation.unreadCount > 0 && (
+                      <div className="bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                        {conversation.unreadCount}
+                      </div>
+                    )}
+                    <ChevronRight className="w-4 h-4 text-gray-400" />
+                  </div>
+                </motion.button>
+              ))}
+            </div>
+          ) : (
+            <div className="flex-1 flex items-center justify-center">
+              <div className="text-center space-y-4">
+                <MessageCircle className="w-16 h-16 text-gray-400 mx-auto" />
+                <div className="text-gray-400 font-light">No conversations yet</div>
+                <p className="text-gray-500 text-sm">Start browsing listings to connect with sellers</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Individual conversation view (existing logic)
+  const conversationListingId = parseInt(listingId || "0");
+  const { data: listing } = useListing(conversationListingId, user?.id);
 
   if (!listing) {
     return (
