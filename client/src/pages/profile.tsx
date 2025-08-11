@@ -127,6 +127,23 @@ export default function Profile() {
 
           {/* Action Buttons */}
           <div className="flex gap-4 mt-6">
+            {/* Add Listing Button - Primary Action */}
+            <motion.button
+              onClick={() => window.location.href = '/add-listing'}
+              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.02 }}
+              className="bg-gradient-to-r from-purple-500/25 to-pink-500/25 backdrop-blur-xl border border-purple-400/30 text-white hover:from-purple-500/35 hover:to-pink-500/35 rounded-2xl px-8 py-4 font-light tracking-wide transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-3 min-w-[44px] min-h-[44px]"
+              style={{
+                backdropFilter: 'blur(12px) saturate(150%)',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 20px rgba(147, 51, 234, 0.2)'
+              }}
+              aria-label="Add New Listing"
+              data-testid="button-add-listing"
+            >
+              <Plus size={20} className="drop-shadow-sm" />
+              <span className="text-lg">Add Listing</span>
+            </motion.button>
+
             {!user.isVerified && (
               <Button
                 onClick={() => setShowVerificationModal(true)}

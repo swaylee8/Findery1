@@ -7,7 +7,7 @@ export default function BottomNav() {
 
   return (
     <div className="safe-area-bottom bg-white border-t border-gray-200 px-4">
-      <div className="flex items-center justify-around py-2">
+      <div className="flex items-center justify-between px-8 py-2">
         <Button
           variant="ghost"
           onClick={() => setLocation("/")}
@@ -19,16 +19,7 @@ export default function BottomNav() {
           <span className="text-xs font-medium">Feed</span>
         </Button>
 
-        <Button
-          variant="ghost"
-          onClick={() => setLocation("/add-listing")}
-          className={`flex flex-col items-center py-2 px-3 ${
-            location === "/add-listing" ? "text-instagram-blue" : "text-instagram-light-gray"
-          }`}
-        >
-          <Plus className="mb-1" size={20} />
-          <span className="text-xs font-medium">Post</span>
-        </Button>
+        {/* Add Listing button moved to Profile section */}
 
         <Button
           variant="ghost"

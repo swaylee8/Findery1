@@ -296,14 +296,7 @@ export default function TikTokHome() {
         ))}
       </div>
 
-      {/* Floating Action Button */}
-      <Button
-        className="fixed bottom-20 right-6 w-14 h-14 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-lg z-50"
-        onClick={() => window.location.href = '/add-listing'}
-        data-testid="button-add-listing"
-      >
-        <Plus size={24} className="text-white" />
-      </Button>
+      {/* Removed floating action button - moved to Profile section */}
 
       {/* Floating Tab Bar */}
       <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
