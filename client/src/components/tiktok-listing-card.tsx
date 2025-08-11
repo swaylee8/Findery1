@@ -316,8 +316,8 @@ export default function TikTokListingCard({
   const isNegotiable = Math.random() > 0.4; // 60% chance of being negotiable
   const hasFinancing = listing.price > 50000; // Show financing for expensive items
 
-  // Description truncation for mobile
-  const MOBILE_DESCRIPTION_LIMIT = 100;
+  // Description truncation for mobile - 1 line only (approximately 40-50 characters)
+  const MOBILE_DESCRIPTION_LIMIT = 45;
   const shouldTruncateDescription = listing.description.length > MOBILE_DESCRIPTION_LIMIT;
   const previewDescription = shouldTruncateDescription 
     ? listing.description.slice(0, MOBILE_DESCRIPTION_LIMIT).trim() + '...'
@@ -664,7 +664,9 @@ export default function TikTokListingCard({
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                   className="overflow-hidden"
                 >
-                  <p className="text-gray-200 text-sm leading-relaxed">
+                  <p className={`text-gray-200 text-sm leading-relaxed ${
+                    isDescriptionExpanded ? '' : 'truncate whitespace-nowrap overflow-hidden'
+                  }`}>
                     {isDescriptionExpanded ? listing.description : previewDescription}
                   </p>
                 </motion.div>
