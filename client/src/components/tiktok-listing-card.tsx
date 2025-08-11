@@ -377,19 +377,26 @@ export default function TikTokListingCard({
           )}
         </div>
 
-        {/* Enhanced Action Buttons - Compact */}
-        <div className="absolute top-3 right-3 flex flex-col gap-1 z-20">
+        {/* Enhanced Action Buttons - Glassmorphism Style */}
+        <div className="absolute top-3 right-3 flex flex-col gap-1.5 z-20">
           {/* 360° View Button */}
-          <button
+          <motion.button
             onClick={handle360Viewer}
-            className="bg-black/40 backdrop-blur-sm rounded-full p-1.5 text-white hover:bg-black/60 transition-colors shadow-sm border border-white/10"
+            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.05 }}
+            className="min-w-[44px] min-h-[44px] bg-black/25 backdrop-blur-sm rounded-xl p-2.5 text-white transition-all duration-200 border border-white/15 shadow-lg hover:bg-black/35 hover:shadow-xl active:bg-black/45"
+            style={{
+              backdropFilter: 'blur(8px) saturate(150%)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 12px rgba(0,0,0,0.3)'
+            }}
+            aria-label="View in 360°"
             data-testid="360-view-button"
           >
-            <Camera className="w-4 h-4" />
-          </button>
+            <Camera className="w-5 h-5 drop-shadow-sm" />
+          </motion.button>
           
           {/* AR Preview Button */}
-          <button
+          <motion.button
             onClick={() => {
               triggerHaptic('medium');
               toast({
@@ -398,20 +405,34 @@ export default function TikTokListingCard({
                 duration: 3000,
               });
             }}
-            className="bg-black/40 backdrop-blur-sm rounded-full p-1.5 text-white hover:bg-black/60 transition-colors shadow-sm border border-white/10"
+            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.05 }}
+            className="min-w-[44px] min-h-[44px] bg-black/25 backdrop-blur-sm rounded-xl p-2.5 text-white transition-all duration-200 border border-white/15 shadow-lg hover:bg-black/35 hover:shadow-xl active:bg-black/45"
+            style={{
+              backdropFilter: 'blur(8px) saturate(150%)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 12px rgba(0,0,0,0.3)'
+            }}
+            aria-label="AR Preview"
             data-testid="ar-preview-button"
           >
-            <Maximize2 className="w-4 h-4" />
-          </button>
+            <Maximize2 className="w-5 h-5 drop-shadow-sm" />
+          </motion.button>
           
           {/* Price History Button */}
-          <button
+          <motion.button
             onClick={handlePriceHistory}
-            className="bg-black/40 backdrop-blur-sm rounded-full p-1.5 text-white hover:bg-black/60 transition-colors shadow-sm border border-white/10"
+            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.05 }}
+            className="min-w-[44px] min-h-[44px] bg-black/25 backdrop-blur-sm rounded-xl p-2.5 text-white transition-all duration-200 border border-white/15 shadow-lg hover:bg-black/35 hover:shadow-xl active:bg-black/45"
+            style={{
+              backdropFilter: 'blur(8px) saturate(150%)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 12px rgba(0,0,0,0.3)'
+            }}
+            aria-label="Price History"
             data-testid="price-history-button"
           >
-            <TrendingUp className="w-4 h-4" />
-          </button>
+            <TrendingUp className="w-5 h-5 drop-shadow-sm" />
+          </motion.button>
         </div>
 
         {/* Double-tap Heart Animation */}
