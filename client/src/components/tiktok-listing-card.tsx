@@ -377,9 +377,9 @@ export default function TikTokListingCard({
           )}
         </div>
 
-        {/* Enhanced Action Buttons - Glassmorphism Style */}
-        <div className="absolute top-3 right-3 flex flex-col gap-1.5 z-20">
-          {/* 360° View Button */}
+        {/* Enhanced Action Buttons - Repositioned closer to content */}
+        <div className="absolute top-1/4 right-4 flex flex-col gap-2 z-20">
+          {/* 360° Photo Viewer Button - Enhanced icon clarity */}
           <motion.button
             onClick={handle360Viewer}
             whileTap={{ scale: 0.95 }}
@@ -389,13 +389,16 @@ export default function TikTokListingCard({
               backdropFilter: 'blur(8px) saturate(150%)',
               boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 12px rgba(0,0,0,0.3)'
             }}
-            aria-label="View in 360°"
+            aria-label="View 360° Photos"
             data-testid="360-view-button"
           >
-            <Camera className="w-5 h-5 drop-shadow-sm" />
+            <div className="relative">
+              <Camera className="w-5 h-5 drop-shadow-sm" />
+              <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-400 rounded-full opacity-80" />
+            </div>
           </motion.button>
           
-          {/* AR Preview Button */}
+          {/* AR Preview Button - Enhanced with clearer icon */}
           <motion.button
             onClick={() => {
               triggerHaptic('medium');
@@ -412,13 +415,16 @@ export default function TikTokListingCard({
               backdropFilter: 'blur(8px) saturate(150%)',
               boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 12px rgba(0,0,0,0.3)'
             }}
-            aria-label="AR Preview"
+            aria-label="AR Preview - View in Your Space"
             data-testid="ar-preview-button"
           >
-            <Maximize2 className="w-5 h-5 drop-shadow-sm" />
+            <div className="relative">
+              <Maximize2 className="w-5 h-5 drop-shadow-sm" />
+              <div className="absolute -bottom-1 -right-1 text-xs font-bold text-green-300">AR</div>
+            </div>
           </motion.button>
           
-          {/* Price History Button */}
+          {/* Price History & Analytics Button */}
           <motion.button
             onClick={handlePriceHistory}
             whileTap={{ scale: 0.95 }}
@@ -428,7 +434,7 @@ export default function TikTokListingCard({
               backdropFilter: 'blur(8px) saturate(150%)',
               boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 12px rgba(0,0,0,0.3)'
             }}
-            aria-label="Price History"
+            aria-label="Price History & Market Analytics"
             data-testid="price-history-button"
           >
             <TrendingUp className="w-5 h-5 drop-shadow-sm" />
