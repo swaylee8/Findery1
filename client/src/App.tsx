@@ -10,6 +10,7 @@ import TikTokHome from "@/pages/tiktok-home";
 import ListingDetail from "@/pages/listing-detail";
 import AddListing from "@/pages/add-listing";
 import Profile from "@/pages/profile";
+import SellerProfile from "@/pages/seller-profile";
 import Messages from "@/pages/messages";
 import Alerts from "@/pages/alerts";
 import { useAuth } from "@/hooks/use-auth";
@@ -38,6 +39,8 @@ function Router() {
           <Route path="/listing/:id" component={ListingDetail} />
           <Route path="/add-listing" component={AddListing} />
           <Route path="/profile" component={Profile} />
+          <Route path="/seller/:sellerId" component={SellerProfile} />
+          <Route path="/messages" component={Messages} />
           <Route path="/messages/:listingId" component={Messages} />
           <Route path="/alerts" component={Alerts} />
         </>

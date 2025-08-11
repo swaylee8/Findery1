@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useHaptics } from "@/hooks/use-haptics";
 import { useSound } from "@/hooks/use-sound";
 import { useToast } from "@/hooks/use-toast";
+import { useLocation } from "wouter";
 import type { Listing } from "@shared/schema";
 
 interface TikTokListingCardProps {
@@ -53,6 +54,7 @@ export default function TikTokListingCard({
   
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const [, setLocation] = useLocation();
   const { triggerHaptic } = useHaptics();
   const { playSound } = useSound();
   const { toast } = useToast();
@@ -165,8 +167,9 @@ export default function TikTokListingCard({
   const handleProfilePreview = useCallback(() => {
     triggerHaptic('light');
     playSound('pop');
-    setShowProfilePreview(true);
-  }, [triggerHaptic, playSound]);
+    // Navigate to seller profile page instead of showing preview
+    setLocation(`/seller/${listing.userId}`);
+  }, [triggerHaptic, playSound, listing.userId, setLocation]);
 
   // Mock seller data - in real app this would come from API
   const mockSeller = {
@@ -486,14 +489,14 @@ export default function TikTokListingCard({
         {/* Bottom Info Panel - Compact */}
         <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
           <div className="space-y-2">
-            {/* Seller Profile Section */}
-            <div className="flex items-center gap-3 mb-2">
-              <div className="relative">
-                <button
-                  onClick={handleProfilePreview}
-                  className="relative"
-                  data-testid={`seller-avatar-${listing.id}`}
-                >
+            {/* Seller Profile Section - Click to view profile and message */}
+            <div className="mb-2">
+              <button
+                onClick={handleProfilePreview}
+                className="flex items-center gap-3 w-full text-left hover:opacity-80 transition-opacity"
+                data-testid={`seller-profile-${listing.id}`}
+              >
+                <div className="relative">
                   <img
                     src={mockSeller.avatar}
                     alt="Seller"
@@ -504,13 +507,8 @@ export default function TikTokListingCard({
                     <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border border-black">
                     </div>
                   )}
-                </button>
-              </div>
-              <div className="flex-1">
-                <button
-                  onClick={handleProfilePreview}
-                  className="text-left hover:opacity-80 transition-opacity"
-                >
+                </div>
+                <div className="flex-1">
                   <p className="text-white font-medium text-sm flex items-center gap-2">
                     {mockSeller.name}
                     {mockSeller.isOnline && (
@@ -520,11 +518,10 @@ export default function TikTokListingCard({
                   <p className="text-gray-300 text-xs font-light">
                     {mockSeller.listingsCount} listings • {mockSeller.isOnline ? "Active now" : `Last seen ${mockSeller.lastSeen}`}
                   </p>
-                </button>
-              </div>
-              {/* Message Button - Compact */}
-              <button className="bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full text-white text-sm font-light transition-colors">
-                Message
+                </div>
+                <div className="text-gray-400">
+                  <ChevronRight size={16} />
+                </div>
               </button>
             </div>
 

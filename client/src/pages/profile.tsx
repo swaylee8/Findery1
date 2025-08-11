@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Heart, Grid, LogOut, Shield, Plus, ArrowLeft } from "lucide-react";
+import { Heart, Grid, LogOut, Shield, Plus, ArrowLeft, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
@@ -127,17 +127,31 @@ export default function Profile() {
             </div>
           </div>
 
-          {/* Get Verified Button */}
-          {!user.isVerified && (
+          {/* Action Buttons */}
+          <div className="flex gap-4 mt-6">
+            {!user.isVerified && (
+              <Button
+                onClick={() => setShowVerificationModal(true)}
+                className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm border border-purple-500/30 text-purple-300 hover:from-purple-500/30 hover:to-pink-500/30 rounded-2xl px-6 py-3 font-light tracking-wide"
+                data-testid="button-get-verified"
+              >
+                <Shield size={16} className="mr-2" />
+                Get Verified
+              </Button>
+            )}
+            
+            {/* Message Seller Button - This would show when viewing someone else's profile */}
+            {/* For now, this is commented out as this profile page shows the current user's own profile
             <Button
-              onClick={() => setShowVerificationModal(true)}
-              className="mt-6 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm border border-purple-500/30 text-purple-300 hover:from-purple-500/30 hover:to-pink-500/30 rounded-2xl px-6 py-3 font-light tracking-wide"
-              data-testid="button-get-verified"
+              onClick={() => setLocation('/messages')}
+              className="bg-blue-600/20 backdrop-blur-sm border border-blue-500/30 text-blue-300 hover:bg-blue-600/30 rounded-2xl px-6 py-3 font-light tracking-wide"
+              data-testid="button-message-seller"
             >
-              <Shield size={16} className="mr-2" />
-              Get Verified
+              <MessageCircle size={16} className="mr-2" />
+              Message Seller
             </Button>
-          )}
+            */}
+          </div>
         </motion.div>
 
         {/* Tab Navigation - Glassmorphism */}
@@ -219,7 +233,7 @@ export default function Profile() {
                 </div>
               )
             ) : userListings?.length ? (
-              userListings.map((listing, index) => (
+              userListings.map((listing: any, index: number) => (
                 <motion.div
                   key={listing.id}
                   initial={{ opacity: 0, scale: 0.9 }}
