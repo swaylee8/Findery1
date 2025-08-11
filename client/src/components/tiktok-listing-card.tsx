@@ -49,6 +49,7 @@ export default function TikTokListingCard({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [lastTap, setLastTap] = useState(0);
   const [isLongPress, setIsLongPress] = useState(false);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   
   const queryClient = useQueryClient();
   const { user } = useAuth();
@@ -270,6 +271,12 @@ export default function TikTokListingCard({
     setShowBoardSelector(true);
   }, [triggerHaptic, playSound]);
 
+  const toggleDescription = useCallback(() => {
+    setIsDescriptionExpanded(!isDescriptionExpanded);
+    triggerHaptic('light');
+    playSound('pop');
+  }, [isDescriptionExpanded, triggerHaptic, playSound]);
+
   const nextImage = useCallback(() => {
     setCurrentImageIndex((prev) => (prev + 1) % listing.images.length);
   }, [listing.images.length]);
@@ -308,6 +315,13 @@ export default function TikTokListingCard({
   const isBelowMarket = Math.random() > 0.5;
   const isNegotiable = Math.random() > 0.4; // 60% chance of being negotiable
   const hasFinancing = listing.price > 50000; // Show financing for expensive items
+
+  // Description truncation for mobile
+  const MOBILE_DESCRIPTION_LIMIT = 100;
+  const shouldTruncateDescription = listing.description.length > MOBILE_DESCRIPTION_LIMIT;
+  const previewDescription = shouldTruncateDescription 
+    ? listing.description.slice(0, MOBILE_DESCRIPTION_LIMIT).trim() + '...'
+    : listing.description;
 
   return (
     <>
@@ -638,9 +652,40 @@ export default function TikTokListingCard({
               {listing.title}
             </h2>
             
-            <p className="text-gray-200 text-sm leading-relaxed max-w-[80%]">
-              {listing.description}
-            </p>
+            {/* Responsive Description */}
+            <div className="max-w-[80%]">
+              {/* Mobile: Truncated with Show More */}
+              <div className="block md:hidden">
+                <motion.div
+                  initial={false}
+                  animate={{ 
+                    height: isDescriptionExpanded ? "auto" : "fit-content"
+                  }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="overflow-hidden"
+                >
+                  <p className="text-gray-200 text-sm leading-relaxed">
+                    {isDescriptionExpanded ? listing.description : previewDescription}
+                  </p>
+                </motion.div>
+                {shouldTruncateDescription && (
+                  <button
+                    onClick={toggleDescription}
+                    className="text-blue-400 text-sm font-medium mt-1 hover:text-blue-300 transition-colors"
+                    data-testid="toggle-description"
+                  >
+                    {isDescriptionExpanded ? 'Show less' : 'Show more'}
+                  </button>
+                )}
+              </div>
+
+              {/* Desktop/Tablet: Full Description */}
+              <div className="hidden md:block">
+                <p className="text-gray-200 text-sm leading-relaxed">
+                  {listing.description}
+                </p>
+              </div>
+            </div>
             
             <div className="flex items-center gap-4 text-gray-300 text-sm">
               <span>📍 {listing.location}</span>
