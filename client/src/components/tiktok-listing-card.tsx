@@ -374,24 +374,7 @@ export default function TikTokListingCard({
           )}
         </div>
 
-        {/* Single Action Button - Price History */}
-        <div className="absolute top-1/4 right-4 z-20">
-          {/* Price History & Analytics Button */}
-          <motion.button
-            onClick={handlePriceHistory}
-            whileTap={{ scale: 0.95 }}
-            whileHover={{ scale: 1.05 }}
-            className="min-w-[44px] min-h-[44px] bg-black/25 backdrop-blur-sm rounded-xl p-2.5 text-white transition-all duration-200 border border-white/15 shadow-lg hover:bg-black/35 hover:shadow-xl active:bg-black/45"
-            style={{
-              backdropFilter: 'blur(8px) saturate(150%)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 12px rgba(0,0,0,0.3)'
-            }}
-            aria-label="Price History & Market Analytics"
-            data-testid="price-history-button"
-          >
-            <TrendingUp className="w-5 h-5 drop-shadow-sm" />
-          </motion.button>
-        </div>
+        {/* Removed standalone Price History button - moved to action bar */}
 
         {/* Double-tap Heart Animation */}
         <AnimatePresence>
@@ -435,7 +418,7 @@ export default function TikTokListingCard({
 
         {/* Swipe indicators removed - button-only interactions */}
 
-        {/* Right Action Bar - Compact */}
+        {/* Right Action Bar - Compact with Price History */}
         <div className="absolute right-3 bottom-24 flex flex-col gap-3 z-20">
           <button
             onClick={handleLike}
@@ -462,6 +445,17 @@ export default function TikTokListingCard({
           </button>
 
           <button
+            onClick={handlePriceHistory}
+            className="flex flex-col items-center gap-0.5 group"
+            data-testid={`button-price-history-${listing.id}`}
+          >
+            <div className="bg-black/40 backdrop-blur-sm rounded-full p-2.5 group-active:scale-95 transition-transform shadow-sm border border-white/10">
+              <TrendingUp className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-white text-xs font-light">Chart</span>
+          </button>
+
+          <button
             onClick={handleBoardSelector}
             className="flex flex-col items-center gap-0.5 group"
             data-testid={`button-save-${listing.id}`}
@@ -482,6 +476,7 @@ export default function TikTokListingCard({
             <div className="bg-black/40 backdrop-blur-sm rounded-full p-2.5 group-active:scale-95 transition-transform shadow-sm border border-white/10">
               <Share className="w-6 h-6 text-white" />
             </div>
+            <span className="text-white text-xs font-light">Share</span>
           </button>
         </div>
 
