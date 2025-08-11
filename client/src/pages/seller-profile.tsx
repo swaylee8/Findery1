@@ -3,14 +3,14 @@ import { Heart, Grid, MessageCircle, Shield, ArrowLeft, Star, MapPin, Clock, Tre
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useHaptics } from "@/hooks/use-haptics";
-import { useSound } from "@/hooks/use-sound";
+
 import { useLocation } from "wouter";
 
 export default function SellerProfile(props: { params: { sellerId: string } }) {
   const sellerId = props.params.sellerId;
   const [activeTab, setActiveTab] = useState<"listings" | "reviews">("listings");
   const { triggerHaptic } = useHaptics();
-  const { playSound } = useSound();
+
   const [, setLocation] = useLocation();
 
   // Mock seller data - this would come from API in real app
@@ -71,12 +71,10 @@ export default function SellerProfile(props: { params: { sellerId: string } }) {
   const handleTabChange = (tab: "listings" | "reviews") => {
     setActiveTab(tab);
     triggerHaptic('light');
-    playSound('pop');
   };
 
   const handleMessageSeller = () => {
     triggerHaptic('medium');
-    playSound('notification');
     // Navigate to messages with this seller pre-selected
     setLocation(`/messages?seller=${mockSeller.id}`);
   };

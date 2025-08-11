@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
 import { useUserListings, useLikedListings } from "@/hooks/use-listings";
 import { useHaptics } from "@/hooks/use-haptics";
-import { useSound } from "@/hooks/use-sound";
+
 import { useLocation } from "wouter";
 import VerificationModal from "@/components/verification-modal";
 
@@ -14,7 +14,7 @@ export default function Profile() {
   const [showVerificationModal, setShowVerificationModal] = useState(false);
   const { user, logout } = useAuth();
   const { triggerHaptic } = useHaptics();
-  const { playSound } = useSound();
+
   const [, setLocation] = useLocation();
 
   const { data: likedListings } = useLikedListings(user?.id || 0);
@@ -23,12 +23,10 @@ export default function Profile() {
   const handleTabChange = (tab: "liked" | "posted") => {
     setActiveTab(tab);
     triggerHaptic('light');
-    playSound('pop');
   };
 
   const handleLogout = () => {
     triggerHaptic('medium');
-    playSound('notification');
     logout();
   };
 

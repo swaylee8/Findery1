@@ -1,11 +1,10 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Heart, MessageCircle, Share, MoreHorizontal, Plus, Menu, Search, Volume2, VolumeX } from "lucide-react";
+import { Heart, MessageCircle, Share, MoreHorizontal, Plus, Menu, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { useListings } from "@/hooks/use-listings";
 import { useToggleLike } from "@/hooks/use-listings";
 import { useHaptics } from "@/hooks/use-haptics";
-import { useSound } from "@/hooks/use-sound";
 import { useFeedAlgorithm } from "@/hooks/use-feed-algorithm";
 import { useSmartLoading } from "@/hooks/use-smart-loading";
 import type { ListingWithUser } from "@shared/schema";
@@ -27,7 +26,6 @@ export default function TikTokHome() {
   const [viewStartTime, setViewStartTime] = useState<number>(Date.now());
   
   const { triggerHaptic } = useHaptics();
-  const { playSound, soundEnabled, toggleSound } = useSound();
   const { personalizeListings, generateCyclicFeed, trackInteraction, preferences } = useFeedAlgorithm();
   
   const containerRef = useRef<HTMLDivElement>(null);
@@ -136,7 +134,7 @@ export default function TikTokHome() {
       container.removeEventListener('scroll', handleScroll);
       clearTimeout(scrollTimeout);
     };
-  }, [currentIndex, processedListings.length, triggerHaptic, playSound]);
+  }, [currentIndex, processedListings.length, triggerHaptic]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -152,7 +150,7 @@ export default function TikTokHome() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentIndex, processedListings.length, triggerHaptic, playSound]);
+  }, [currentIndex, processedListings.length, triggerHaptic]);
 
   const scrollToIndex = (index: number) => {
     const container = containerRef.current;
@@ -173,14 +171,12 @@ export default function TikTokHome() {
     setActiveFeed(feed);
     setCurrentIndex(0); // Reset to top when changing feeds
     triggerHaptic('medium');
-    playSound('pop');
   };
 
   const handleCategoryChange = (category: CategoryType) => {
     setActiveCategory(category);
     setCurrentIndex(0); // Reset to top when changing categories  
     triggerHaptic('selection');
-    playSound('swipe');
   };
 
   // Enhanced interaction tracking
@@ -264,16 +260,7 @@ export default function TikTokHome() {
         </SheetContent>
       </Sheet>
 
-      {/* Compact Sound Toggle */}
-      <Button 
-        variant="ghost" 
-        size="sm"
-        className="fixed top-2 right-2 z-50 text-white hover:bg-white/20 backdrop-blur-sm p-2 rounded-full"
-        onClick={toggleSound}
-        data-testid="button-sound-toggle"
-      >
-        {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
-      </Button>
+      {/* Sound toggle removed - no audio in app */}
 
       {/* Main Content with Cyclic Feed and Category Headers */}
       <div 

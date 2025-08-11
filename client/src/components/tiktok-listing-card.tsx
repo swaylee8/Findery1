@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
 import { useHaptics } from "@/hooks/use-haptics";
-import { useSound } from "@/hooks/use-sound";
+
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
 import type { Listing } from "@shared/schema";
@@ -56,7 +56,6 @@ export default function TikTokListingCard({
   const { user } = useAuth();
   const [, setLocation] = useLocation();
   const { triggerHaptic } = useHaptics();
-  const { playSound } = useSound();
   const { toast } = useToast();
   
   const cardRef = useRef<HTMLDivElement>(null);
@@ -87,11 +86,7 @@ export default function TikTokListingCard({
       setShowHeartAnimation(true);
       triggerHaptic('medium');
       
-      if (newLikedState) {
-        playSound('like', 0.4);
-      } else {
-        playSound('unlike', 0.4); // Unlike sound - darker/heavier tone
-      }
+      // Sound removed - keeping haptic feedback only
       
       onInteraction?.('like');
       likeMutation.mutate();
@@ -100,7 +95,7 @@ export default function TikTokListingCard({
     }
     
     setLastTap(now);
-  }, [lastTap, liked, triggerHaptic, playSound, onInteraction, likeMutation]);
+  }, [lastTap, liked, triggerHaptic, onInteraction, likeMutation]);
 
   const handleLongPressStart = useCallback(() => {
     setIsLongPress(false);
@@ -108,9 +103,8 @@ export default function TikTokListingCard({
       setIsLongPress(true);
       setShowContextMenu(true);
       triggerHaptic('heavy');
-      playSound('pop');
     }, 500);
-  }, [triggerHaptic, playSound]);
+  }, [triggerHaptic]);
 
   const handleLongPressEnd = useCallback(() => {
     if (longPressTimer.current) {
@@ -125,28 +119,21 @@ export default function TikTokListingCard({
     setLiked(newLikedState);
     triggerHaptic('light');
     
-    // Play like or unlike sound immediately for responsiveness
-    if (newLikedState) {
-      playSound('like', 0.4); // Like sound
-    } else {
-      playSound('unlike', 0.4); // Unlike sound - darker/heavier tone
-    }
+    // Sound removed - keeping haptic feedback only
     
     onInteraction?.('like');
     likeMutation.mutate();
-  }, [liked, triggerHaptic, playSound, onInteraction, likeMutation]);
+  }, [liked, triggerHaptic, onInteraction, likeMutation]);
 
   const handleSave = useCallback(() => {
     setSaved(!saved);
     triggerHaptic('light');
-    playSound('pop');
     onInteraction?.('save');
     saveMutation.mutate();
-  }, [saved, triggerHaptic, playSound, onInteraction, saveMutation]);
+  }, [saved, triggerHaptic, onInteraction, saveMutation]);
 
   const handleShare = useCallback(() => {
     triggerHaptic('light');
-    playSound('notification');
     onInteraction?.('share');
     
     const shareData = {
@@ -164,20 +151,18 @@ export default function TikTokListingCard({
         description: "Share this listing with others",
       });
     }
-  }, [listing, triggerHaptic, playSound, onInteraction, toast]);
+  }, [listing, triggerHaptic, onInteraction, toast]);
 
   const handleCommentsOpen = useCallback(() => {
     triggerHaptic('light');
-    playSound('pop');
     setShowCommentsOverlay(true);
-  }, [triggerHaptic, playSound]);
+  }, [triggerHaptic]);
 
   const handleProfilePreview = useCallback(() => {
     triggerHaptic('light');
-    playSound('pop');
     // Navigate to seller profile page instead of showing preview
     setLocation(`/seller/${listing.userId}`);
-  }, [triggerHaptic, playSound, listing.userId, setLocation]);
+  }, [triggerHaptic, listing.userId, setLocation]);
 
   // Mock seller data - in real app this would come from API
   const mockSeller = {
@@ -229,33 +214,28 @@ export default function TikTokListingCard({
 
   const handle360Viewer = useCallback(() => {
     triggerHaptic('light');
-    playSound('pop');
     setShow360Viewer(true);
-  }, [triggerHaptic, playSound]);
+  }, [triggerHaptic]);
 
   const handlePriceHistory = useCallback(() => {
     triggerHaptic('light');
-    playSound('pop');
     setShowPriceHistory(true);
-  }, [triggerHaptic, playSound]);
+  }, [triggerHaptic]);
 
   const handleSimilarListings = useCallback(() => {
     triggerHaptic('light');
-    playSound('pop');
     setShowSimilarListings(true);
-  }, [triggerHaptic, playSound]);
+  }, [triggerHaptic]);
 
   const handleBoardSelector = useCallback(() => {
     triggerHaptic('light');
-    playSound('pop');
     setShowBoardSelector(true);
-  }, [triggerHaptic, playSound]);
+  }, [triggerHaptic]);
 
   const toggleDescription = useCallback(() => {
     setIsDescriptionExpanded(!isDescriptionExpanded);
     triggerHaptic('light');
-    playSound('pop');
-  }, [isDescriptionExpanded, triggerHaptic, playSound]);
+  }, [isDescriptionExpanded, triggerHaptic]);
 
   const nextImage = useCallback(() => {
     setCurrentImageIndex((prev) => (prev + 1) % listing.images.length);
@@ -379,7 +359,6 @@ export default function TikTokListingCard({
           <button
             onClick={() => {
               triggerHaptic('medium');
-              playSound('notification');
               toast({
                 title: "AR Preview",
                 description: "View this item in your space using your camera",
@@ -709,7 +688,6 @@ export default function TikTokListingCard({
                 <button
                   onClick={() => {
                     triggerHaptic('light');
-                    playSound('notification');
                     toast({
                       title: "Reported",
                       description: "Thank you for keeping our community safe",
@@ -1076,7 +1054,6 @@ export default function TikTokListingCard({
                       onClick={() => {
                         setSaved(true);
                         triggerHaptic('light');
-                        playSound('notification');
                         toast({
                           title: "Saved!",
                           description: `Added to ${board.name}`,
