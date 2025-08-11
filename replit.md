@@ -239,3 +239,34 @@ The application follows a monorepo structure with shared TypeScript types, enabl
 - **Elegant Hierarchy**: Clear price prominence without overwhelming visual presence
 - **Sophisticated Colors**: Muted tones and transparency for premium look
 - **Clean Layout**: Streamlined design that maintains focus on content
+
+## Profile & Messages Glassmorphism Redesign (January 2025)
+
+### Complete UI Architecture Overhaul
+- **Full Black Background**: Immersive dark theme matching main TikTok-style feed
+- **Glassmorphism Throughout**: All panels use `bg-black/40 backdrop-blur-xl` with `border-gray-800/50`
+- **Modern Sans-Serif Typography**: Light font weights (`font-light`) with wide letter spacing (`tracking-wide`)
+- **Eliminated Instagram-Style Elements**: Removed rounded rectangles, profile galleries, and multi-section cards
+
+### Profile Page Transformation
+- **Floating Header**: Fixed glassmorphism header with back button, title, and logout
+- **Premium Profile Card**: Single large glass panel with avatar, stats, and bio
+- **Subtle Stats Display**: Transparent overlay boxes instead of bold stat blocks
+- **Minimal Online Status**: Small green dot indicator with backdrop blur
+- **Elegant Tab System**: Glass panel navigation with smooth transitions
+- **Hover Animations**: Scale and blur effects on listing grid items
+
+### Messages Page Innovation  
+- **Conversation Context**: Listing preview panel at top for reference
+- **Glass Message Bubbles**: Transparent chat bubbles with backdrop blur effects
+- **Smart Status System**: Read/delivered/sent indicators with color coding
+- **Typing Animations**: Bouncing dots with "typing..." indicator
+- **Quick Action Buttons**: Pre-written message shortcuts in glass style
+- **Enhanced Input**: Rounded glass input with emoji button and send animation
+
+### Technical Implementation Details
+- **Framer Motion Integration**: Smooth page transitions and micro-animations
+- **Haptic Feedback**: Light/medium haptic responses for all interactions  
+- **Sound Effects**: Pop sounds for navigation, notifications for messages
+- **Responsive Design**: Mobile-first with proper touch targets
+- **Performance Optimization**: Proper scroll management and animation cleanup
