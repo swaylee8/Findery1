@@ -342,19 +342,7 @@ export default function TikTokHome() {
         </div>
       </div>
 
-      {/* Progress indicator */}
-      <div className="fixed right-4 top-1/2 transform -translate-y-1/2 z-40">
-        <div className="flex flex-col space-y-2">
-          {processedListings.map((_, index) => (
-            <div
-              key={index}
-              className={`w-1 h-8 rounded-full transition-colors ${
-                index === currentIndex ? 'bg-white' : 'bg-white/30'
-              }`}
-            />
-          ))}
-        </div>
-      </div>
+
     </div>
   );
 }
