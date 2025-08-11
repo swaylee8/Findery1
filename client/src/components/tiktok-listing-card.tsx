@@ -687,32 +687,26 @@ export default function TikTokListingCard({
               </div>
             </div>
             
-            {/* Responsive Specifications */}
             <div className="flex items-center gap-4 text-gray-300 text-sm">
-              {/* Location - Always visible */}
               <span>📍 {listing.location}</span>
-              
-              {/* Specifications - Desktop/Tablet only */}
-              <div className="hidden md:flex md:items-center md:gap-4">
-                {listing.category === 'homes' && specs && (
-                  <>
-                    <span>🛏️ {specs.bedrooms} bed</span>
-                    <span>🛁 {specs.bathrooms} bath</span>
-                  </>
-                )}
-                {listing.category === 'cars' && specs && (
-                  <>
-                    <span>📅 {specs.year}</span>
-                    <span>📏 {specs.mileage?.toLocaleString()} mi</span>
-                  </>
-                )}
-                {listing.category === 'boats' && specs && (
-                  <>
-                    <span>⛵ {specs.length}ft</span>
-                    <span>👥 {specs.guests || specs.cabins} guests</span>
-                  </>
-                )}
-              </div>
+              {listing.category === 'homes' && specs && (
+                <>
+                  <span>🛏️ {specs.bedrooms} bed</span>
+                  <span>🛁 {specs.bathrooms} bath</span>
+                </>
+              )}
+              {listing.category === 'cars' && specs && (
+                <>
+                  <span>📅 {specs.year}</span>
+                  <span>📏 {specs.mileage?.toLocaleString()} mi</span>
+                </>
+              )}
+              {listing.category === 'boats' && specs && (
+                <>
+                  <span>⛵ {specs.length}ft</span>
+                  <span>👥 {specs.guests || specs.cabins} guests</span>
+                </>
+              )}
             </div>
             
             {/* Similar Listings Preview */}
