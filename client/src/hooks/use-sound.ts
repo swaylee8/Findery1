@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 
-export type SoundType = 'like' | 'swipe' | 'snap' | 'pop' | 'notification';
+export type SoundType = 'like' | 'unlike' | 'swipe' | 'snap' | 'pop' | 'notification';
 
 export function useSound() {
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -41,11 +41,18 @@ export function useSound() {
 
       switch (type) {
         case 'like':
-          // Heart sound - quick ascending tone
-          oscillator.frequency.setValueAtTime(400, context.currentTime);
-          oscillator.frequency.exponentialRampToValueAtTime(800, context.currentTime + 0.1);
-          gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.15);
-          duration = 0.15;
+          // Premium like sound - clean ascending tone
+          oscillator.frequency.setValueAtTime(500, context.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(1000, context.currentTime + 0.12);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.18);
+          duration = 0.18;
+          break;
+        case 'unlike':
+          // Unlike sound - same like sound but pitch-shifted down for darker tone
+          oscillator.frequency.setValueAtTime(375, context.currentTime); // 25% lower
+          oscillator.frequency.exponentialRampToValueAtTime(750, context.currentTime + 0.12); // 25% lower
+          gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.18);
+          duration = 0.18;
           break;
         case 'swipe':
           // Whoosh sound - descending tone

@@ -88,9 +88,9 @@ export default function TikTokListingCard({
       triggerHaptic('medium');
       
       if (newLikedState) {
-        playSound('like');
+        playSound('like', 0.4);
       } else {
-        playSound('pop'); // Different sound for unlike
+        playSound('unlike', 0.4); // Unlike sound - darker/heavier tone
       }
       
       onInteraction?.('like');
@@ -121,9 +121,17 @@ export default function TikTokListingCard({
   // Remove swipe functionality - all interactions via buttons only
 
   const handleLike = useCallback(() => {
-    setLiked(!liked);
+    const newLikedState = !liked;
+    setLiked(newLikedState);
     triggerHaptic('light');
-    playSound('like');
+    
+    // Play like or unlike sound immediately for responsiveness
+    if (newLikedState) {
+      playSound('like', 0.4); // Like sound
+    } else {
+      playSound('unlike', 0.4); // Unlike sound - darker/heavier tone
+    }
+    
     onInteraction?.('like');
     likeMutation.mutate();
   }, [liked, triggerHaptic, playSound, onInteraction, likeMutation]);
@@ -955,7 +963,7 @@ export default function TikTokListingCard({
                                     (Math.max(...mockPriceHistory.map(p => p.price)) - Math.min(...mockPriceHistory.map(p => p.price)))) * 100;
                       return (
                         <div key={index} className="flex-1 flex flex-col items-center gap-2">
-                          <div className="text-xs text-gray-300">{formatPrice(point.price)}</div>
+                          <div className="text-xs text-gray-300">${point.price.toLocaleString()}</div>
                           <div 
                             className="w-full bg-blue-500 rounded-t-sm transition-all"
                             style={{ height: `${Math.max(height, 10)}%` }}
@@ -1011,7 +1019,7 @@ export default function TikTokListingCard({
                       />
                       <div className="flex-1">
                         <h4 className="text-white font-medium text-sm mb-1">{similar.title}</h4>
-                        <p className="text-gray-300 text-sm">{formatPrice(similar.price)}</p>
+                        <p className="text-gray-300 text-sm">${similar.price.toLocaleString()}</p>
                         <div className="flex items-center gap-2 mt-2">
                           <span className="text-xs text-gray-400">📍 Similar location</span>
                           <span className="text-xs text-green-400">• Available</span>

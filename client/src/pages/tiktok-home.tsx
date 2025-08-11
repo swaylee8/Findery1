@@ -114,9 +114,8 @@ export default function TikTokHome() {
         if (newIndex !== currentIndex && newIndex >= 0 && newIndex < processedListings.length) {
           setCurrentIndex(newIndex);
           
-          // Haptic feedback for scroll snapping
+          // Haptic feedback for scroll snapping (sound removed)
           triggerHaptic('light');
-          playSound('snap', 0.1);
           
           // Smooth scroll to exact position
           isScrolling = true;
@@ -159,9 +158,8 @@ export default function TikTokHome() {
     const container = containerRef.current;
     if (!container || index < 0 || index >= processedListings.length) return;
     
-    // Haptic feedback for navigation
+    // Haptic feedback for navigation (sound removed)
     triggerHaptic('light');
-    playSound('snap', 0.1);
     
     setCurrentIndex(index);
     container.scrollTo({
