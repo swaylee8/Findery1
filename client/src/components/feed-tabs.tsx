@@ -30,34 +30,7 @@ export default function FeedTabs({
   onFeedChange, 
   onCategoryChange 
 }: FeedTabsProps) {
-  const [dragStartX, setDragStartX] = useState<number | null>(null);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setDragStartX(e.touches[0].clientX);
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (dragStartX === null) return;
-    
-    const dragEndX = e.changedTouches[0].clientX;
-    const diff = dragStartX - dragEndX;
-    const threshold = 100;
-
-    if (Math.abs(diff) > threshold) {
-      const categories = categoryTabs.map(tab => tab.id);
-      const currentIndex = categories.indexOf(activeCategory);
-      
-      if (diff > 0 && currentIndex < categories.length - 1) {
-        // Swipe left - next category
-        onCategoryChange(categories[currentIndex + 1]);
-      } else if (diff < 0 && currentIndex > 0) {
-        // Swipe right - previous category
-        onCategoryChange(categories[currentIndex - 1]);
-      }
-    }
-    
-    setDragStartX(null);
-  };
+  // Remove swipe functionality - feed auto-cycles through categories
 
   return (
     <div className="fixed top-0 left-0 right-0 z-40 bg-gradient-to-b from-black/80 via-black/60 to-transparent backdrop-blur-sm">
@@ -94,22 +67,12 @@ export default function FeedTabs({
         </div>
       </div>
 
-      {/* Category Tabs - Compact Swipeable */}
+      {/* Category Tabs - Auto-Cycling Display Only */}
       <div 
         className="flex items-center justify-center pb-2 px-4 overflow-hidden"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
         data-testid="category-tabs-container"
       >
-        <motion.div 
-          className="flex items-center gap-1"
-          animate={{
-            x: activeCategory === 'all' ? 0 : 
-               activeCategory === 'homes' ? -50 :
-               activeCategory === 'cars' ? -100 : -150
-          }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        >
+        <div className="flex items-center gap-1">
           {categoryTabs.map((tab, index) => {
             const Icon = tab.icon;
             const isActive = activeCategory === tab.id;
@@ -140,28 +103,14 @@ export default function FeedTabs({
               </button>
             );
           })}
-        </motion.div>
-      </div>
-
-      {/* Compact Swipe Indicator */}
-      <div className="flex justify-center pb-1">
-        <div className="flex gap-0.5">
-          {categoryTabs.map((_, index) => (
-            <div
-              key={index}
-              className={`w-1 h-1 rounded-full transition-colors ${
-                categoryTabs[index].id === activeCategory 
-                  ? 'bg-white' 
-                  : 'bg-gray-600'
-              }`}
-            />
-          ))}
         </div>
       </div>
 
-      {/* Touch instruction hint - only show first few times */}
-      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-gray-300 text-xs animate-pulse">
-        Swipe to switch categories
+      {/* Category Navigation Info */}
+      <div className="flex justify-center pb-1">
+        <div className="text-xs text-gray-400 font-light">
+          Auto-cycling through categories
+        </div>
       </div>
     </div>
   );

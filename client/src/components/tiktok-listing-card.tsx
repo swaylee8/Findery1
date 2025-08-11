@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from "react";
-import { Heart, MessageCircle, Share, Bookmark, MoreHorizontal, Flag, Eye, User, ExternalLink, Circle, Users, Camera, ChevronLeft, ChevronRight, TrendingUp, Layers, Maximize2 } from "lucide-react";
-import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from "framer-motion";
+import { Heart, MessageCircle, Share, Bookmark, MoreHorizontal, Flag, User, ExternalLink, Circle, Users, Camera, ChevronLeft, ChevronRight, TrendingUp, Layers, Maximize2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
@@ -59,9 +59,6 @@ export default function TikTokListingCard({
   
   const cardRef = useRef<HTMLDivElement>(null);
   const longPressTimer = useRef<NodeJS.Timeout>();
-  const x = useMotionValue(0);
-  const opacity = useTransform(x, [-150, 0, 150], [0.5, 1, 0.5]);
-  const scale = useTransform(x, [-150, 0, 150], [0.95, 1, 0.95]);
 
   const likeMutation = useMutation({
     mutationFn: () => apiRequest(`/api/listings/${listing.id}/like`, 'POST'),
@@ -119,35 +116,7 @@ export default function TikTokListingCard({
     }
   }, []);
 
-  const handlePanEnd = useCallback((event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    const threshold = 100;
-    
-    if (info.offset.x > threshold) {
-      // Swipe right - save/favorite
-      setSaved(true);
-      triggerHaptic('selection');
-      playSound('swipe');
-      saveMutation.mutate();
-      toast({
-        title: "Saved!",
-        description: "Added to your favorites",
-        duration: 2000,
-      });
-    } else if (info.offset.x < -threshold) {
-      // Swipe left - not interested
-      triggerHaptic('light');
-      playSound('swipe');
-      onInteraction?.('skip');
-      toast({
-        title: "Not interested",
-        description: "We'll show you less like this",
-        duration: 2000,
-      });
-    }
-    
-    // Reset position
-    x.set(0);
-  }, [x, triggerHaptic, playSound, saveMutation, toast]);
+  // Remove swipe functionality - all interactions via buttons only
 
   const handleLike = useCallback(() => {
     setLiked(!liked);
@@ -325,15 +294,10 @@ export default function TikTokListingCard({
 
   return (
     <>
-      <motion.div
+      <div
         ref={cardRef}
         data-testid={`listing-card-${listing.id}`}
         className="relative h-screen w-full overflow-hidden snap-start snap-always"
-        style={{ x, opacity, scale }}
-        drag="x"
-        dragConstraints={{ left: -200, right: 200 }}
-        dragElastic={0.2}
-        onPanEnd={handlePanEnd}
         onPointerDown={handleLongPressStart}
         onPointerUp={handleLongPressEnd}
         onPointerLeave={handleLongPressEnd}
@@ -467,30 +431,7 @@ export default function TikTokListingCard({
           )}
         </AnimatePresence>
 
-        {/* Swipe Indicators */}
-        <motion.div
-          className="absolute left-4 top-1/2 -translate-y-1/2 flex flex-col items-center opacity-0 pointer-events-none z-20"
-          animate={{
-            opacity: useTransform(x, [0, 50, 150], [0, 0.5, 1]).get(),
-            x: useTransform(x, [0, 150], [0, 50]).get()
-          }}
-          data-testid="swipe-right-indicator"
-        >
-          <Bookmark className="w-8 h-8 text-green-400 mb-2" />
-          <span className="text-green-400 font-semibold text-sm">Save</span>
-        </motion.div>
-
-        <motion.div
-          className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col items-center opacity-0 pointer-events-none z-20"
-          animate={{
-            opacity: useTransform(x, [-150, -50, 0], [1, 0.5, 0]).get(),
-            x: useTransform(x, [-150, 0], [-50, 0]).get()
-          }}
-          data-testid="swipe-left-indicator"
-        >
-          <Eye className="w-8 h-8 text-gray-400 mb-2" />
-          <span className="text-gray-400 font-semibold text-sm">Pass</span>
-        </motion.div>
+        {/* Swipe indicators removed - button-only interactions */}
 
         {/* Right Action Bar - Compact */}
         <div className="absolute right-3 bottom-24 flex flex-col gap-3 z-20">
@@ -723,7 +664,7 @@ export default function TikTokListingCard({
             </button>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Context Menu */}
       <AnimatePresence>

@@ -11,6 +11,7 @@ import { useSmartLoading } from "@/hooks/use-smart-loading";
 import type { ListingWithUser } from "@shared/schema";
 import TikTokListingCard from "../components/tiktok-listing-card";
 import FeedTabs from "../components/feed-tabs";
+import CategoryHeader from "../components/category-header";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 type FeedType = 'for-you' | 'following';
@@ -27,32 +28,33 @@ export default function TikTokHome() {
   
   const { triggerHaptic } = useHaptics();
   const { playSound, soundEnabled, toggleSound } = useSound();
-  const { personalizeListings, trackInteraction, preferences } = useFeedAlgorithm();
+  const { personalizeListings, generateCyclicFeed, trackInteraction, preferences } = useFeedAlgorithm();
   
   const containerRef = useRef<HTMLDivElement>(null);
   const listingRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Apply personalization and filtering
-  const processedListings = useMemo(() => {
-    let filtered = rawListings;
-
-    // Category filtering
-    if (activeCategory !== 'all') {
-      filtered = filtered.filter(listing => listing.category === activeCategory);
-    }
-
-    // Feed algorithm
+  // Generate cyclic feed with automatic category switching
+  const cyclicFeedItems = useMemo(() => {
     if (activeFeed === 'for-you') {
-      // Personalized feed using algorithm
-      return personalizeListings(filtered);
+      // Auto-cycling feed: All → Homes → Cars → Boats → repeat
+      return generateCyclicFeed(rawListings, 8); // 8 items per category section
     } else {
-      // Following feed - for now just show chronological
-      // TODO: Implement following users/categories
-      return filtered.sort((a, b) => 
+      // Following feed - chronological with category headers
+      const chronological = rawListings.sort((a, b) => 
         new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
       );
+      return chronological.map(listing => ({ 
+        listing, 
+        category: listing.category as CategoryType, 
+        sectionHeader: false 
+      }));
     }
-  }, [rawListings, activeCategory, activeFeed, personalizeListings]);
+  }, [rawListings, activeFeed, generateCyclicFeed]);
+
+  // Extract just the listings for backwards compatibility with existing code
+  const processedListings = useMemo(() => {
+    return cyclicFeedItems.map(item => item.listing);
+  }, [cyclicFeedItems]);
 
   // Smart loading
   const {
@@ -275,28 +277,36 @@ export default function TikTokHome() {
         {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
       </Button>
 
-      {/* Main Content */}
+      {/* Main Content with Cyclic Feed and Category Headers */}
       <div 
         ref={containerRef}
         className="h-full overflow-y-scroll snap-y snap-mandatory scrollbar-hide"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         data-testid="main-content"
       >
-        {processedListings.map((listing, index) => (
-          <div
-            key={listing.id}
-            ref={(el) => (listingRefs.current[index] = el)}
-            className="h-screen snap-start snap-always relative"
-            data-testid={`listing-${listing.id}`}
-          >
-            <TikTokListingCard 
-              listing={listing}
-              isActive={index === currentIndex}
-              onInteraction={(type) => handleListingInteraction(listing.id, type)}
-              loadingPriority={getLoadingPriority(index)}
-              shouldLoadEagerly={shouldLoadEagerly(index)}
-              isImagePreloaded={listing.images?.[0] ? isImagePreloaded(listing.images[0]) : false}
-            />
+        {cyclicFeedItems.map((item, index) => (
+          <div key={`feed-${item.listing.id}-${index}`} className="relative">
+            {/* Category Header */}
+            {item.sectionHeader && (
+              <CategoryHeader category={item.category} />
+            )}
+            
+            {/* Listing Container */}
+            <div
+              key={`container-${item.listing.id}-${index}`}
+              ref={(el) => (listingRefs.current[index] = el)}
+              className="h-screen snap-start snap-always relative"
+              data-testid={`listing-${item.listing.id}`}
+            >
+              <TikTokListingCard 
+                listing={item.listing}
+                isActive={index === currentIndex}
+                onInteraction={(type) => handleListingInteraction(item.listing.id, type)}
+                loadingPriority={getLoadingPriority(index)}
+                shouldLoadEagerly={shouldLoadEagerly(index)}
+                isImagePreloaded={item.listing.images?.[0] ? isImagePreloaded(item.listing.images[0]) : false}
+              />
+            </div>
           </div>
         ))}
       </div>

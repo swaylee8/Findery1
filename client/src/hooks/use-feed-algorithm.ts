@@ -17,6 +17,15 @@ interface FeedPreferences {
   engagementScore: number;
 }
 
+type CategoryType = 'all' | 'homes' | 'cars' | 'boats';
+
+interface CategorySection {
+  category: CategoryType;
+  startIndex: number;
+  endIndex: number;
+  listings: Listing[];
+}
+
 export function useFeedAlgorithm() {
   const { user } = useAuth();
   const [interactions, setInteractions] = useState<UserInteraction[]>([]);
@@ -26,6 +35,13 @@ export function useFeedAlgorithm() {
     locationPreference: [],
     engagementScore: 1.0
   });
+  
+  // Auto-cycling category state
+  const [currentCycleIndex, setCurrentCycleIndex] = useState(0);
+  const [categorySections, setCategorySections] = useState<CategorySection[]>([]);
+  
+  // Category cycle pattern: All → Homes → Cars → Boats → repeat
+  const categoryPattern: CategoryType[] = ['all', 'homes', 'cars', 'boats'];
 
   // Load preferences from localStorage
   useEffect(() => {
@@ -171,6 +187,54 @@ export function useFeedAlgorithm() {
       .map(item => item.listing);
   }, [user, preferences]);
 
+  // Auto-cycling category feed algorithm
+  const generateCyclicFeed = useCallback((listings: Listing[], itemsPerSection = 10): { listing: Listing, category: CategoryType, sectionHeader?: boolean }[] => {
+    if (!listings || listings.length === 0) return [];
+
+    const categorizedListings = {
+      all: listings,
+      homes: listings.filter(l => l.category === 'homes'),
+      cars: listings.filter(l => l.category === 'cars'),
+      boats: listings.filter(l => l.category === 'boats')
+    };
+
+    const cyclicFeed: { listing: Listing, category: CategoryType, sectionHeader?: boolean }[] = [];
+    let currentIndex = 0;
+    const maxItems = listings.length * 2; // Allow cycling through listings twice
+
+    while (cyclicFeed.length < maxItems) {
+      for (const category of categoryPattern) {
+        const categoryListings = personalizeListings(categorizedListings[category]);
+        
+        if (categoryListings.length === 0) continue;
+
+        // Add section header
+        if (cyclicFeed.length > 0) {
+          cyclicFeed.push({ 
+            listing: categoryListings[0], 
+            category, 
+            sectionHeader: true 
+          });
+        }
+
+        // Add listings from this category
+        for (let i = 0; i < Math.min(itemsPerSection, categoryListings.length); i++) {
+          const listingIndex = (currentIndex + i) % categoryListings.length;
+          cyclicFeed.push({ 
+            listing: categoryListings[listingIndex], 
+            category,
+            sectionHeader: false 
+          });
+        }
+
+        currentIndex += itemsPerSection;
+        if (cyclicFeed.length >= maxItems) break;
+      }
+    }
+
+    return cyclicFeed;
+  }, [personalizeListings]);
+
   // Track user interaction
   const trackInteraction = useCallback((interaction: Omit<UserInteraction, 'timestamp'>) => {
     const newInteraction = {
@@ -193,9 +257,12 @@ export function useFeedAlgorithm() {
 
   return {
     personalizeListings,
+    generateCyclicFeed,
     trackInteraction,
     preferences,
     updatePreferences: savePreferences,
-    interactions
+    interactions,
+    currentCycleIndex,
+    categoryPattern
   };
 }
