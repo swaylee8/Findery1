@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from "react";
-import { Heart, MessageCircle, Share, Bookmark, MoreHorizontal, Flag, User, ExternalLink, Circle, Users, Camera, ChevronLeft, ChevronRight, TrendingUp, Layers, Maximize2 } from "lucide-react";
+import { Heart, MessageCircle, Share, Bookmark, MoreHorizontal, Flag, User, ExternalLink, Circle, Users, ChevronLeft, ChevronRight, TrendingUp, Layers } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -43,7 +43,7 @@ export default function TikTokListingCard({
   const [showContextMenu, setShowContextMenu] = useState(false);
   const [showCommentsOverlay, setShowCommentsOverlay] = useState(false);
   const [showProfilePreview, setShowProfilePreview] = useState(false);
-  const [show360Viewer, setShow360Viewer] = useState(false);
+
   const [showPriceHistory, setShowPriceHistory] = useState(false);
   const [showSimilarListings, setShowSimilarListings] = useState(false);
   const [showBoardSelector, setShowBoardSelector] = useState(false);
@@ -212,10 +212,7 @@ export default function TikTokListingCard({
     { id: 4, name: "Investment Properties", icon: "💰", count: 15 },
   ];
 
-  const handle360Viewer = useCallback(() => {
-    triggerHaptic('light');
-    setShow360Viewer(true);
-  }, [triggerHaptic]);
+
 
   const handlePriceHistory = useCallback(() => {
     triggerHaptic('light');
@@ -377,53 +374,8 @@ export default function TikTokListingCard({
           )}
         </div>
 
-        {/* Enhanced Action Buttons - Repositioned closer to content */}
-        <div className="absolute top-1/4 right-4 flex flex-col gap-2 z-20">
-          {/* 360° Photo Viewer Button - Enhanced icon clarity */}
-          <motion.button
-            onClick={handle360Viewer}
-            whileTap={{ scale: 0.95 }}
-            whileHover={{ scale: 1.05 }}
-            className="min-w-[44px] min-h-[44px] bg-black/25 backdrop-blur-sm rounded-xl p-2.5 text-white transition-all duration-200 border border-white/15 shadow-lg hover:bg-black/35 hover:shadow-xl active:bg-black/45"
-            style={{
-              backdropFilter: 'blur(8px) saturate(150%)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 12px rgba(0,0,0,0.3)'
-            }}
-            aria-label="View 360° Photos"
-            data-testid="360-view-button"
-          >
-            <div className="relative">
-              <Camera className="w-5 h-5 drop-shadow-sm" />
-              <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-400 rounded-full opacity-80" />
-            </div>
-          </motion.button>
-          
-          {/* AR Preview Button - Enhanced with clearer icon */}
-          <motion.button
-            onClick={() => {
-              triggerHaptic('medium');
-              toast({
-                title: "AR Preview",
-                description: "View this item in your space using your camera",
-                duration: 3000,
-              });
-            }}
-            whileTap={{ scale: 0.95 }}
-            whileHover={{ scale: 1.05 }}
-            className="min-w-[44px] min-h-[44px] bg-black/25 backdrop-blur-sm rounded-xl p-2.5 text-white transition-all duration-200 border border-white/15 shadow-lg hover:bg-black/35 hover:shadow-xl active:bg-black/45"
-            style={{
-              backdropFilter: 'blur(8px) saturate(150%)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 12px rgba(0,0,0,0.3)'
-            }}
-            aria-label="AR Preview - View in Your Space"
-            data-testid="ar-preview-button"
-          >
-            <div className="relative">
-              <Maximize2 className="w-5 h-5 drop-shadow-sm" />
-              <div className="absolute -bottom-1 -right-1 text-xs font-bold text-green-300">AR</div>
-            </div>
-          </motion.button>
-          
+        {/* Single Action Button - Price History */}
+        <div className="absolute top-1/4 right-4 z-20">
           {/* Price History & Analytics Button */}
           <motion.button
             onClick={handlePriceHistory}
@@ -888,63 +840,7 @@ export default function TikTokListingCard({
         )}
       </AnimatePresence>
 
-      {/* 360° Photo Viewer */}
-      <AnimatePresence>
-        {show360Viewer && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50"
-              onClick={() => setShow360Viewer(false)}
-              data-testid="360-viewer-overlay"
-            />
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              className="fixed inset-4 bg-gray-900/95 backdrop-blur-xl rounded-3xl p-6 z-50 flex flex-col"
-              data-testid="360-viewer-panel"
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-white font-semibold text-lg flex items-center gap-2">
-                  <Camera className="w-5 h-5" />
-                  360° Photo Viewer
-                </h3>
-                <button
-                  onClick={() => setShow360Viewer(false)}
-                  className="text-gray-400 hover:text-white"
-                >
-                  ✕
-                </button>
-              </div>
-              
-              <div className="flex-1 relative rounded-2xl overflow-hidden bg-black">
-                <img
-                  src={listing.images[currentImageIndex]}
-                  alt={listing.title}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                  {listing.images.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentImageIndex(index)}
-                      className={`w-3 h-3 rounded-full transition-colors ${
-                        index === currentImageIndex ? 'bg-white' : 'bg-white/40'
-                      }`}
-                    />
-                  ))}
-                </div>
-                <div className="absolute inset-x-4 bottom-16 text-center">
-                  <p className="text-white text-sm opacity-80">Swipe or tap to explore all angles</p>
-                </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+      {/* 360° Photo Viewer - Removed */}
 
       {/* Price History Chart */}
       <AnimatePresence>

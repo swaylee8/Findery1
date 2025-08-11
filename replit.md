@@ -68,6 +68,7 @@ Preferred communication style: Simple, everyday language.
 - **Price Badge Repositioning**: Moved "Price Drop" and "Great Deal" badges to left side with enhanced glassmorphism
 - **Action Button Enhancement**: Updated top-right action buttons with reduced blur, improved contrast, and accessibility
 - **Add Listing Button Relocation**: Moved add-listing "plus" button from main navigation to Profile section with premium glassmorphism styling
+- **360° and AR Removal**: Completely removed 360° photo viewer and AR preview functionality for streamlined experience
 - **Mobile Optimization**: Better responsive spacing and touch targets for iPhone compatibility
 
 ### Feed Algorithm & Navigation Implementation
