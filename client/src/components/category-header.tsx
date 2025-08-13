@@ -23,7 +23,7 @@ export default function CategoryHeader({ category }: CategoryHeaderProps) {
       
       {/* Category Emoji - Clean */}
       <div className="relative">
-        <span className="text-3xl drop-shadow-lg">{config.emoji}</span>
+        <span className="text-3xl drop-shadow-lg filter brightness-110">{config.emoji}</span>
       </div>
       
       {/* Subtle Indicator Line */}

@@ -20,11 +20,12 @@ type CategoryType = 'all' | 'homes' | 'cars' | 'boats';
 export default function TikTokHome() {
   const { user } = useAuth();
   const [, setLocation] = useLocation();
-  const { data: rawListings = [], isLoading } = useListings();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeFeed, setActiveFeed] = useState<FeedType>('for-you');
   const [activeCategory, setActiveCategory] = useState<CategoryType>('all');
+  
+  const { data: rawListings = [], isLoading } = useListings(activeCategory === 'all' ? undefined : activeCategory);
   const [viewStartTime, setViewStartTime] = useState<number>(Date.now());
   
   const { triggerHaptic } = useHaptics();
@@ -33,11 +34,21 @@ export default function TikTokHome() {
   const containerRef = useRef<HTMLDivElement>(null);
   const listingRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Generate cyclic feed with automatic category switching
+  // Generate feed based on selected category
   const cyclicFeedItems = useMemo(() => {
     if (activeFeed === 'for-you') {
-      // Auto-cycling feed: All → Homes → Cars → Boats → repeat
-      return generateCyclicFeed(rawListings, 8); // 8 items per category section
+      if (activeCategory === 'all') {
+        // Auto-cycling feed: All → Homes → Cars → Boats → repeat
+        return generateCyclicFeed(rawListings, 8); // 8 items per category section
+      } else {
+        // Filter by specific category
+        const filteredListings = rawListings.filter(listing => listing.category === activeCategory);
+        return filteredListings.map(listing => ({ 
+          listing, 
+          category: listing.category as CategoryType, 
+          sectionHeader: false 
+        }));
+      }
     } else {
       // Following feed - chronological with category headers
       const chronological = rawListings.sort((a, b) => 
@@ -49,7 +60,7 @@ export default function TikTokHome() {
         sectionHeader: false 
       }));
     }
-  }, [rawListings, activeFeed, generateCyclicFeed]);
+  }, [rawListings, activeFeed, activeCategory, generateCyclicFeed]);
 
   // Extract just the listings for backwards compatibility with existing code
   const processedListings = useMemo(() => {

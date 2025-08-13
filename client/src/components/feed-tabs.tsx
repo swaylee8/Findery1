@@ -85,11 +85,14 @@ export default function FeedTabs({
               >
                 <span className={`text-xl transition-all duration-300 ${
                   isActive 
-                    ? 'scale-125 drop-shadow-lg' 
-                    : 'group-hover:scale-110 group-hover:drop-shadow-md'
+                    ? 'scale-125 drop-shadow-lg filter brightness-125' 
+                    : 'group-hover:scale-110 group-hover:drop-shadow-md opacity-70 group-hover:opacity-100'
                 }`}>
                   {tab.emoji}
                 </span>
+                {isActive && (
+                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full shadow-lg" />
+                )}
               </button>
             );
           })}

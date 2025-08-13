@@ -39,11 +39,14 @@ export default function CategoryFilter({
         >
           <span className={`text-2xl transition-all duration-300 ${
             selectedCategory === category.id 
-              ? 'scale-125 drop-shadow-lg' 
-              : 'group-hover:scale-110 group-hover:drop-shadow-md'
+              ? 'scale-125 drop-shadow-lg filter brightness-125' 
+              : 'group-hover:scale-110 group-hover:drop-shadow-md opacity-70 group-hover:opacity-100'
           }`}>
             {category.icon}
           </span>
+          {selectedCategory === category.id && (
+            <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full shadow-lg" />
+          )}
         </Button>
       ))}
     </div>
