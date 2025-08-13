@@ -24,7 +24,6 @@ export default function TikTokHome() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeFeed, setActiveFeed] = useState<FeedType>('for-you');
   const [activeCategory, setActiveCategory] = useState<CategoryType>('all');
-  const [isTransitioning, setIsTransitioning] = useState(false);
   
   const { data: rawListings = [], isLoading } = useListings(activeCategory === 'all' ? undefined : activeCategory);
   const [viewStartTime, setViewStartTime] = useState<number>(Date.now());
@@ -106,24 +105,18 @@ export default function TikTokHome() {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [currentIndex, processedListings, trackInteraction, viewStartTime]);
 
-  // Enhanced scroll handling for smooth transitions
+  // Handle scroll snapping
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     let isScrolling = false;
     let scrollTimeout: NodeJS.Timeout;
-    let transitionTimeout: NodeJS.Timeout;
 
     const handleScroll = () => {
       if (isScrolling) return;
       
       clearTimeout(scrollTimeout);
-      clearTimeout(transitionTimeout);
-      
-      // Start transition state for UI elements
-      setIsTransitioning(true);
-      
       scrollTimeout = setTimeout(() => {
         const scrollTop = container.scrollTop;
         const viewportHeight = window.innerHeight;
@@ -142,23 +135,17 @@ export default function TikTokHome() {
             behavior: 'smooth'
           });
           
-          // Reset transition state after content settles
-          transitionTimeout = setTimeout(() => {
-            setIsTransitioning(false);
+          setTimeout(() => {
             isScrolling = false;
-          }, 300); // Allow 300ms for UI animations to complete
-        } else {
-          // Reset transition state if no index change
-          setIsTransitioning(false);
+          }, 500);
         }
-      }, 50); // Reduced delay for more responsive feedback
+      }, 100);
     };
 
     container.addEventListener('scroll', handleScroll);
     return () => {
       container.removeEventListener('scroll', handleScroll);
       clearTimeout(scrollTimeout);
-      clearTimeout(transitionTimeout);
     };
   }, [currentIndex, processedListings.length, triggerHaptic]);
 
@@ -395,7 +382,7 @@ export default function TikTokHome() {
             >
               <TikTokListingCard 
                 listing={item.listing}
-                isActive={index === currentIndex && !isTransitioning}
+                isActive={index === currentIndex}
                 onInteraction={(type) => handleListingInteraction(item.listing.id, type)}
                 loadingPriority={getLoadingPriority(index)}
                 shouldLoadEagerly={shouldLoadEagerly(index)}
