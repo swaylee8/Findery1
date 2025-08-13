@@ -39,7 +39,7 @@ function Router() {
             </div>
           </div>
           
-          <h1 className="text-3xl font-light text-white mb-2 tracking-wide">Scroll & Sold</h1>
+          <h1 className="text-3xl font-light text-white mb-2 tracking-wide">Findery</h1>
           <div className="w-32 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent mx-auto"></div>
         </div>
       </div>

@@ -229,7 +229,7 @@ export default function TikTokHome() {
             </div>
           </div>
           
-          <h1 className="text-3xl font-light text-white mb-2 tracking-wide">Scroll & Sold</h1>
+          <h1 className="text-3xl font-light text-white mb-2 tracking-wide">Findery</h1>
           <div className="w-32 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent mx-auto"></div>
         </div>
       </div>
@@ -271,7 +271,7 @@ export default function TikTokHome() {
         </SheetTrigger>
         <SheetContent side="left" className="bg-black/90 backdrop-blur-md border-gray-800">
           <div className="text-white">
-            <h2 className="text-lg font-light mb-6">Scroll & Sold</h2>
+            <h2 className="text-lg font-light mb-6">Findery</h2>
             
             {/* Navigation Section */}
             <div className="space-y-1 mb-6">

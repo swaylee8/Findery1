@@ -224,7 +224,7 @@ export default function Home() {
       {/* Top Bar */}
       <div className="safe-area-top bg-white border-b border-gray-200 px-4 py-3">
         <div className="flex items-center justify-between mb-3">
-          <h1 className="text-xl font-bold text-instagram-gray">Scroll & Sold</h1>
+          <h1 className="text-xl font-bold text-instagram-gray">Findery</h1>
           <div className="flex items-center space-x-3">
             {/* Online/Offline indicator */}
             <div className="flex items-center">

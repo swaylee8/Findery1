@@ -69,7 +69,7 @@ export default function Landing() {
   return (
     <div className="mobile-container bg-white min-h-screen flex flex-col justify-center px-8">
       <div className="text-center mb-12">
-        <h1 className="text-3xl font-bold text-instagram-gray mb-2">Scroll & Sold</h1>
+        <h1 className="text-3xl font-bold text-instagram-gray mb-2">Findery</h1>
         <p className="text-instagram-light-gray">Discover homes, cars & boats</p>
       </div>
 

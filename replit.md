@@ -1,7 +1,7 @@
-# Scroll & Sold - Marketplace Application
+# Findery - Marketplace Application
 
 ## Overview
-"Scroll & Sold" is a modern marketplace application designed for browsing homes, cars, and boats. It offers an immersive, full-screen vertical scrolling experience inspired by TikTok, featuring rich media content, glassmorphism overlays, and a minimalistic design. The project aims to provide a seamless and engaging browsing experience with a strong focus on mobile-first interaction and intuitive social features.
+"Findery" is a modern marketplace application designed for browsing homes, cars, and boats. It offers an immersive, full-screen vertical scrolling experience inspired by TikTok, featuring rich media content, glassmorphism overlays, and a minimalistic design. The project aims to provide a seamless and engaging browsing experience with a strong focus on mobile-first interaction and intuitive social features.
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.
@@ -56,6 +56,16 @@ Preferred communication style: Simple, everyday language.
 - Vite
 - TSX
 - Replit Integration (runtime error modal, cartographer plugins)
+
+## Recent Updates (January 2025)
+
+### App Rebranding to "Findery" (January 2025)
+- **Complete Name Change**: Updated all app references from "Scroll & Sold" to "Findery" across the entire application
+- **Enhanced Branding**: Updated HTML metadata, titles, and Open Graph tags with "Findery - Discover Homes, Cars & Boats"
+- **Mobile App Support**: Added comprehensive app manifest for mobile installation with proper theming and orientation
+- **Consistent UI**: Updated all user-facing text, loading screens, and navigation menus to display "Findery"
+- **SEO Optimization**: Improved meta descriptions and social media sharing with new brand messaging
+- **Progressive Web App**: Enhanced mobile app experience with proper manifest.json for standalone installation
 
 ## Recent Updates (January 2025)
 
