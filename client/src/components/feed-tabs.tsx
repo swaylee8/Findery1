@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, Users, Home, Car, Anchor } from "lucide-react";
+import { Sparkles, Users } from "lucide-react";
 
 type FeedType = 'for-you' | 'following';
 type CategoryType = 'all' | 'homes' | 'cars' | 'boats';
@@ -18,10 +18,10 @@ const feedTabs = [
 ];
 
 const categoryTabs = [
-  { id: 'all' as const, label: 'All', icon: null },
-  { id: 'homes' as const, label: 'Homes', icon: Home },
-  { id: 'cars' as const, label: 'Cars', icon: Car },
-  { id: 'boats' as const, label: 'Boats', icon: Anchor }
+  { id: 'all' as const, emoji: '✨' },
+  { id: 'homes' as const, emoji: '🏠' },
+  { id: 'cars' as const, emoji: '🚗' },
+  { id: 'boats' as const, emoji: '🚤' }
 ];
 
 export default function FeedTabs({ 
@@ -72,30 +72,32 @@ export default function FeedTabs({
         className="flex items-center justify-center pb-2 px-4 overflow-hidden"
         data-testid="category-tabs-container"
       >
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           {categoryTabs.map((tab, index) => {
-            const Icon = tab.icon;
             const isActive = activeCategory === tab.id;
             
             return (
               <button
                 key={tab.id}
                 onClick={() => onCategoryChange(tab.id)}
-                className={`relative px-3 py-1 rounded-full text-xs font-light transition-all ${
+                className={`relative px-3 py-2 rounded-2xl transition-all duration-300 group ${
                   isActive 
-                    ? 'text-white bg-white/20 scale-105' 
-                    : 'text-gray-300 hover:text-gray-100'
-                }`}
+                    ? 'bg-white/20 backdrop-blur-md scale-110 shadow-lg' 
+                    : 'bg-white/5 backdrop-blur-sm hover:bg-white/15 hover:scale-105'
+                } border border-white/10`}
                 data-testid={`category-tab-${tab.id}`}
               >
-                <div className="flex items-center gap-1">
-                  {Icon && <Icon size={10} />}
-                  <span>{tab.label}</span>
-                </div>
+                <span className={`text-lg transition-all duration-300 ${
+                  isActive 
+                    ? 'drop-shadow-lg' 
+                    : 'group-hover:drop-shadow-md'
+                }`}>
+                  {tab.emoji}
+                </span>
                 
                 {isActive && (
                   <motion.div
-                    className="absolute -bottom-0.5 left-1/2 transform -translate-x-1/2 w-0.5 h-0.5 bg-white rounded-full"
+                    className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500/20 to-pink-500/20"
                     layoutId="categoryIndicator"
                     transition={{ type: "spring", duration: 0.3 }}
                   />

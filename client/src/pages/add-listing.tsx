@@ -10,9 +10,9 @@ import { useToast } from "@/hooks/use-toast";
 
 
 const categories = [
-  { id: "homes", label: "🏠 Home" },
-  { id: "cars", label: "🚗 Car" },
-  { id: "boats", label: "🚤 Boat" },
+  { id: "homes", label: "🏠" },
+  { id: "cars", label: "🚗" },
+  { id: "boats", label: "🚤" },
 ];
 
 export default function AddListing() {

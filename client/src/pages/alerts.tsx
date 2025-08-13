@@ -147,10 +147,10 @@ export default function Alerts() {
                   <SelectValue placeholder="Any category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Any category</SelectItem>
-                  <SelectItem value="homes">Homes</SelectItem>
-                  <SelectItem value="cars">Cars</SelectItem>
-                  <SelectItem value="boats">Boats</SelectItem>
+                  <SelectItem value="">✨ Any category</SelectItem>
+                  <SelectItem value="homes">🏠</SelectItem>
+                  <SelectItem value="cars">🚗</SelectItem>
+                  <SelectItem value="boats">🚤</SelectItem>
                 </SelectContent>
               </Select>
             </div>
