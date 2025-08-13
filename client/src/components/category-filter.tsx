@@ -33,28 +33,17 @@ export default function CategoryFilter({
           key={category.id}
           variant="ghost"
           size="sm"
-          className={`${buttonClass} relative group transition-all duration-300 ${
-            variant === "vertical" 
-              ? selectedCategory === category.id 
-                ? "bg-white/20 backdrop-blur-md text-white shadow-lg scale-105" 
-                : "text-gray-300 hover:text-white hover:bg-white/10 hover:scale-105"
-              : selectedCategory === category.id 
-                ? "bg-white/20 backdrop-blur-md shadow-lg scale-110" 
-                : "bg-white/10 backdrop-blur-sm hover:bg-white/20 hover:scale-105"
-          } rounded-2xl px-4 py-3 border border-white/10`}
+          className={`${buttonClass} relative group transition-all duration-300 hover:scale-110 p-2`}
           onClick={() => onCategoryChange(category.id)}
           data-testid={`filter-${category.id}`}
         >
-          <span className={`text-xl transition-all duration-300 ${
+          <span className={`text-2xl transition-all duration-300 ${
             selectedCategory === category.id 
-              ? 'drop-shadow-lg' 
-              : 'group-hover:drop-shadow-md'
+              ? 'scale-125 drop-shadow-lg' 
+              : 'group-hover:scale-110 group-hover:drop-shadow-md'
           }`}>
             {category.icon}
           </span>
-          {selectedCategory === category.id && (
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500/20 to-pink-500/20 animate-pulse" />
-          )}
         </Button>
       ))}
     </div>

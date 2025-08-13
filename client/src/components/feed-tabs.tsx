@@ -80,28 +80,16 @@ export default function FeedTabs({
               <button
                 key={tab.id}
                 onClick={() => onCategoryChange(tab.id)}
-                className={`relative px-3 py-2 rounded-2xl transition-all duration-300 group ${
-                  isActive 
-                    ? 'bg-white/20 backdrop-blur-md scale-110 shadow-lg' 
-                    : 'bg-white/5 backdrop-blur-sm hover:bg-white/15 hover:scale-105'
-                } border border-white/10`}
+                className={`relative p-2 transition-all duration-300 group hover:scale-110`}
                 data-testid={`category-tab-${tab.id}`}
               >
-                <span className={`text-lg transition-all duration-300 ${
+                <span className={`text-xl transition-all duration-300 ${
                   isActive 
-                    ? 'drop-shadow-lg' 
-                    : 'group-hover:drop-shadow-md'
+                    ? 'scale-125 drop-shadow-lg' 
+                    : 'group-hover:scale-110 group-hover:drop-shadow-md'
                 }`}>
                   {tab.emoji}
                 </span>
-                
-                {isActive && (
-                  <motion.div
-                    className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500/20 to-pink-500/20"
-                    layoutId="categoryIndicator"
-                    transition={{ type: "spring", duration: 0.3 }}
-                  />
-                )}
               </button>
             );
           })}
