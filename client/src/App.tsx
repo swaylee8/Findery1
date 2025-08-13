@@ -20,10 +20,27 @@ function Router() {
 
   if (isLoading) {
     return (
-      <div className="mobile-container bg-white min-h-screen flex items-center justify-center">
+      <div className="fixed inset-0 bg-gradient-to-br from-black to-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-instagram-gray mb-2">Scroll & Sold</h1>
-          <p className="text-instagram-light-gray">Loading...</p>
+          {/* Branded Loading Animation */}
+          <div className="relative mb-8">
+            <div className="w-16 h-16 mx-auto mb-4">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl opacity-80 animate-pulse"></div>
+              <div className="absolute inset-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 flex items-center justify-center">
+                <span className="text-2xl">✨</span>
+              </div>
+            </div>
+            
+            {/* Glassmorphism Loading Dots */}
+            <div className="flex justify-center space-x-2">
+              <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+              <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+              <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+            </div>
+          </div>
+          
+          <h1 className="text-3xl font-light text-white mb-2 tracking-wide">Scroll & Sold</h1>
+          <div className="w-32 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent mx-auto"></div>
         </div>
       </div>
     );

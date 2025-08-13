@@ -27,15 +27,10 @@ export default function Landing() {
       const result = await response.json();
       
       login(result.user);
-      toast({
-        title: isLogin ? "Welcome back!" : "Account created!",
-        description: isLogin ? "Redirecting to TikTok-style feed..." : "Your account has been created and you're logged in.",
-      });
       
+      // Seamless transition - no toast message
       // Force page reload to ensure redirect works
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      window.location.reload();
     } catch (error: any) {
       toast({
         title: "Error",
@@ -57,15 +52,10 @@ export default function Landing() {
       const result = await response.json();
       
       login(result.user);
-      toast({
-        title: "Demo Login Successful!",
-        description: "Redirecting to TikTok-style feed...",
-      });
       
+      // Seamless transition - no toast message
       // Force page reload to ensure state updates properly
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      window.location.reload();
     } catch (error: any) {
       toast({
         title: "Demo Login Failed",
