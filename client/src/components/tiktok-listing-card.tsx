@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Heart, MessageCircle, Share, Bookmark, MoreHorizontal, Flag, User, ExternalLink, Circle, Users, ChevronLeft, ChevronRight, TrendingUp, Layers } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -52,6 +52,10 @@ export default function TikTokListingCard({
   const [isLongPress, setIsLongPress] = useState(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   
+  // Animation states for smooth transitions
+  const [isContentLoaded, setIsContentLoaded] = useState(false);
+  const [areUIElementsVisible, setAreUIElementsVisible] = useState(false);
+  
   const queryClient = useQueryClient();
   const { user } = useAuth();
   const [, setLocation] = useLocation();
@@ -60,6 +64,32 @@ export default function TikTokListingCard({
   
   const cardRef = useRef<HTMLDivElement>(null);
   const longPressTimer = useRef<NodeJS.Timeout>();
+  const contentTimeoutRef = useRef<NodeJS.Timeout>();
+  
+  // Preload and animate content when card becomes active
+  useEffect(() => {
+    if (isActive) {
+      // Immediate data availability simulation (in real app, this would preload from API)
+      setIsContentLoaded(true);
+      
+      // Staggered animation for UI elements
+      contentTimeoutRef.current = setTimeout(() => {
+        setAreUIElementsVisible(true);
+      }, 100); // 100ms delay for smooth entrance
+    } else {
+      // Reset animation state when card becomes inactive
+      setAreUIElementsVisible(false);
+      if (contentTimeoutRef.current) {
+        clearTimeout(contentTimeoutRef.current);
+      }
+    }
+    
+    return () => {
+      if (contentTimeoutRef.current) {
+        clearTimeout(contentTimeoutRef.current);
+      }
+    };
+  }, [isActive]);
 
   const likeMutation = useMutation({
     mutationFn: () => apiRequest(`/api/listings/${listing.id}/like`, 'POST'),
@@ -341,12 +371,21 @@ export default function TikTokListingCard({
           )}
         </div>
 
-        {/* Price Drop & Great Deal Badges - Left Side with Mobile Optimization */}
+        {/* Price Drop & Great Deal Badges - Left Side with Smooth Transitions */}
         <div className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 z-20 max-w-[90px] sm:max-w-none">
           {isPriceDrop && (
             <motion.div
-              initial={{ opacity: 0, x: -15 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, x: -15, scale: 0.8 }}
+              animate={{ 
+                opacity: areUIElementsVisible ? 1 : 0, 
+                x: areUIElementsVisible ? 0 : -15,
+                scale: areUIElementsVisible ? 1 : 0.8 
+              }}
+              transition={{ 
+                duration: 0.3, 
+                ease: "easeOut",
+                delay: 0.35 
+              }}
               className="bg-red-500/30 backdrop-blur-xl text-red-100 text-xs font-medium px-2 py-0.5 rounded-md border border-red-400/30 shadow-sm"
               style={{ 
                 textShadow: '0 1px 2px rgba(0,0,0,0.8)',
@@ -359,9 +398,17 @@ export default function TikTokListingCard({
           )}
           {isGreatDeal && (
             <motion.div
-              initial={{ opacity: 0, x: -15 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 }}
+              initial={{ opacity: 0, x: -15, scale: 0.8 }}
+              animate={{ 
+                opacity: areUIElementsVisible ? 1 : 0, 
+                x: areUIElementsVisible ? 0 : -15,
+                scale: areUIElementsVisible ? 1 : 0.8 
+              }}
+              transition={{ 
+                duration: 0.3, 
+                ease: "easeOut",
+                delay: 0.4 
+              }}
               className="bg-green-500/30 backdrop-blur-xl text-green-100 text-xs font-medium px-2 py-0.5 rounded-md border border-green-400/30 shadow-sm"
               style={{ 
                 textShadow: '0 1px 2px rgba(0,0,0,0.8)',
@@ -483,69 +530,177 @@ export default function TikTokListingCard({
         {/* Bottom Info Panel - Compact */}
         <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
           <div className="space-y-2">
-            {/* Seller Profile Section - Click to view profile and message */}
-            <div className="mb-2">
+            {/* Seller Profile Section - Smooth Animated Entry */}
+            <motion.div 
+              className="mb-2"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ 
+                opacity: areUIElementsVisible ? 1 : 0, 
+                y: areUIElementsVisible ? 0 : 10 
+              }}
+              transition={{ 
+                duration: 0.3, 
+                ease: "easeOut",
+                delay: 0.1 
+              }}
+            >
               <button
                 onClick={handleProfilePreview}
                 className="flex items-center gap-3 w-full text-left hover:opacity-80 transition-opacity"
                 data-testid={`seller-profile-${listing.id}`}
               >
                 <div className="relative">
-                  <img
+                  <motion.img
                     src={mockSeller.avatar}
                     alt="Seller"
                     className="w-10 h-10 rounded-full border border-white/20 hover:border-white/40 transition-colors"
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ 
+                      scale: areUIElementsVisible ? 1 : 0.8, 
+                      opacity: areUIElementsVisible ? 1 : 0 
+                    }}
+                    transition={{ 
+                      duration: 0.3, 
+                      ease: "easeOut",
+                      delay: 0.15 
+                    }}
                   />
-                  {/* Online Status Indicator - Smaller */}
+                  {/* Online Status Indicator - Coordinated Animation */}
                   {mockSeller.isOnline && (
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border border-black">
-                    </div>
+                    <motion.div 
+                      className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border border-black"
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ 
+                        scale: areUIElementsVisible ? 1 : 0, 
+                        opacity: areUIElementsVisible ? 1 : 0 
+                      }}
+                      transition={{ 
+                        duration: 0.25, 
+                        ease: "easeOut",
+                        delay: 0.25 
+                      }}
+                    />
                   )}
                 </div>
-                <div className="flex-1">
+                <motion.div 
+                  className="flex-1"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ 
+                    opacity: areUIElementsVisible ? 1 : 0, 
+                    x: areUIElementsVisible ? 0 : -10 
+                  }}
+                  transition={{ 
+                    duration: 0.3, 
+                    ease: "easeOut",
+                    delay: 0.2 
+                  }}
+                >
                   <p className="text-white font-medium text-sm flex items-center gap-2">
                     {mockSeller.name}
                     {mockSeller.isOnline && (
-                      <span className="text-green-400 text-xs font-light">• Online</span>
+                      <motion.span 
+                        className="text-green-400 text-xs font-light"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: areUIElementsVisible ? 1 : 0 }}
+                        transition={{ 
+                          duration: 0.25, 
+                          delay: 0.3 
+                        }}
+                      >
+                        • Online
+                      </motion.span>
                     )}
                   </p>
                   <p className="text-gray-300 text-xs font-light">
                     {mockSeller.listingsCount} listings • {mockSeller.isOnline ? "Active now" : `Last seen ${mockSeller.lastSeen}`}
                   </p>
-                </div>
+                </motion.div>
                 <div className="text-gray-400">
                   <ChevronRight size={16} />
                 </div>
               </button>
-            </div>
+            </motion.div>
 
-            {/* Sleek Price Display - Left Aligned - Compact */}
-            <div className="flex items-start justify-between mb-3">
+            {/* Sleek Price Display - Smooth Animated Entry */}
+            <motion.div 
+              className="flex items-start justify-between mb-3"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ 
+                opacity: areUIElementsVisible ? 1 : 0, 
+                y: areUIElementsVisible ? 0 : 8 
+              }}
+              transition={{ 
+                duration: 0.3, 
+                ease: "easeOut",
+                delay: 0.4 
+              }}
+            >
               {/* Premium Price Display - Left Side */}
               <div className="text-left">
                 {isNegotiable && (
-                  <p className="text-white/60 text-xs font-light mb-0.5">From</p>
+                  <motion.p 
+                    className="text-white/60 text-xs font-light mb-0.5"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: areUIElementsVisible ? 1 : 0 }}
+                    transition={{ 
+                      duration: 0.25, 
+                      delay: 0.45 
+                    }}
+                  >
+                    From
+                  </motion.p>
                 )}
                 
                 <div className="flex items-baseline gap-2">
-                  <div className="flex items-baseline">
+                  <motion.div 
+                    className="flex items-baseline"
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ 
+                      scale: areUIElementsVisible ? 1 : 0.9, 
+                      opacity: areUIElementsVisible ? 1 : 0 
+                    }}
+                    transition={{ 
+                      duration: 0.3, 
+                      ease: "easeOut",
+                      delay: 0.45 
+                    }}
+                  >
                     <span className="text-base font-light text-white/80 mr-0.5">
                       $
                     </span>
                     <span className="text-2xl font-light tracking-wide text-white">
                       {new Intl.NumberFormat('en-US').format(listing.price)}
                     </span>
-                  </div>
+                  </motion.div>
                   {hasDiscount && (
-                    <div className="flex items-baseline text-white/40 text-sm line-through font-light">
+                    <motion.div 
+                      className="flex items-baseline text-white/40 text-sm line-through font-light"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ 
+                        opacity: areUIElementsVisible ? 1 : 0, 
+                        x: areUIElementsVisible ? 0 : -10 
+                      }}
+                      transition={{ 
+                        duration: 0.25, 
+                        delay: 0.5 
+                      }}
+                    >
                       <span className="text-xs mr-0.5">$</span>
                       <span>{new Intl.NumberFormat('en-US').format(originalPrice)}</span>
-                    </div>
+                    </motion.div>
                   )}
                 </div>
 
-                {/* Subtle context */}
-                <div className="flex items-center gap-2 mt-0.5">
+                {/* Subtle context with staggered animation */}
+                <motion.div 
+                  className="flex items-center gap-2 mt-0.5"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: areUIElementsVisible ? 1 : 0 }}
+                  transition={{ 
+                    duration: 0.25, 
+                    delay: 0.55 
+                  }}
+                >
                   {hasFinancing && (
                     <span className="text-white/50 text-xs font-light">
                       ${Math.floor(listing.price * 0.004).toLocaleString()}/mo
@@ -556,16 +711,28 @@ export default function TikTokListingCard({
                       Save ${(originalPrice - listing.price).toLocaleString()}
                     </span>
                   )}
-                </div>
+                </motion.div>
               </div>
               
               {/* Removed badges from right side - moved to left */}
-            </div>
+            </motion.div>
 
-            {/* Title - Compact */}
-            <h2 className="text-xl font-medium text-white mb-2 leading-tight">
+            {/* Title - Smooth Animated Entry */}
+            <motion.h2 
+              className="text-xl font-medium text-white mb-2 leading-tight"
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ 
+                opacity: areUIElementsVisible ? 1 : 0, 
+                y: areUIElementsVisible ? 0 : 5 
+              }}
+              transition={{ 
+                duration: 0.3, 
+                ease: "easeOut",
+                delay: 0.6 
+              }}
+            >
               {listing.title}
-            </h2>
+            </motion.h2>
             
             {/* Responsive Description */}
             <div className="max-w-[80%]">

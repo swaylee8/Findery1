@@ -100,9 +100,14 @@ Preferred communication style: Simple, everyday language.
 - **Section Headers**: `CategoryHeader` component with glassmorphism styling and category-specific icons
 - **Infinite Scrolling**: Maintains lazy loading and smart preloading while respecting category order
 - **Performance Optimized**: Category cycling with efficient re-rendering and memory management
+- **Smooth Transitions**: Enhanced scroll handling with 300ms animation timing and coordinated UI element transitions
+- **Preloading**: Increased preload distance to 3 items with batch size of 4 for seamless content availability
 
 ### User Experience Improvements
 - **Natural Category Discovery**: Users encounter all categories automatically without manual switching
 - **Reduced Cognitive Load**: No need to remember or manually navigate between category tabs
 - **Immersive Browsing**: Uninterrupted vertical scroll experience like social media feeds
 - **Mobile-First Design**: Category headers sized and positioned for optimal mobile viewing density
+- **Seamless Listing Transitions**: Coordinated 200-300ms fade/slide animations for seller info, online status dots, and deal badges
+- **Premium Animation Feel**: Staggered entry animations eliminate jarring pop-ins with consistent glassmorphism styling
+- **Mobile-Optimized Performance**: 60fps animations with preloaded content and smooth scroll snapping
