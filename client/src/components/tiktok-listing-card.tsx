@@ -9,6 +9,7 @@ import { useHaptics } from "@/hooks/use-haptics";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
 import type { Listing } from "@shared/schema";
+import { FullScreenImageViewer } from "./full-screen-image-viewer";
 
 interface TikTokListingCardProps {
   listing: Listing;
@@ -307,32 +308,51 @@ export default function TikTokListingCard({
         onPointerLeave={handleLongPressEnd}
         onClick={handleScreenTap}
       >
-        {/* Background Image/Video - Premium Display */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
-          {/* Blurred background for aspect ratio padding */}
-          <img
-            src={listing.images[currentImageIndex]}
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover opacity-20 blur-xl scale-110"
-            loading={shouldLoadEagerly ? "eager" : "lazy"}
-            aria-hidden="true"
-          />
+        {/* Background Image/Video - Responsive Display */}
+        <div className="absolute inset-0 bg-black">
+          {/* Mobile: Blurred background with main image overlay */}
+          <div className="md:hidden">
+            <img
+              src={listing.images[currentImageIndex]}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover opacity-20 blur-xl scale-110"
+              loading={shouldLoadEagerly ? "eager" : "lazy"}
+              aria-hidden="true"
+            />
+            <img
+              src={listing.images[currentImageIndex]}
+              alt={listing.title}
+              className="relative h-full w-full object-cover z-10 cursor-pointer"
+              loading={shouldLoadEagerly ? "eager" : "lazy"}
+              style={{
+                filter: isImagePreloaded ? 'none' : 'blur(3px)',
+                transition: 'filter 0.2s ease'
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowFullScreenImage(true);
+              }}
+              data-testid={`listing-image-${listing.id}`}
+            />
+          </div>
           
-          {/* Main image */}
-          <img
-            src={listing.images[currentImageIndex]}
-            alt={listing.title}
-            className="relative h-full w-full object-cover md:object-contain z-10"
-            loading={shouldLoadEagerly ? "eager" : "lazy"}
-            style={{
-              filter: isImagePreloaded ? 'none' : 'blur(3px)',
-              transition: 'filter 0.2s ease'
-            }}
-            data-testid={`listing-image-${listing.id}`}
-          />
+          {/* Desktop: Original immersive edge-to-edge layout */}
+          <div className="hidden md:block">
+            <img
+              src={listing.images[currentImageIndex]}
+              alt={listing.title}
+              className="h-full w-full object-cover"
+              loading={shouldLoadEagerly ? "eager" : "lazy"}
+              style={{
+                filter: isImagePreloaded ? 'none' : 'blur(3px)',
+                transition: 'filter 0.2s ease'
+              }}
+              data-testid={`listing-image-${listing.id}`}
+            />
+          </div>
           
           {/* Glassmorphism overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/15 backdrop-blur-[0.5px]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/15" />
           
           {/* Compact Image Navigation Controls */}
           {listing.images.length > 1 && (
@@ -1073,74 +1093,16 @@ export default function TikTokListingCard({
         )}
       </AnimatePresence>
 
-      {/* Full-Screen Image Viewer */}
+      {/* Enhanced Full-Screen Image Viewer with Zoom */}
       <AnimatePresence>
         {showFullScreenImage && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black z-50"
-              onClick={() => setShowFullScreenImage(false)}
-              data-testid="fullscreen-image-overlay"
-            >
-              <div className="relative h-full w-full flex items-center justify-center">
-                <img
-                  src={listing.images[currentImageIndex]}
-                  alt={listing.title}
-                  className="max-h-full max-w-full object-contain"
-                  style={{ 
-                    touchAction: 'pinch-zoom',
-                    userSelect: 'none'
-                  }}
-                />
-                
-                {/* Close Button */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowFullScreenImage(false);
-                  }}
-                  className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm rounded-full p-2 text-white hover:bg-black/80 transition-colors"
-                  data-testid="close-fullscreen"
-                >
-                  <MoreHorizontal className="w-6 h-6 rotate-45" />
-                </button>
-
-                {/* Image Navigation for Multiple Images */}
-                {listing.images.length > 1 && (
-                  <>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        prevImage();
-                      }}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 backdrop-blur-sm rounded-full p-3 text-white hover:bg-black/80 transition-colors"
-                      data-testid="fullscreen-prev-image"
-                    >
-                      <ChevronLeft className="w-6 h-6" />
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        nextImage();
-                      }}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/60 backdrop-blur-sm rounded-full p-3 text-white hover:bg-black/80 transition-colors"
-                      data-testid="fullscreen-next-image"
-                    >
-                      <ChevronRight className="w-6 h-6" />
-                    </button>
-                    
-                    {/* Image Counter */}
-                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-sm rounded-full px-3 py-1 text-white text-sm">
-                      {currentImageIndex + 1} / {listing.images.length}
-                    </div>
-                  </>
-                )}
-              </div>
-            </motion.div>
-          </>
+          <FullScreenImageViewer
+            images={listing.images}
+            currentIndex={currentImageIndex}
+            title={listing.title}
+            onClose={() => setShowFullScreenImage(false)}
+            onImageChange={setCurrentImageIndex}
+          />
         )}
       </AnimatePresence>
     </>
