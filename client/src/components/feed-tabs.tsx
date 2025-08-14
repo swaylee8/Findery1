@@ -98,13 +98,6 @@ export default function FeedTabs({
           })}
         </div>
       </div>
-
-      {/* Category Navigation Info */}
-      <div className="flex justify-center pb-1">
-        <div className="text-xs text-gray-400 font-light">
-          Auto-cycling through categories
-        </div>
-      </div>
     </div>
   );
 }

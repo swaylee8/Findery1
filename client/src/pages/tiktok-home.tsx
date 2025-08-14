@@ -38,8 +38,8 @@ export default function TikTokHome() {
   const cyclicFeedItems = useMemo(() => {
     if (activeFeed === 'for-you') {
       if (activeCategory === 'all') {
-        // Auto-cycling feed: All → Homes → Cars → Boats → repeat
-        return generateCyclicFeed(rawListings, 8); // 8 items per category section
+        // Seamless feed mixing all categories
+        return generateCyclicFeed(rawListings, 8);
       } else {
         // Filter by specific category
         const filteredListings = rawListings.filter(listing => listing.category === activeCategory);
@@ -368,11 +368,6 @@ export default function TikTokHome() {
       >
         {cyclicFeedItems.map((item, index) => (
           <div key={`feed-${item.listing.id}-${index}`} className="relative">
-            {/* Category Header */}
-            {item.sectionHeader && (
-              <CategoryHeader category={item.category} />
-            )}
-            
             {/* Listing Container */}
             <div
               key={`container-${item.listing.id}-${index}`}
