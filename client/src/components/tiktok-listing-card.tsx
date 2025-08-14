@@ -302,32 +302,29 @@ export default function TikTokListingCard({
       <div
         ref={cardRef}
         data-testid={`listing-card-${listing.id}`}
-        className="relative h-screen w-full overflow-hidden snap-start snap-always"
+        className="relative w-full overflow-hidden snap-start snap-always"
+        style={{
+          width: '100vw',
+          height: '100vh'
+        }}
         onPointerDown={handleLongPressStart}
         onPointerUp={handleLongPressEnd}
         onPointerLeave={handleLongPressEnd}
         onClick={handleScreenTap}
       >
-        {/* Background Image/Video - Responsive Display */}
+        {/* Background Image/Video - Full-Screen Display */}
         <div className="absolute inset-0 bg-black">
-          {/* Mobile: Blurred background with main image overlay */}
+          {/* Mobile: True full-screen TikTok-style display */}
           <div className="md:hidden">
             <img
               src={listing.images[currentImageIndex]}
-              alt=""
-              className="absolute inset-0 h-full w-full object-cover opacity-20 blur-xl scale-110"
-              loading={shouldLoadEagerly ? "eager" : "lazy"}
-              aria-hidden="true"
-            />
-            <img
-              src={listing.images[currentImageIndex]}
               alt={listing.title}
-              className="relative h-full w-full object-cover z-10 cursor-pointer"
-              loading={shouldLoadEagerly ? "eager" : "lazy"}
+              className="mobile-fullscreen-image cursor-pointer"
               style={{
                 filter: isImagePreloaded ? 'none' : 'blur(3px)',
                 transition: 'filter 0.2s ease'
               }}
+              loading={shouldLoadEagerly ? "eager" : "lazy"}
               onClick={(e) => {
                 e.stopPropagation();
                 setShowFullScreenImage(true);

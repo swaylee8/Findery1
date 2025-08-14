@@ -362,8 +362,13 @@ export default function TikTokHome() {
       {/* Main Content with Cyclic Feed and Category Headers */}
       <div 
         ref={containerRef}
-        className="h-full overflow-y-scroll snap-y snap-mandatory scrollbar-hide"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        className="h-full w-full overflow-y-scroll snap-y snap-mandatory scrollbar-hide"
+        style={{ 
+          scrollbarWidth: 'none', 
+          msOverflowStyle: 'none',
+          width: '100vw',
+          height: '100vh'
+        }}
         data-testid="main-content"
       >
         {cyclicFeedItems.map((item, index) => (
@@ -372,7 +377,11 @@ export default function TikTokHome() {
             <div
               key={`container-${item.listing.id}-${index}`}
               ref={(el) => (listingRefs.current[index] = el)}
-              className="h-screen snap-start snap-always relative"
+              className="h-screen w-screen snap-start snap-always relative"
+              style={{
+                width: '100vw',
+                height: '100vh'
+              }}
               data-testid={`listing-${item.listing.id}`}
             >
               <TikTokListingCard 
