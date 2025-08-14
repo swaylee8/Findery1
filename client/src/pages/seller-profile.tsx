@@ -82,13 +82,13 @@ export default function SellerProfile(props: { params: { sellerId: string } }) {
   return (
     <div className="fixed inset-0 bg-black overflow-hidden">
       {/* Header with glassmorphism */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-gray-800/50">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-black/90 border-b border-gray-800/50">
         <div className="flex items-center justify-between px-6 py-4">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => window.history.back()}
-            className="text-white/80 hover:text-white hover:bg-white/10 backdrop-blur-sm"
+            className="text-white/80 hover:text-white hover:bg-white/10"
             data-testid="button-back"
           >
             <ArrowLeft size={24} />
@@ -107,7 +107,7 @@ export default function SellerProfile(props: { params: { sellerId: string } }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="bg-black/40 backdrop-blur-xl border border-gray-800/50 rounded-3xl p-8 mb-8"
+          className="bg-black/50 border border-gray-800/50 rounded-3xl p-8 mb-8"
         >
           <div className="flex items-start space-x-6">
             {/* Avatar */}
@@ -137,7 +137,7 @@ export default function SellerProfile(props: { params: { sellerId: string } }) {
               <div className="flex items-center space-x-3">
                 <h2 className="text-2xl font-light text-white tracking-wide">{mockSeller.name}</h2>
                 {mockSeller.isVerified && (
-                  <div className="bg-blue-500/20 backdrop-blur-sm border border-blue-500/30 rounded-lg px-2 py-1 flex items-center space-x-1">
+                  <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg px-2 py-1 flex items-center space-x-1">
                     <Shield size={12} className="text-blue-300" />
                     <span className="text-xs text-blue-300 font-light">Verified</span>
                   </div>
@@ -171,17 +171,17 @@ export default function SellerProfile(props: { params: { sellerId: string } }) {
 
           {/* Stats - Floating subtle overlays */}
           <div className="flex space-x-8 mt-8">
-            <div className="bg-gray-800/30 backdrop-blur-sm border border-gray-700/30 rounded-2xl px-4 py-3">
+            <div className="bg-gray-800/40 border border-gray-700/30 rounded-2xl px-4 py-3">
               <div className="text-2xl font-light text-white">{mockSeller.totalListings}</div>
               <div className="text-sm text-gray-400 font-light">Listings</div>
             </div>
             
-            <div className="bg-gray-800/30 backdrop-blur-sm border border-gray-700/30 rounded-2xl px-4 py-3">
+            <div className="bg-gray-800/40 border border-gray-700/30 rounded-2xl px-4 py-3">
               <div className="text-2xl font-light text-white">{mockSeller.totalSales}</div>
               <div className="text-sm text-gray-400 font-light">Sales</div>
             </div>
             
-            <div className="bg-gray-800/30 backdrop-blur-sm border border-gray-700/30 rounded-2xl px-4 py-3">
+            <div className="bg-gray-800/40 border border-gray-700/30 rounded-2xl px-4 py-3">
               <div className="text-2xl font-light text-white">{mockSeller.rating}</div>
               <div className="text-sm text-gray-400 font-light">Rating</div>
             </div>
@@ -191,7 +191,7 @@ export default function SellerProfile(props: { params: { sellerId: string } }) {
           <div className="flex justify-center mt-8">
             <Button
               onClick={handleMessageSeller}
-              className="bg-blue-600/20 backdrop-blur-sm border border-blue-500/30 text-blue-300 hover:bg-blue-600/30 rounded-2xl px-8 py-4 font-light tracking-wide text-lg"
+              className="bg-blue-600/20 border border-blue-500/30 text-blue-300 hover:bg-blue-600/30 rounded-2xl px-8 py-4 font-light tracking-wide text-lg"
               data-testid="button-message-seller"
             >
               <MessageCircle size={20} className="mr-3" />
@@ -204,7 +204,7 @@ export default function SellerProfile(props: { params: { sellerId: string } }) {
             {mockSeller.badges.map((badge) => (
               <div
                 key={badge}
-                className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm border border-purple-500/30 rounded-full px-3 py-1"
+                className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-full px-3 py-1"
               >
                 <span className="text-xs text-purple-300 font-light">{badge}</span>
               </div>
@@ -217,7 +217,7 @@ export default function SellerProfile(props: { params: { sellerId: string } }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-black/40 backdrop-blur-xl border border-gray-800/50 rounded-2xl p-2 mb-8"
+          className="bg-black/50 border border-gray-800/50 rounded-2xl p-2 mb-8"
         >
           <div className="flex space-x-2">
             <Button

@@ -359,14 +359,14 @@ export default function TikTokListingCard({
             <>
               <button
                 onClick={prevImage}
-                className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 backdrop-blur-sm rounded-full p-1.5 text-white hover:bg-black/60 transition-colors z-20 border border-white/10"
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/60 rounded-full p-1.5 text-white hover:bg-black/80 transition-colors z-20 border border-white/10"
                 data-testid="prev-image"
               >
                 <ChevronLeft className="w-3 h-3" />
               </button>
               <button
                 onClick={nextImage}
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 backdrop-blur-sm rounded-full p-1.5 text-white hover:bg-black/60 transition-colors z-20 border border-white/10"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/60 rounded-full p-1.5 text-white hover:bg-black/80 transition-colors z-20 border border-white/10"
                 data-testid="next-image"
               >
                 <ChevronRight className="w-3 h-3" />
@@ -395,10 +395,9 @@ export default function TikTokListingCard({
             <motion.div
               initial={{ opacity: 0, x: -15 }}
               animate={{ opacity: 1, x: 0 }}
-              className="bg-red-500/30 backdrop-blur-xl text-red-100 text-xs font-medium px-2 py-0.5 rounded-md border border-red-400/30 shadow-sm"
+              className="bg-red-500/40 text-red-100 text-xs font-medium px-2 py-0.5 rounded-md border border-red-400/30 shadow-sm"
               style={{ 
-                textShadow: '0 1px 2px rgba(0,0,0,0.8)',
-                backdropFilter: 'blur(12px) saturate(150%)'
+                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
               }}
               data-testid="price-drop-badge"
             >
@@ -410,10 +409,9 @@ export default function TikTokListingCard({
               initial={{ opacity: 0, x: -15 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-green-500/30 backdrop-blur-xl text-green-100 text-xs font-medium px-2 py-0.5 rounded-md border border-green-400/30 shadow-sm"
+              className="bg-green-500/40 text-green-100 text-xs font-medium px-2 py-0.5 rounded-md border border-green-400/30 shadow-sm"
               style={{ 
-                textShadow: '0 1px 2px rgba(0,0,0,0.8)',
-                backdropFilter: 'blur(12px) saturate(150%)'
+                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
               }}
               data-testid="great-deal-badge"
             >

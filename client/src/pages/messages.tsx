@@ -144,7 +144,7 @@ export default function Messages() {
     return (
       <div className="fixed inset-0 bg-black overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-black/80 backdrop-blur-xl border-b border-gray-800/50 px-6 py-4">
+        <div className="bg-black/90 border-b border-gray-800/50 px-6 py-4">
           <h1 className="text-white text-xl font-light">Messages</h1>
         </div>
 
@@ -303,7 +303,7 @@ export default function Messages() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="mx-6 mt-4 bg-black/40 backdrop-blur-xl border border-gray-800/50 rounded-2xl p-4 flex items-center space-x-4"
+        className="mx-6 mt-4 bg-black/50 border border-gray-800/50 rounded-2xl p-4 flex items-center space-x-4"
       >
         <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900">
           <img

@@ -216,7 +216,7 @@ export default function TikTokHome() {
           <div className="relative mb-8">
             <div className="w-16 h-16 mx-auto mb-4">
               <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl opacity-80 animate-pulse"></div>
-              <div className="absolute inset-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 flex items-center justify-center">
+              <div className="absolute inset-2 bg-white/10 rounded-xl border border-white/20 flex items-center justify-center">
                 <span className="text-2xl">✨</span>
               </div>
             </div>
@@ -263,13 +263,13 @@ export default function TikTokHome() {
           <Button 
             variant="ghost" 
             size="sm"
-            className="fixed top-2 left-2 z-50 text-white hover:bg-white/20 backdrop-blur-sm p-2 rounded-full"
+            className="fixed top-2 left-2 z-50 text-white hover:bg-white/20 bg-black/60 p-2 rounded-full"
             data-testid="button-menu"
           >
             <Menu size={18} />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="bg-black/90 backdrop-blur-md border-gray-800">
+        <SheetContent side="left" className="bg-black/95 border-gray-800">
           <div className="text-white">
             <h2 className="text-lg font-light mb-6">Findery</h2>
             

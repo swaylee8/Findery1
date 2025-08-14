@@ -33,10 +33,10 @@ export default function FeedTabs({
   // Remove swipe functionality - feed auto-cycles through categories
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-40 bg-gradient-to-b from-black/80 via-black/60 to-transparent backdrop-blur-sm">
+    <div className="fixed top-0 left-0 right-0 z-40 bg-gradient-to-b from-black/90 via-black/70 to-transparent">
       {/* Feed Type Tabs - Compact */}
       <div className="flex items-center justify-center pt-10 pb-1">
-        <div className="relative bg-black/40 backdrop-blur-md rounded-full p-0.5 flex">
+        <div className="relative bg-black/60 rounded-full p-0.5 flex">
           {feedTabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeFeed === tab.id;

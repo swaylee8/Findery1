@@ -168,7 +168,7 @@ export function FullScreenImageViewer({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl"
+      className="fixed inset-0 z-50 bg-black/95"
       onClick={onClose}
       data-testid="fullscreen-image-viewer"
     >
@@ -179,7 +179,7 @@ export function FullScreenImageViewer({
             e.stopPropagation();
             zoomOut();
           }}
-          className="p-3 bg-black/60 backdrop-blur-sm rounded-full text-white hover:bg-black/80 transition-colors"
+          className="p-3 bg-black/70 rounded-full text-white hover:bg-black/90 transition-colors"
           data-testid="zoom-out"
         >
           <ZoomOut className="w-5 h-5" />
@@ -189,14 +189,14 @@ export function FullScreenImageViewer({
             e.stopPropagation();
             zoomIn();
           }}
-          className="p-3 bg-black/60 backdrop-blur-sm rounded-full text-white hover:bg-black/80 transition-colors"
+          className="p-3 bg-black/70 rounded-full text-white hover:bg-black/90 transition-colors"
           data-testid="zoom-in"
         >
           <ZoomIn className="w-5 h-5" />
         </button>
         <button
           onClick={onClose}
-          className="p-3 bg-black/60 backdrop-blur-sm rounded-full text-white hover:bg-black/80 transition-colors"
+          className="p-3 bg-black/70 rounded-full text-white hover:bg-black/90 transition-colors"
           data-testid="close-fullscreen"
         >
           <X className="w-6 h-6" />
@@ -233,14 +233,14 @@ export function FullScreenImageViewer({
 
       {/* Image Counter */}
       {images.length > 1 && (
-        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-black/60 backdrop-blur-sm rounded-full text-white text-sm">
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-black/70 rounded-full text-white text-sm">
           {currentIndex + 1} / {images.length}
         </div>
       )}
 
       {/* Zoom indicator */}
       {scale !== 1 && (
-        <div className="absolute bottom-6 right-6 px-3 py-2 bg-black/60 backdrop-blur-sm rounded-full text-white text-sm">
+        <div className="absolute bottom-6 right-6 px-3 py-2 bg-black/70 rounded-full text-white text-sm">
           {Math.round(scale * 100)}%
         </div>
       )}
@@ -253,7 +253,7 @@ export function FullScreenImageViewer({
               e.stopPropagation();
               navigateImage('prev');
             }}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 p-3 bg-black/60 backdrop-blur-sm rounded-full text-white hover:bg-black/80 transition-colors"
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 p-3 bg-black/70 rounded-full text-white hover:bg-black/90 transition-colors"
             data-testid="prev-image"
           >
             <ChevronLeft className="w-6 h-6" />
@@ -263,7 +263,7 @@ export function FullScreenImageViewer({
               e.stopPropagation();
               navigateImage('next');
             }}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-black/60 backdrop-blur-sm rounded-full text-white hover:bg-black/80 transition-colors"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-black/70 rounded-full text-white hover:bg-black/90 transition-colors"
             data-testid="next-image"
           >
             <ChevronRight className="w-6 h-6" />
