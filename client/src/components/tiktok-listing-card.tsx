@@ -49,9 +49,11 @@ export default function TikTokListingCard({
   const [showBoardSelector, setShowBoardSelector] = useState(false);
   const [showFullScreenImage, setShowFullScreenImage] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [lastTap, setLastTap] = useState(0);
   const [isLongPress, setIsLongPress] = useState(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [heartScale, setHeartScale] = useState(1);
+  const lastTapRef = useRef(0);
+  const tapTimeoutRef = useRef<NodeJS.Timeout>();
   
   const queryClient = useQueryClient();
   const { user } = useAuth();
@@ -76,27 +78,51 @@ export default function TikTokListingCard({
     },
   });
 
-  const handleDoubleTap = useCallback(() => {
-    const now = Date.now();
-    const timeSinceLastTap = now - lastTap;
+  // TikTok-style like handler with instant feedback
+  const handleLike = useCallback((source: 'button' | 'doubletap') => {
+    const newLikedState = !liked;
+    setLiked(newLikedState);
+    setShowHeartAnimation(true);
     
-    if (timeSinceLastTap < 300 && timeSinceLastTap > 0) {
-      // Double tap detected - toggle like state
-      const newLikedState = !liked;
-      setLiked(newLikedState);
-      setShowHeartAnimation(true);
-      triggerHaptic('medium');
-      
-      // Sound removed - keeping haptic feedback only
-      
-      onInteraction?.('like');
-      likeMutation.mutate();
-      
-      setTimeout(() => setShowHeartAnimation(false), 1000);
+    // Heart button scaling animation
+    if (source === 'button') {
+      setHeartScale(1.3);
+      setTimeout(() => setHeartScale(1), 200);
     }
     
-    setLastTap(now);
-  }, [lastTap, liked, triggerHaptic, onInteraction, likeMutation]);
+    triggerHaptic('light');
+    onInteraction?.('like');
+    likeMutation.mutate();
+    
+    // Clear central animation
+    setTimeout(() => setShowHeartAnimation(false), 600);
+  }, [liked, triggerHaptic, onInteraction, likeMutation]);
+
+  // Optimized double-tap detection for mobile responsiveness
+  const handleScreenTap = useCallback((e: React.MouseEvent) => {
+    const now = Date.now();
+    const timeBetweenTaps = now - lastTapRef.current;
+    
+    // Clear any existing timeout
+    if (tapTimeoutRef.current) {
+      clearTimeout(tapTimeoutRef.current);
+      tapTimeoutRef.current = undefined;
+    }
+    
+    if (timeBetweenTaps < 350 && timeBetweenTaps > 50) {
+      // Double tap detected
+      e.preventDefault();
+      e.stopPropagation();
+      handleLike('doubletap');
+    } else {
+      // Single tap - set timeout for potential double tap
+      tapTimeoutRef.current = setTimeout(() => {
+        // Single tap action (currently none, but could add image navigation)
+      }, 350);
+    }
+    
+    lastTapRef.current = now;
+  }, [handleLike]);
 
   const handleLongPressStart = useCallback(() => {
     setIsLongPress(false);
@@ -114,17 +140,6 @@ export default function TikTokListingCard({
   }, []);
 
   // Remove swipe functionality - all interactions via buttons only
-
-  const handleLike = useCallback(() => {
-    const newLikedState = !liked;
-    setLiked(newLikedState);
-    triggerHaptic('light');
-    
-    // Sound removed - keeping haptic feedback only
-    
-    onInteraction?.('like');
-    likeMutation.mutate();
-  }, [liked, triggerHaptic, onInteraction, likeMutation]);
 
   const handleSave = useCallback(() => {
     setSaved(!saved);
@@ -290,8 +305,7 @@ export default function TikTokListingCard({
         onPointerDown={handleLongPressStart}
         onPointerUp={handleLongPressEnd}
         onPointerLeave={handleLongPressEnd}
-        onClick={handleDoubleTap}
-        onDoubleClick={() => setShowFullScreenImage(true)}
+        onClick={handleScreenTap}
       >
         {/* Background Image/Video - Optimized for Mobile Density */}
         <div className="absolute inset-0 bg-black">
@@ -378,42 +392,44 @@ export default function TikTokListingCard({
 
         {/* Removed standalone Price History button - moved to action bar */}
 
-        {/* Double-tap Heart Animation */}
+        {/* TikTok-style Double-tap Heart Animation */}
         <AnimatePresence>
           {showHeartAnimation && (
             <motion.div
-              initial={{ scale: 0, opacity: 0 }}
+              initial={{ scale: 0, opacity: 0, y: 0 }}
               animate={{ 
-                scale: [0, 1.5, 1.2], 
-                opacity: [0, 1, 0],
-                rotate: liked ? 0 : [0, 15, -15, 0] // Shake animation when unliking
+                scale: [0, 1.4, 1.1, 0.9, 0], 
+                opacity: [0, 1, 0.9, 0.7, 0],
+                y: [0, -10, -20],
+                rotate: [0, -5, 5, 0]
               }}
-              exit={{ opacity: 0 }}
+              exit={{ opacity: 0, scale: 0 }}
               transition={{ 
-                duration: 1,
-                rotate: { duration: 0.5 }
+                duration: 0.6,
+                ease: [0.25, 0.46, 0.45, 0.94]
               }}
               className="absolute inset-0 flex items-center justify-center pointer-events-none z-30"
               data-testid="heart-animation"
             >
-              {liked ? (
-                // Liked state - full red heart
-                <Heart className="w-24 h-24 text-red-500 fill-red-500 drop-shadow-2xl" />
-              ) : (
-                // Unliked state - broken heart effect
-                <div className="relative">
-                  <Heart className="w-24 h-24 text-gray-400 fill-gray-400 drop-shadow-2xl opacity-60" />
+              <div className="relative">
+                <Heart 
+                  className={`w-20 h-20 drop-shadow-2xl ${
+                    liked 
+                      ? 'text-pink-500 fill-pink-500' 
+                      : 'text-gray-300 fill-gray-300'
+                  }`}
+                />
+                {liked && (
                   <motion.div
-                    initial={{ scale: 1, opacity: 1 }}
-                    animate={{ scale: [1, 1.1, 0.8], opacity: [1, 0.8, 0.3] }}
-                    transition={{ duration: 0.6 }}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: [0, 1.2, 1] }}
+                    transition={{ duration: 0.3, delay: 0.1 }}
                     className="absolute inset-0 flex items-center justify-center"
                   >
-                    <div className="w-1 h-12 bg-gray-600 rotate-45 absolute"></div>
-                    <div className="w-1 h-12 bg-gray-600 -rotate-45 absolute"></div>
+                    <div className="w-6 h-6 bg-pink-400/30 rounded-full blur-md"></div>
                   </motion.div>
-                </div>
-              )}
+                )}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -422,18 +438,39 @@ export default function TikTokListingCard({
 
         {/* Right Action Bar - Compact with Price History */}
         <div className="absolute right-3 bottom-24 flex flex-col gap-3 z-20">
-          <button
-            onClick={handleLike}
-            className="flex flex-col items-center gap-0.5 group"
+          <motion.button
+            onClick={() => handleLike('button')}
+            className="flex flex-col items-center gap-1 group relative"
             data-testid={`button-like-${listing.id}`}
+            whileTap={{ scale: 0.9 }}
+            animate={{ scale: heartScale }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
           >
-            <div className="bg-black/40 backdrop-blur-sm rounded-full p-2.5 group-active:scale-95 transition-transform shadow-sm border border-white/10">
+            <motion.div 
+              className={`rounded-full p-3 transition-all duration-200 shadow-lg ${
+                liked 
+                  ? 'bg-pink-500/20 backdrop-blur-xl border border-pink-400/30' 
+                  : 'bg-black/30 backdrop-blur-sm border border-white/20'
+              }`}
+              animate={liked ? { 
+                boxShadow: [
+                  '0 0 0 0 rgba(236, 72, 153, 0.4)',
+                  '0 0 0 10px rgba(236, 72, 153, 0)',
+                  '0 0 0 0 rgba(236, 72, 153, 0)'
+                ]
+              } : {}}
+              transition={{ duration: 0.6 }}
+            >
               <Heart 
-                className={`w-6 h-6 ${liked ? 'text-red-500 fill-red-500' : 'text-white'}`} 
+                className={`w-6 h-6 transition-all duration-200 ${
+                  liked 
+                    ? 'text-pink-400 fill-pink-400 drop-shadow-sm' 
+                    : 'text-white/90 hover:text-white'
+                }`} 
               />
-            </div>
-            <span className="text-white text-xs font-light">12.3K</span>
-          </button>
+            </motion.div>
+            <span className="text-white text-xs font-light tracking-wide">12.3K</span>
+          </motion.button>
 
           <button
             onClick={handleCommentsOpen}
