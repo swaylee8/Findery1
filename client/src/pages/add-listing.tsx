@@ -135,7 +135,7 @@ export default function AddListing() {
                   <img
                     src={images[index]}
                     alt={`Upload ${index + 1}`}
-                    className="w-full h-full object-cover rounded-lg"
+                    className="w-full h-full object-contain bg-gray-100 rounded-lg"
                   />
                 ) : (
                   <Camera className="text-gray-400" size={24} />

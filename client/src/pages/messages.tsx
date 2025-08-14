@@ -164,11 +164,13 @@ export default function Messages() {
                   data-testid={`conversation-${conversation.id}`}
                 >
                   {/* Listing Image */}
-                  <img
-                    src={conversation.listingImage}
-                    alt={conversation.listingTitle}
-                    className="w-14 h-14 rounded-xl object-cover"
-                  />
+                  <div className="w-14 h-14 bg-gray-100 rounded-xl overflow-hidden">
+                    <img
+                      src={conversation.listingImage}
+                      alt={conversation.listingTitle}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">
@@ -297,11 +299,13 @@ export default function Messages() {
         transition={{ delay: 0.1 }}
         className="mx-6 mt-4 bg-black/40 backdrop-blur-xl border border-gray-800/50 rounded-2xl p-4 flex items-center space-x-4"
       >
-        <img
-          src={listing.images[0]}
-          alt={listing.title}
-          className="w-16 h-16 rounded-xl object-cover"
-        />
+        <div className="w-16 h-16 bg-gray-100 rounded-xl overflow-hidden">
+          <img
+            src={listing.images[0]}
+            alt={listing.title}
+            className="w-full h-full object-contain"
+          />
+        </div>
         <div className="flex-1">
           <h4 className="text-white font-light text-sm truncate">{listing.title}</h4>
           <p className="text-gray-400 font-light text-xs">${listing.price.toLocaleString()}</p>

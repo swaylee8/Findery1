@@ -47,6 +47,7 @@ export default function TikTokListingCard({
   const [showPriceHistory, setShowPriceHistory] = useState(false);
   const [showSimilarListings, setShowSimilarListings] = useState(false);
   const [showBoardSelector, setShowBoardSelector] = useState(false);
+  const [showFullScreenImage, setShowFullScreenImage] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [lastTap, setLastTap] = useState(0);
   const [isLongPress, setIsLongPress] = useState(false);
@@ -290,13 +291,14 @@ export default function TikTokListingCard({
         onPointerUp={handleLongPressEnd}
         onPointerLeave={handleLongPressEnd}
         onClick={handleDoubleTap}
+        onDoubleClick={() => setShowFullScreenImage(true)}
       >
         {/* Background Image/Video - Optimized for Mobile Density */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-black">
           <img
             src={listing.images[currentImageIndex]}
             alt={listing.title}
-            className="h-full w-full object-cover scale-105"
+            className="h-full w-full object-contain"
             loading={shouldLoadEagerly ? "eager" : "lazy"}
             style={{
               filter: isImagePreloaded ? 'none' : 'blur(3px)',
@@ -925,11 +927,13 @@ export default function TikTokListingCard({
                 <div className="space-y-4">
                   {mockSimilarListings.map((similar) => (
                     <div key={similar.id} className="flex gap-4 p-4 bg-gray-800/30 rounded-xl border border-gray-600/30">
-                      <img
-                        src={similar.image}
-                        alt={similar.title}
-                        className="w-20 h-20 rounded-lg object-cover"
-                      />
+                      <div className="w-20 h-20 bg-gray-800 rounded-lg overflow-hidden">
+                        <img
+                          src={similar.image}
+                          alt={similar.title}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
                       <div className="flex-1">
                         <h4 className="text-white font-medium text-sm mb-1">{similar.title}</h4>
                         <p className="text-gray-300 text-sm">${similar.price.toLocaleString()}</p>
@@ -1008,6 +1012,77 @@ export default function TikTokListingCard({
                 <button className="w-full bg-gray-700 hover:bg-gray-600 text-white font-medium py-3 rounded-xl transition-colors border border-gray-600/30">
                   + Create New Board
                 </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Full-Screen Image Viewer */}
+      <AnimatePresence>
+        {showFullScreenImage && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black z-50"
+              onClick={() => setShowFullScreenImage(false)}
+              data-testid="fullscreen-image-overlay"
+            >
+              <div className="relative h-full w-full flex items-center justify-center">
+                <img
+                  src={listing.images[currentImageIndex]}
+                  alt={listing.title}
+                  className="max-h-full max-w-full object-contain"
+                  style={{ 
+                    touchAction: 'pinch-zoom',
+                    userSelect: 'none'
+                  }}
+                />
+                
+                {/* Close Button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowFullScreenImage(false);
+                  }}
+                  className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm rounded-full p-2 text-white hover:bg-black/80 transition-colors"
+                  data-testid="close-fullscreen"
+                >
+                  <MoreHorizontal className="w-6 h-6 rotate-45" />
+                </button>
+
+                {/* Image Navigation for Multiple Images */}
+                {listing.images.length > 1 && (
+                  <>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        prevImage();
+                      }}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 backdrop-blur-sm rounded-full p-3 text-white hover:bg-black/80 transition-colors"
+                      data-testid="fullscreen-prev-image"
+                    >
+                      <ChevronLeft className="w-6 h-6" />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        nextImage();
+                      }}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/60 backdrop-blur-sm rounded-full p-3 text-white hover:bg-black/80 transition-colors"
+                      data-testid="fullscreen-next-image"
+                    >
+                      <ChevronRight className="w-6 h-6" />
+                    </button>
+                    
+                    {/* Image Counter */}
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-sm rounded-full px-3 py-1 text-white text-sm">
+                      {currentImageIndex + 1} / {listing.images.length}
+                    </div>
+                  </>
+                )}
               </div>
             </motion.div>
           </>

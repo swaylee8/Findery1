@@ -112,11 +112,13 @@ export default function SellerProfile(props: { params: { sellerId: string } }) {
           <div className="flex items-start space-x-6">
             {/* Avatar */}
             <div className="relative">
-              <img
-                src={mockSeller.avatar}
-                alt={mockSeller.name}
-                className="w-24 h-24 rounded-full border border-gray-700/50 object-cover"
-              />
+              <div className="w-24 h-24 bg-gray-800 rounded-full border border-gray-700/50 overflow-hidden">
+                <img
+                  src={mockSeller.avatar}
+                  alt={mockSeller.name}
+                  className="w-full h-full object-contain"
+                />
+              </div>
               
               {/* Online Status - Minimal green dot */}
               {mockSeller.isOnline && (
@@ -264,7 +266,7 @@ export default function SellerProfile(props: { params: { sellerId: string } }) {
                     <img
                       src={listing.image}
                       alt={listing.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-contain bg-gray-800 group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <div className="absolute bottom-4 left-4 right-4">

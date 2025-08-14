@@ -108,12 +108,13 @@ export default function ListingCard({ listing }: ListingCardProps) {
       </div>
 
       {/* Image */}
-      <img
-        src={listing.images[0]}
-        alt={listing.title}
-        className="w-full h-80 object-cover cursor-pointer"
-        onClick={handleCardClick}
-      />
+      <div className="w-full h-80 bg-black cursor-pointer" onClick={handleCardClick}>
+        <img
+          src={listing.images[0]}
+          alt={listing.title}
+          className="w-full h-full object-contain"
+        />
+      </div>
 
       {/* Actions and Content */}
       <div className="px-4 py-3">
