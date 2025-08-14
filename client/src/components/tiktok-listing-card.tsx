@@ -307,12 +307,22 @@ export default function TikTokListingCard({
         onPointerLeave={handleLongPressEnd}
         onClick={handleScreenTap}
       >
-        {/* Background Image/Video - Optimized for Mobile Density */}
-        <div className="absolute inset-0 bg-black">
+        {/* Background Image/Video - Premium Display */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+          {/* Blurred background for aspect ratio padding */}
+          <img
+            src={listing.images[currentImageIndex]}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover opacity-20 blur-xl scale-110"
+            loading={shouldLoadEagerly ? "eager" : "lazy"}
+            aria-hidden="true"
+          />
+          
+          {/* Main image */}
           <img
             src={listing.images[currentImageIndex]}
             alt={listing.title}
-            className="h-full w-full object-contain"
+            className="relative h-full w-full object-cover md:object-contain z-10"
             loading={shouldLoadEagerly ? "eager" : "lazy"}
             style={{
               filter: isImagePreloaded ? 'none' : 'blur(3px)',
@@ -320,7 +330,9 @@ export default function TikTokListingCard({
             }}
             data-testid={`listing-image-${listing.id}`}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/15" />
+          
+          {/* Glassmorphism overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/15 backdrop-blur-[0.5px]" />
           
           {/* Compact Image Navigation Controls */}
           {listing.images.length > 1 && (
@@ -964,11 +976,17 @@ export default function TikTokListingCard({
                 <div className="space-y-4">
                   {mockSimilarListings.map((similar) => (
                     <div key={similar.id} className="flex gap-4 p-4 bg-gray-800/30 rounded-xl border border-gray-600/30">
-                      <div className="w-20 h-20 bg-gray-800 rounded-lg overflow-hidden">
+                      <div className="relative w-20 h-20 rounded-lg overflow-hidden bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900">
+                        <img
+                          src={similar.image}
+                          alt=""
+                          className="absolute inset-0 w-full h-full object-cover opacity-30 blur-sm"
+                          aria-hidden="true"
+                        />
                         <img
                           src={similar.image}
                           alt={similar.title}
-                          className="w-full h-full object-contain"
+                          className="relative w-full h-full object-cover"
                         />
                       </div>
                       <div className="flex-1">

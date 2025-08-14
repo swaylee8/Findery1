@@ -164,11 +164,17 @@ export default function Messages() {
                   data-testid={`conversation-${conversation.id}`}
                 >
                   {/* Listing Image */}
-                  <div className="w-14 h-14 bg-gray-100 rounded-xl overflow-hidden">
+                  <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900">
+                    <img
+                      src={conversation.listingImage}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover opacity-30 blur-sm"
+                      aria-hidden="true"
+                    />
                     <img
                       src={conversation.listingImage}
                       alt={conversation.listingTitle}
-                      className="w-full h-full object-contain"
+                      className="relative w-full h-full object-cover"
                     />
                   </div>
 
@@ -299,11 +305,17 @@ export default function Messages() {
         transition={{ delay: 0.1 }}
         className="mx-6 mt-4 bg-black/40 backdrop-blur-xl border border-gray-800/50 rounded-2xl p-4 flex items-center space-x-4"
       >
-        <div className="w-16 h-16 bg-gray-100 rounded-xl overflow-hidden">
+        <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900">
+          <img
+            src={listing.images[0]}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover opacity-30 blur-sm"
+            aria-hidden="true"
+          />
           <img
             src={listing.images[0]}
             alt={listing.title}
-            className="w-full h-full object-contain"
+            className="relative w-full h-full object-cover"
           />
         </div>
         <div className="flex-1">

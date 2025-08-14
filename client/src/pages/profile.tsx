@@ -227,11 +227,19 @@ export default function Profile() {
                     className="aspect-square bg-black/40 backdrop-blur-xl border border-gray-800/50 rounded-3xl overflow-hidden group hover:bg-black/60 transition-all duration-300"
                     data-testid={`liked-listing-${listing.id}`}
                   >
-                    <img
-                      src={listing.images[0]}
-                      alt={listing.title}
-                      className="w-full h-full object-contain bg-gray-800 group-hover:scale-105 transition-transform duration-300"
-                    />
+                    <div className="relative w-full h-full overflow-hidden">
+                      <img
+                        src={listing.images[0]}
+                        alt=""
+                        className="absolute inset-0 w-full h-full object-cover opacity-20 blur-xl scale-110"
+                        aria-hidden="true"
+                      />
+                      <img
+                        src={listing.images[0]}
+                        alt={listing.title}
+                        className="relative w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <div className="absolute bottom-4 left-4 right-4">
                         <p className="text-white font-light text-sm truncate">{listing.title}</p>
@@ -257,11 +265,19 @@ export default function Profile() {
                   className="aspect-square bg-black/40 backdrop-blur-xl border border-gray-800/50 rounded-3xl overflow-hidden group hover:bg-black/60 transition-all duration-300"
                   data-testid={`user-listing-${listing.id}`}
                 >
-                  <img
-                    src={listing.images[0]}
-                    alt={listing.title}
-                    className="w-full h-full object-contain bg-gray-800 group-hover:scale-105 transition-transform duration-300"
-                  />
+                  <div className="relative w-full h-full overflow-hidden">
+                    <img
+                      src={listing.images[0]}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover opacity-20 blur-xl scale-110"
+                      aria-hidden="true"
+                    />
+                    <img
+                      src={listing.images[0]}
+                      alt={listing.title}
+                      className="relative w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <div className="absolute bottom-4 left-4 right-4">
                       <p className="text-white font-light text-sm truncate">{listing.title}</p>

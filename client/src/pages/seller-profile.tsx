@@ -112,11 +112,17 @@ export default function SellerProfile(props: { params: { sellerId: string } }) {
           <div className="flex items-start space-x-6">
             {/* Avatar */}
             <div className="relative">
-              <div className="w-24 h-24 bg-gray-800 rounded-full border border-gray-700/50 overflow-hidden">
+              <div className="relative w-24 h-24 rounded-full border border-gray-700/50 overflow-hidden bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900">
+                <img
+                  src={mockSeller.avatar}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover opacity-30 blur-sm"
+                  aria-hidden="true"
+                />
                 <img
                   src={mockSeller.avatar}
                   alt={mockSeller.name}
-                  className="w-full h-full object-contain"
+                  className="relative w-full h-full object-cover"
                 />
               </div>
               
@@ -263,11 +269,19 @@ export default function SellerProfile(props: { params: { sellerId: string } }) {
                     className="aspect-square bg-black/40 backdrop-blur-xl border border-gray-800/50 rounded-3xl overflow-hidden group hover:bg-black/60 transition-all duration-300"
                     data-testid={`seller-listing-${listing.id}`}
                   >
-                    <img
-                      src={listing.image}
-                      alt={listing.title}
-                      className="w-full h-full object-contain bg-gray-800 group-hover:scale-105 transition-transform duration-300"
-                    />
+                    <div className="relative w-full h-full overflow-hidden">
+                      <img
+                        src={listing.image}
+                        alt=""
+                        className="absolute inset-0 w-full h-full object-cover opacity-20 blur-xl scale-110"
+                        aria-hidden="true"
+                      />
+                      <img
+                        src={listing.image}
+                        alt={listing.title}
+                        className="relative w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <div className="absolute bottom-4 left-4 right-4">
                         <p className="text-white font-light text-sm truncate">{listing.title}</p>

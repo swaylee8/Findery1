@@ -132,11 +132,19 @@ export default function AddListing() {
                 onClick={!images[index] ? handleImageUpload : undefined}
               >
                 {images[index] ? (
-                  <img
-                    src={images[index]}
-                    alt={`Upload ${index + 1}`}
-                    className="w-full h-full object-contain bg-gray-100 rounded-lg"
-                  />
+                  <div className="relative w-full h-full rounded-lg overflow-hidden bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900">
+                    <img
+                      src={images[index]}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover opacity-30 blur-sm"
+                      aria-hidden="true"
+                    />
+                    <img
+                      src={images[index]}
+                      alt={`Upload ${index + 1}`}
+                      className="relative w-full h-full object-cover"
+                    />
+                  </div>
                 ) : (
                   <Camera className="text-gray-400" size={24} />
                 )}
