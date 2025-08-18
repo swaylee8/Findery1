@@ -1,0 +1,17 @@
+1. Fix Blurry Pictures & Enable 4K Ultra HD
+		The pictures in the app are all appearing blurry and low quality. I want all images to display in 4K Ultra HD quality—crisp, clear, and visually stunning across every device (mobile and desktop).
+	•	Make sure the images used for listings are actual 4K (3840×2160) or the highest original resolution available. Do not downscale, compress, or resize images for display—preserve their original quality at all times.
+	•	For mobile: Use responsive image delivery with  srcSet  so it automatically serves retina-quality (2x/3x density) images for modern phones. This avoids blurry results on iPhone and Android screens, which require extra resolution to look sharp.
+	•	Double-check the image pipeline: Export/upload images at maximum quality, and when showing them, avoid “object-fit: contain” if it shrinks or pixelates; use “cover” but always serve high-res images and allow viewing the full original when zoomed.
+	•	Preview and zoom: When customers tap an image, open the original at full resolution and allow pinch-to-zoom (with no loss of quality or pixelation).
+	•	Remove any forced downscaling, excessive compression, or lazy loading that degrades image clarity. Test several listings with 4K source images to confirm sharpness.
+	•	If using CDN/image hosting, enable 4K/Ultra HD optimization and bypass “auto-optimize” that might degrade image quality.
+2. Fix Broken Mobile Scrolling
+		Scrolling on mobile is currently broken—the feed either stutters, doesn’t respond to touch right, or fails to scroll naturally.
+	•	Audit your scroll implementation for mobile. If you use custom scroll-snapping, momentum, or JS libraries, verify they aren’t interfering with natural touch scrolling behavior.
+	•	Standardize mobile scroll using native CSS properties: Set  overflow-y: scroll; -webkit-overflow-scrolling: touch;  and remove any custom scroll/animation code that overrides default behavior and causes lag or “sticky” movement.
+	•	Test scrolling with lots of media—there should be no jitter, lag, or unresponsiveness in any case, even during fast swipe.
+	•	Make sure images loading does not block or delay scroll. Use progressive image loading, prioritize smooth scroll, and background-load non-visible images so the user experience never stutters.
+	•	Validate on iPhone and Android devices. Confirm that scrolling behaves naturally, like TikTok or Instagram—no custom code should break momentum or touch interaction.
+General QA
+	•	After these changes, ask your developer for before/after screenshots and a video recording of scrolling and viewing images on mobile. This will let you confirm images are crystal-clear at 4K, and scrolling is buttery-smooth.
